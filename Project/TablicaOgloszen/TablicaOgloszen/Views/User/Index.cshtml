@@ -1,0 +1,63 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+}
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+
+    <div class="col">
+        <div class="card h-100">
+            <h5 class="card-header">item.UserName</h5>
+            <div class="card-body">
+                <p class="card-title">Id: item.Id</p>
+                <p class="card-text">Email: item.Email</p>
+                <p class="card-text">Phone number: item.PhoneNumber</p>
+                <p class="card-text">Ban: item.Ban</p>
+                <p class="card-text">
+                    Roles:
+
+                    <span>role,</span>
+
+                </p>
+                <p class="card-text">
+                    Posty:
+
+                    <a asp-controller="Post" asp-action="Details" asp-route-id="obj.Id">obj.Title</a>@(", ")
+
+                </p>
+                <p class="card-text">
+                    Komentarze:
+
+                    obj.Id @(", ")
+
+                </p>
+            </div>
+            <div class="card-footer">
+
+                <span>
+                    <a asp-action="Unban" asp-route-name="item.UserName" class="btn btn-warning">Odblokuj</a>
+                </span>
+                <span>
+                    <a asp-action="Ban" asp-route-name="item.UserName" class="btn btn-danger">Zablokuj</a>
+                </span>
+
+                <span>
+                    <a asp-action="Edit" asp-route-Id="item.Id" class="btn btn-warning">Edytuj</a>
+                </span>
+                <span>
+                    <a asp-action="Delete" asp-route-Id="item.Id" class="btn btn-danger">Usuń</a>
+                </span>
+                <span>
+                    <a asp-action="ModGrant" asp-route-name="item.UserName" class="btn btn-primary">Grant Moderator</a>
+                </span>
+                <span>
+                    <a asp-action="ModRevoke" asp-route-name="item.UserName" class="btn btn-secondary">Revoke Moderator</a>
+                </span>
+
+            </div>
+        </div>
+    </div>
+
+</div>

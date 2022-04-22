@@ -83,3 +83,17 @@ C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOg
 C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\ref\TablicaOgloszen.dll
 C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\TablicaOgloszen.pdb
 C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\TablicaOgloszen.genruntimeconfig.cache
+C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Views\Post\Index.cshtml.g.cs
+C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Views\Notification\Index.cshtml.g.cs
+C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Views\User\Index.cshtml.g.cs
+C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Views\Post\Create.cshtml.g.cs
+C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Views\Post\Delete.cshtml.g.cs
+C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Views\Post\Details.cshtml.g.cs
+C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Views\Post\Edit.cshtml.g.cs
+C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Views\Notification\Delete.cshtml.g.cs
+C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Views\Comment\Index.cshtml.g.cs
+C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Views\User\Delete.cshtml.g.cs
+C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Views\User\Details.cshtml.g.cs
+C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Views\User\Edit.cshtml.g.cs
+C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Views\User\ModGrant.cshtml.g.cs
+C:\Users\Seweryn\Desktop\Work\TAB-Project-2022\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Views\User\ModRevoke.cshtml.g.cs
