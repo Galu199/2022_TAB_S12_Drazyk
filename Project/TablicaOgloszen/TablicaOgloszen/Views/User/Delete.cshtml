@@ -1,5 +1,34 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@model TablicaOgloszen.Models.User
 @{
+}
+
+<h1>Delete - USER</h1>
+
+    <div>
+        <span>
+            <a asp-action="Index" class="btn btn-primary" asp-controller="User" asp-route-id="Model.Id">Powrót</a>
+        </span>
+    </div>
+
+     <div asp-validation-summary="All"></div>
+    <form class="form-control" method="post" asp-action="Delete">
+        <label asp-for="UserName" class="form-label"></label>
+        <input asp-for="UserName" class="form-control" disabled />
+        <span asp-validation-for="UserName" class="form-text"></span>
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" disabled />
+        <span asp-validation-for="Email"  class="form-text"></span>
+        <label asp-for="PhoneNumber" class="form-label"></label>
+        <input asp-for="PhoneNumber" class="form-control" disabled />
+        <span asp-validation-for="PhoneNumber" class="form-text"></span>
+        <input type="submit" class="btn btn-primary"  value="Delete" />
+    </form>
+
+    @section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
 }

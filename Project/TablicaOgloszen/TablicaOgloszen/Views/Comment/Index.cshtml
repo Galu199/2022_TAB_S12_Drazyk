@@ -1,5 +1,36 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@model TablicaOgloszen.Models.Comment
 @{
 }
+
+<h1>Komentarze</h1>
+<div>
+    <span>
+        <a asp-action="Details" asp-controller="Post" asp-route-id="ViewContext.RouteData.Values["idPost"]" class="btn btn-primary">Powrót</a>
+    </span>
+
+        <span>
+            <a asp-controller="Comment" asp-action="Create" asp-route-id="ViewContext.RouteData.Values["idPost"]" class="btn btn-primary">Dodaj komentarz</a>
+        </span>
+    
+</div>
+
+ <div class="card">
+            @*<h5 class="card-header">Id: @comment.Id</h5>*@
+            <div class="card-body position-relative">
+                <h5 class="card-title">comment.Text</h5>
+                <p class="card-text"></p>
+        
+           
+
+                            <a class="btn btn-warning" asp-action="Edit" asp-route-id="comment.Id" asp-route-IdPost="ViewContext.RouteData.Values["idPost"]">Edytuj</a>
+                        
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="comment.Id" asp-route-IdPost="ViewContext.RouteData.Values["idPost"]">Usuń</a>
+                    
+                    <a class="btn btn-danger position-absolute" style="right:1%;bottom:10%;" asp-action="Report" asp-route-id="comment.Id" asp-route-IdPost="ViewContext.RouteData.Values["idPost"]">Zgłoś</a>
+                
+            </div>
+            <div class="card-footer">Data utworzenia: comment.Date</div>
+        </div>

@@ -33,5 +33,25 @@ namespace TablicaOgloszen.Controllers
             return View();
         }
 
+        public IActionResult Report()
+        {
+            return RedirectToAction("Details");
+        }
+
+        public IActionResult Tags()
+        {
+            return RedirectToAction("Details");
+        }
+
+        public IActionResult AddTag()
+        {
+            return RedirectToAction("Details");
+        }
+
+        public IActionResult DeleteTag()
+        {
+            return RedirectToAction("Details");
+        }
+
     }
 }

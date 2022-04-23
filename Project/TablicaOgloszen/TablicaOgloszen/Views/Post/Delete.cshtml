@@ -1,5 +1,36 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@model TablicaOgloszen.Models.Post
 @{
+}
+
+<h1>Usuń ogłoszenie</h1>
+
+    <div>
+        <span>
+            <a class="btn btn-primary" asp-action="Details" asp-controller="Post" asp-route-id="Model.Id">Powrót</a>
+        </span>
+    </div>
+
+      <div asp-validation-summary="All"></div>
+        <form class="form-control" method="post" asp-action="Delete">
+            <div class="mb-3">
+                <label class="form-label" asp-for="Title"></label>
+                <input class="form-control" asp-for="Title" disabled />
+                <span class="form-text" asp-validation-for="Title"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="Text"></label>
+                <input class="form-control" asp-for="Text" disabled />
+                <span class="form-text" asp-validation-for="Text"></span>
+            </div>
+
+            <input class="btn btn-primary" type="submit" value="Delete" />
+        </form>
+
+        @section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
 }
