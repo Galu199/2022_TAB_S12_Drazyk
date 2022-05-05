@@ -19,14 +19,15 @@ namespace TablicaOgloszen.Models
         [Phone]
         [DisplayName("Numer telefonu")]
         public override string PhoneNumber { get; set; }
-
-        public virtual IEnumerable<Post> Posts { get; set; }
-        [DisplayName("Komentarze")]
-        public virtual IEnumerable<Comment> Comments { get; set; }
         [Required]
+        [DisplayName("Zbanowany")]
         public bool Ban { get; set; }
-        [DisplayName("Zablokowany przez")]
         [Required]
+        [DisplayName("Zablokowany przez")]
         public User ModedBy { get; set; }
+        //[DisplayName("Posty")]
+        //public virtual IEnumerable<Post> Posts { get; set; }
+        //[DisplayName("Komentarze")]
+        //public virtual IEnumerable<Comment> Comments { get; set; }
     }
 }
