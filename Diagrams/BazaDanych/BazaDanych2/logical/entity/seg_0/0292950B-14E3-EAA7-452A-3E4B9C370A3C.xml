@@ -1,0 +1,129 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="0292950B-14E3-EAA7-452A-3E4B9C370A3C" name="Comments">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:55:00 UTC</createdTime>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="Id" id="14B905C5-A9F6-52C5-691B-73AB9315D495">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:55:12 UTC</createdTime>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Text" id="527911A9-CF5A-D59B-D979-AE655DC817ED">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:55:31 UTC</createdTime>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT040</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Date" id="22647430-8371-F3D9-D92E-532CBB86C33E">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:55:41 UTC</createdTime>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT008</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Deletred" id="0AA238E3-FCD0-FD2F-F883-23075853977C">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:55:53 UTC</createdTime>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Id1" id="36CBF868-DE53-696B-C332-EA26DC4D0B6A">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:59:19 UTC</createdTime>
+<generatorID>41DE7B0F-44A3-4ADB-6D69-4BAB64DF31C8</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>F5A09B3A-E5CA-EC09-9CBC-BC9C2489FC1F</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>450</dataTypeSize>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Id2" id="FAB3579B-C0B6-B4B7-CEEE-66C13B4431C4">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 17:01:34 UTC</createdTime>
+<generatorID>F87A5128-DEC9-738B-DB0D-03005FE5A107</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>CD5BC7D2-037C-D821-C4C4-89F915D57243</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Id3" id="3639E455-6232-05A2-F057-B74389953EAC">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 18:00:26 UTC</createdTime>
+<generatorID>6D38216C-4B61-DA39-BF1A-769F29949C9B</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="true"/>
+</engineerTo>
+<referedAttribute>F5A09B3A-E5CA-EC09-9CBC-BC9C2489FC1F</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>450</dataTypeSize>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="196CC05F-DFF3-7ED4-3D9B-BE36EFC06C0C" name="Comments PK">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:55:26 UTC</createdTime>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<shouldEngineer>false</shouldEngineer>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="false"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>14B905C5-A9F6-52C5-691B-73AB9315D495</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

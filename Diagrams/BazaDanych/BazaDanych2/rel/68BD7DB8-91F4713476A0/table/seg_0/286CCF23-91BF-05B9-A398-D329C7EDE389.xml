@@ -1,0 +1,75 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="286CCF23-91BF-05B9-A398-D329C7EDE389" name="Tags">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:57:15 UTC</createdTime>
+<generatorID>506EC179-E7FD-11FE-3FE7-859F814C751A</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="Id" id="C33AFC6F-BEFB-08A5-854D-6AED95119A0C">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:57:15 UTC</createdTime>
+<generatorID>7DBFDF9B-3FB1-FE16-06EF-2E0D45C149EA</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Text" id="F8897F4B-D65C-C62C-F799-73577E01DDE8">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:57:15 UTC</createdTime>
+<generatorID>3948E23C-7E5F-91C6-E8B4-2F4AE62AF137</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT040</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Posts_Id" id="3A929D24-C817-2E7C-894D-881EC500C4BB">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 17:01:07 UTC</createdTime>
+<generatorID>CF0D084F-28E1-17FF-FD2D-C90396E40C71</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="3709BE71-9849-10E9-36F6-89DF5B97C3D2" referredColumn="5EA0B90F-11B0-6432-455C-ACD39724C72E"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="255971E7-DF72-A2AD-AB08-7BF320330F85" name="Tags_PK">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:57:15 UTC</createdTime>
+<generatorID>CB9580AB-6A0B-7CC3-9AB1-E7A1B5A395C4</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="C33AFC6F-BEFB-08A5-854D-6AED95119A0C"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="B60EF47C-4013-A328-DFE8-3CB94A60642D" name="Tags_Posts_FK">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 17:01:07 UTC</createdTime>
+<generatorID>FBFB02DD-D354-106A-8A38-1BBD588A7A1F</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="3A929D24-C817-2E7C-894D-881EC500C4BB"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

@@ -1,0 +1,171 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="E4B79340-6160-388E-D58B-DED6666D2CDA" name="Posts">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:57:15 UTC</createdTime>
+<generatorID>176C435F-F77C-2026-656A-131A2AD58C6B</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="Id" id="5EA0B90F-11B0-6432-455C-ACD39724C72E">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:57:15 UTC</createdTime>
+<generatorID>CD5BC7D2-037C-D821-C4C4-89F915D57243</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Title" id="949243E7-490C-9DFC-84E8-E864C5D787C6">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:57:15 UTC</createdTime>
+<generatorID>5337A9B1-AA61-BC0A-F63D-CE3C8F9907CE</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT040</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Text" id="400B1167-1847-2543-4C4D-8E08B871852A">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:57:15 UTC</createdTime>
+<generatorID>730B099A-3277-F12B-D71F-91C77B642B3E</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT040</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Rating" id="9C662F36-BE14-9113-DBC4-A75F42864DAD">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:57:15 UTC</createdTime>
+<generatorID>6F0CDD8D-06E2-7699-576A-4B3D199176D2</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Date" id="368AC21C-3016-80D7-2B17-FBB399575FBE">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:57:15 UTC</createdTime>
+<generatorID>0AB7DFE0-22E8-8275-6921-BAF5C49032AA</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT008</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Pinned" id="133D3966-ECA1-FEB6-F6DC-A3809F21C190">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:57:15 UTC</createdTime>
+<generatorID>EA0F5414-685C-BCEA-4616-6C328B25266B</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Deleted" id="D796D740-C1AD-9658-0CEF-63CF97373965">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:57:15 UTC</createdTime>
+<generatorID>FD917A4E-E00D-4D3D-C7E3-84E92BC71CA5</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Users_Id" id="F5E2638E-CDCB-6ADA-C2EC-0E85CF725AF5">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:58:46 UTC</createdTime>
+<generatorID>CA459C11-4A4D-50AA-0513-FE769F3271A2</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>450</dataTypeSize>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="0F320DEB-331E-36A5-A501-99F50434C4B0" referredColumn="AC4E4340-1CF4-2BDE-011E-4FBB0113E1EC"/>
+</associations>
+</Column>
+<Column name="ModedBy" id="4D18A39E-80CE-7C81-FB8A-49EDB636767D">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 17:51:38 UTC</createdTime>
+<generatorID>36997D0B-6CCA-1800-3043-703C157902FA</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>450</dataTypeSize>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="DE0FFC98-FD29-655C-B35D-B1AF0EC4E052" referredColumn="AC4E4340-1CF4-2BDE-011E-4FBB0113E1EC"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="D2DE8E19-DC10-F377-B9B9-BCDB0AFA657B" name="Posts_PK">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:57:15 UTC</createdTime>
+<generatorID>43553F4A-936A-34CC-AE8E-76E8BB837B09</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="5EA0B90F-11B0-6432-455C-ACD39724C72E"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="8AE635BA-FEAF-117C-3CC2-85A53624A7BC" name="Posts__IDX">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 17:51:38 UTC</createdTime>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<indexState>Unique Plain Index</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<relationGeneratorID>1FCE7424-D861-CB57-61DB-C855A51B70AD</relationGeneratorID>
+<indexColumnUsage>
+<colUsage columnID="4D18A39E-80CE-7C81-FB8A-49EDB636767D"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="DA718A4A-BE83-4319-2B44-0273A65639A2" name="Posts_Users_FK">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:58:46 UTC</createdTime>
+<generatorID>79ACB20C-5895-919B-D826-6AE60C6AD1FF</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F5E2638E-CDCB-6ADA-C2EC-0E85CF725AF5"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="1DEA2397-1D86-43DE-B0A2-8EB92A41EF03" name="Posts_Users_FKv2">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 17:51:38 UTC</createdTime>
+<generatorID>1FCE7424-D861-CB57-61DB-C855A51B70AD</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="4D18A39E-80CE-7C81-FB8A-49EDB636767D"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

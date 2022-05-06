@@ -1,0 +1,19 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="PostHasTags" directorySegmentName="seg_0" id="FBFB02DD-D354-106A-8A38-1BBD588A7A1F">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 17:00:05 UTC</createdTime>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="true"/>
+</engineerTo>
+<sourcePk>43553F4A-936A-34CC-AE8E-76E8BB837B09</sourcePk>
+<identifying>false</identifying>
+<optionalSource>false</optionalSource>
+<optionalTarget>true</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>176C435F-F77C-2026-656A-131A2AD58C6B</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>506EC179-E7FD-11FE-3FE7-859F814C751A</targetEntity>
+<transferable>true</transferable>
+<deleteRule>CASCADE</deleteRule>
+</Relation>

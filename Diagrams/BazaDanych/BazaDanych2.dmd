@@ -1,0 +1,8 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="BazaDanych2" id="B67B1590-606C-B9FA-D532-76878BC15D71" version="3.5">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:47:46 UTC</createdTime>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>B67B1590-606C-B9FA-D532-76878BC15D71</designId>
+</OSDM_Design>

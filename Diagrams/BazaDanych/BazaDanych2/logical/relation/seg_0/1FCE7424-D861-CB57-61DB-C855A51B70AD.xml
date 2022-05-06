@@ -1,0 +1,20 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="ModedByv2" directorySegmentName="seg_0" id="1FCE7424-D861-CB57-61DB-C855A51B70AD">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 17:50:21 UTC</createdTime>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="true"/>
+</engineerTo>
+<sourcePk>43553F4A-936A-34CC-AE8E-76E8BB837B09</sourcePk>
+<targetPk>35DFBABA-2192-3F13-5742-870979C2476E</targetPk>
+<identifying>false</identifying>
+<optionalSource>false</optionalSource>
+<optionalTarget>true</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>176C435F-F77C-2026-656A-131A2AD58C6B</sourceEntity>
+<targetCardinalityString>1</targetCardinalityString>
+<targetEntity>3BB41B84-363A-62C6-C46E-0E585721C9CE</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

@@ -1,0 +1,73 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="506EC179-E7FD-11FE-3FE7-859F814C751A" name="Tags">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:56:12 UTC</createdTime>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="Id" id="7DBFDF9B-3FB1-FE16-06EF-2E0D45C149EA">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:56:18 UTC</createdTime>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Text" id="3948E23C-7E5F-91C6-E8B4-2F4AE62AF137">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:56:28 UTC</createdTime>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT040</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Id1" id="CF0D084F-28E1-17FF-FD2D-C90396E40C71">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 17:00:05 UTC</createdTime>
+<generatorID>FBFB02DD-D354-106A-8A38-1BBD588A7A1F</generatorID>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>CD5BC7D2-037C-D821-C4C4-89F915D57243</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="CB9580AB-6A0B-7CC3-9AB1-E7A1B5A395C4" name="Tags PK">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:56:25 UTC</createdTime>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<shouldEngineer>false</shouldEngineer>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="false"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>7DBFDF9B-3FB1-FE16-06EF-2E0D45C149EA</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

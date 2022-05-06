@@ -1,0 +1,19 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="UserHasComments" directorySegmentName="seg_0" id="41DE7B0F-44A3-4ADB-6D69-4BAB64DF31C8">
+<createdBy>Seweryn</createdBy>
+<createdTime>2022-05-06 16:59:19 UTC</createdTime>
+<ownerDesignName>BazaDanych2</ownerDesignName>
+<engineerTo>
+<item key="68BD7DB8-05EB-D655-CF6D-91F4713476A0" value="true"/>
+</engineerTo>
+<sourcePk>35DFBABA-2192-3F13-5742-870979C2476E</sourcePk>
+<identifying>false</identifying>
+<optionalSource>false</optionalSource>
+<optionalTarget>true</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>3BB41B84-363A-62C6-C46E-0E585721C9CE</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>0292950B-14E3-EAA7-452A-3E4B9C370A3C</targetEntity>
+<transferable>true</transferable>
+<deleteRule>CASCADE</deleteRule>
+</Relation>
