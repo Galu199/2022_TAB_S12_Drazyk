@@ -65,7 +65,7 @@
 <ownDataTypeParameters>1,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
-<Column name="Users_Id" id="880C58A8-5D7F-993C-29AF-83B181A9261D">
+<Column name="ModedBy" id="880C58A8-5D7F-993C-29AF-83B181A9261D">
 <createdBy>Seweryn</createdBy>
 <createdTime>2022-05-06 17:06:44 UTC</createdTime>
 <generatorID>01E6F8A2-EE3D-D463-68B3-C5D20EDDD819</generatorID>

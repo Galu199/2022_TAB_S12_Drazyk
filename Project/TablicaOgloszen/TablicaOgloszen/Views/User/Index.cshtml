@@ -6,11 +6,11 @@
 
 }
 
-@if(Model != null)
-@foreach (var user in Model)
-{
-    <div>@user.Id | @user.UserName | @user.Email | @user.PhoneNumber | @user.Ban | @user.ModedBy </div>
-}
+@if (Model != null)
+    @foreach (var item in Model)
+    {
+        <div>@item.Id | @item.UserName | @item.Email | @item.PhoneNumber | @item.Ban | @item.ModedBy </div>
+    }
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
 

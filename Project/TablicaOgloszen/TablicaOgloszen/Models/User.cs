@@ -24,10 +24,6 @@ namespace TablicaOgloszen.Models
         public bool Ban { get; set; }
         [Required]
         [DisplayName("Zablokowany przez")]
-        public User ModedBy { get; set; }
-        //[DisplayName("Posty")]
-        //public virtual IEnumerable<Post> Posts { get; set; }
-        //[DisplayName("Komentarze")]
-        //public virtual IEnumerable<Comment> Comments { get; set; }
+        public string ModedBy { get; set; }
     }
 }

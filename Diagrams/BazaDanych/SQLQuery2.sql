@@ -4,22 +4,20 @@
 --   type:      SQL Server 2012
 
 
-
-
 CREATE
   TABLE Comments
   (
-    Id INTEGER NOT NULL ,
+    Id INTEGER NOT NULL IDENTITY(1,1) ,
     Text TEXT NOT NULL ,
     DATE DATETIME NOT NULL ,
-    Deletred BIT NOT NULL ,
+    Deleted BIT NOT NULL ,
     Users_Id VARCHAR (450) ,
     Posts_Id INTEGER ,
     ModedBy  VARCHAR (450) 
   )
   ON "default"
 GO
-CREATE UNIQUE NONCLUSTERED INDEX
+CREATE NONCLUSTERED INDEX
 Comments__IDX ON Comments
 (
   ModedBy
@@ -38,7 +36,7 @@ GO
 CREATE
   TABLE Posts
   (
-    Id INTEGER NOT NULL ,
+    Id INTEGER NOT NULL IDENTITY(1,1),
     Title TEXT NOT NULL ,
     Text TEXT NOT NULL ,
     Rating INTEGER NOT NULL ,
@@ -50,7 +48,7 @@ CREATE
   )
   ON "default"
 GO
-CREATE UNIQUE NONCLUSTERED INDEX
+CREATE NONCLUSTERED INDEX
 Posts__IDX ON Posts
 (
   ModedBy
@@ -69,7 +67,7 @@ GO
 CREATE
   TABLE Tags
   (
-    Id INTEGER NOT NULL ,
+    Id INTEGER NOT NULL IDENTITY(1,1),
     Text TEXT NOT NULL ,
     Posts_Id INTEGER
   )
@@ -96,7 +94,7 @@ CREATE
   )
   ON "default"
 GO
-CREATE UNIQUE NONCLUSTERED INDEX
+CREATE NONCLUSTERED INDEX
 Users__IDX ON Users
 (
   ModedBy

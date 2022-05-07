@@ -10,7 +10,6 @@ namespace TablicaOgloszen.Controllers
     public class UserController : Controller
     {
         private readonly MyDataBaseService _myDataBaseService;
-
         public UserController(
             MyDataBaseService myDataBaseService
             )
@@ -20,7 +19,7 @@ namespace TablicaOgloszen.Controllers
 
         public IActionResult Index()
         {
-            return View(_myDataBaseService.Query(null));
+            return View(_myDataBaseService.GetUsers());
         }
 
         public IActionResult Details()

@@ -15,7 +15,11 @@ namespace TablicaOgloszen.Models
         public DateTime Date { get; set; }
         [DisplayName("Czy usunięty")]
         public bool Deleted { get; set; }
+        [DisplayName("Twórca")]
+        public string Users_Id { get; set; }
+        [DisplayName("Jego ogłoszenie")]
+        public int Posts_Id { get; set; }
         [DisplayName("Kto usunął")]
-        public User ModedBy { get; set; }
+        public string ModedBy { get; set; }
     }
 }

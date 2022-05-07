@@ -3,14 +3,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TablicaOgloszen.Services;
 
 namespace TablicaOgloszen.Controllers
 {
     public class PostController : Controller
     {
+        private readonly MyDataBaseService _myDataBaseService;
+        public PostController(
+            MyDataBaseService myDataBaseService
+            )
+        {
+            _myDataBaseService = myDataBaseService;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            return View(_myDataBaseService.GetPosts());
         }
 
         public IActionResult Details()

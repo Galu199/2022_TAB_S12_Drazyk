@@ -19,15 +19,13 @@ namespace TablicaOgloszen.Models
         [Required]
         [DisplayName("Data utworzenia")]
         public DateTime Date { get; set; }
-        [DisplayName("Tagi")]
-        public virtual IEnumerable<Tag> Tags { get; set; }
-        [DisplayName("Komentarze")]
-        public virtual IEnumerable<Comment> Comments { get; set; }
         [DisplayName("Przypięte")]
         public bool Pinned { get; set; }
         [DisplayName("Usunięte")]
         public bool Deleted { get; set; }
+        [DisplayName("Twórca")]
+        public string Users_Id { get; set; }
         [DisplayName("Usunięte przez")]
-        public User ModedBy { get; set; }
+        public string ModedBy { get; set; }
     }
 }
