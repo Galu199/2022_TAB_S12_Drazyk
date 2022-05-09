@@ -33,16 +33,43 @@ namespace TablicaOgloszen.Services
 
         public void AddUser(User item)
         {
-            using (SqlConnection con = new SqlConnection(myDbConnectionString))
+            using (var con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand(
+                "BEGIN TRANSACTION;" +
+                @"INSERT INTO Users VALUES ( @Id,@Email,@UserName,@PhoneNumber,@Ban,@ModedBy );" +
+                "COMMIT;"
+                , con))
             {
-                SqlCommand cmd = new SqlCommand("BEGIN TRANSACTION;" + $"INSERT INTO Users ({item.Id},{item.Email},{item.UserName},{item.PhoneNumber},{item.Ban},{item.ModedBy});" + "COMMIT;");
-                cmd.CommandType = CommandType.Text;
-                con.Open();
-                SqlDataReader rdr = cmd.ExecuteReader();
+                cmd.Parameters.Add("@Id", SqlDbType.VarChar, 450).Value = item.Id;
+                cmd.Parameters.Add("@Email", SqlDbType.Text).Value = item.Email;
+                cmd.Parameters.Add("@UserName", SqlDbType.Text).Value = item.UserName;
+                cmd.Parameters.Add("@PhoneNumber", SqlDbType.Text).Value = item.PhoneNumber;
+                cmd.Parameters.Add("@Ban", SqlDbType.Bit).Value = item.Ban;
+                cmd.Parameters.Add("@ModedBy", SqlDbType.VarChar, 450).Value = item.ModedBy;
+                foreach (IDataParameter param in cmd.Parameters)
+                {
+                    if (param.Value == null) param.Value = DBNull.Value;
+                }
+                try
+                {
+                    con.Open();
+                    var rdr = cmd.ExecuteNonQuery();
+                    Console.WriteLine("RowsAffected: {0}", rdr);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
+            //{
+            //SqlCommand cmd = new SqlCommand("BEGIN TRANSACTION;" + $"INSERT INTO Users ({item.Id},{item.Email},{item.UserName},{item.PhoneNumber},{item.Ban},{item.ModedBy});" + "COMMIT;");
+            //cmd.CommandType = CommandType.Text;
+            //con.Open();
+            //SqlDataReader rdr = cmd.ExecuteReader();
+            //}
         }
 
-        public void AddPost(Post item)
+        /*public void AddPost(Post item)
         {
             using (SqlConnection con = new SqlConnection(myDbConnectionString))
             {
@@ -73,7 +100,7 @@ namespace TablicaOgloszen.Services
                 con.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
             }
-        }
+        }*/
 
         public List<User> GetUsers()
         {

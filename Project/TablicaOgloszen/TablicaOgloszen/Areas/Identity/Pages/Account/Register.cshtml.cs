@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using TablicaOgloszen.Services;
 
 namespace TablicaOgloszen.Areas.Identity.Pages.Account
 {
@@ -23,17 +24,20 @@ namespace TablicaOgloszen.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly MyDataBaseService _myDataBaseService;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            MyDataBaseService myDataBaseService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _myDataBaseService = myDataBaseService;
         }
 
         [BindProperty]
@@ -79,7 +83,16 @@ namespace TablicaOgloszen.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-
+                    //CONNECTING WITH APP INTEGRITY
+                    Models.User newUser = new Models.User();
+                    newUser.Id = user.Id;
+                    newUser.UserName = user.UserName;
+                    newUser.Email = user.Email;
+                    newUser.PhoneNumber = "brak";
+                    newUser.Ban = false;
+                    newUser.ModedBy = null;
+                    _myDataBaseService.AddUser(newUser);
+                    //END CONNECTING WITH APP INTEGRITY
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

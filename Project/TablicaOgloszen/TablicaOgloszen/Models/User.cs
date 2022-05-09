@@ -5,20 +5,20 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TablicaOgloszen.Models
 {
-    public class User : IdentityUser
+    public class User
     {
         [Key]
-        public override string Id { get; set; }
+        public string Id { get; set; }
         [Required]
         [EmailAddress]
         [DisplayName("E-mail")]
-        public override string Email { get; set; }
+        public string Email { get; set; }
         [Required]
         [DisplayName("Imię i nazwisko")]
-        public override string UserName { get; set; }
+        public string UserName { get; set; }
         [Phone]
         [DisplayName("Numer telefonu")]
-        public override string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
         [Required]
         [DisplayName("Zbanowany")]
         public bool Ban { get; set; }

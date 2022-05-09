@@ -37,7 +37,8 @@ namespace TablicaOgloszen
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
 
-            services.AddTransient<MyDataBaseService>();
+            //services.AddTransient<MyDataBaseService>();
+            services.AddSingleton<MyDataBaseService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
