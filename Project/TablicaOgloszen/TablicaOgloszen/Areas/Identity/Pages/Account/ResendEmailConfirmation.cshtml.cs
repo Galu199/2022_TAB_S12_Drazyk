@@ -4,7 +4,6 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +32,7 @@ namespace TablicaOgloszen.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+            public string link { get; set; } = "blank";
         }
 
         public void OnGet()
@@ -66,7 +66,9 @@ namespace TablicaOgloszen.Areas.Identity.Pages.Account
                 "Confirm your email",
                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-            ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+            ModelState.AddModelError(string.Empty, $"Verification email sent. Please check your email. <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>");
+            //ModelState.AddModelError(string.Empty, $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            Input.link = $"{HtmlEncoder.Default.Encode(callbackUrl)}".Replace(';', '&');
             return Page();
         }
     }

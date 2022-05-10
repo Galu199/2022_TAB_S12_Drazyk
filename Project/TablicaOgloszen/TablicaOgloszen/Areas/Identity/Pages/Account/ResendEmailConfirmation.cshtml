@@ -11,6 +11,8 @@
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
+            @if (Model.Input != null)
+            {<a href="@Model.Input.link" class="btn btn-primary">CONFIRM</a>}
             <div class="form-group">
                 <label asp-for="Input.Email"></label>
                 <input asp-for="Input.Email" class="form-control" />

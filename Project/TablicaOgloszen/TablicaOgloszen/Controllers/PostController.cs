@@ -19,7 +19,13 @@ namespace TablicaOgloszen.Controllers
 
         public IActionResult Index()
         {
-            return View(_myDataBaseService.GetPosts());
+            var postList = _myDataBaseService.GetPosts();
+            foreach(var post in postList)
+            {
+                post.Owner = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{post.Users_Id}';").First();
+                post.Comments = _myDataBaseService.QueryComments($"SELECT TOP 3 * FROM Comments WHERE Posts_Id={post.Id} AND Deleted = 0;");
+            }
+            return View(postList);
         }
 
         public IActionResult Details()
