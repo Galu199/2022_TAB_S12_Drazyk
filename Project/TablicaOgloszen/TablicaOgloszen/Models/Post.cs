@@ -27,7 +27,5 @@ namespace TablicaOgloszen.Models
         public string Users_Id { get; set; }
         [DisplayName("Usunięte przez")]
         public string ModedBy { get; set; }
-        public List<Comment> Comments;
-        public User Owner;
     }
 }

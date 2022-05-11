@@ -1,54 +1,50 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model TablicaOgloszen.Models.User
-@{
-}
+﻿@model TablicaOgloszen.Models.UserDetails
 
 <h1>Profil Użytkownika</h1>
-
 <div asp-validation-summary="All"></div>
-
-<div class="col">
+@if (Model != null)
+{
+    <div class="col">
         <div class="card h-100">
-            <h5 class="card-header">Model.UserName</h5>
+            <h5 class="card-header">@Model.UserName</h5>
             <div class="card-body">
-                @*<p class="card-title">Id: @Model.Id</p>*@
-                <p class="card-text">Email: Model.Email</p>
-                <p class="card-text">Phone number: Model.PhoneNumber</p>
-                @*<p class="card-text">Ban: @Model.Ban</p>*@
-                @*<p class="card-text">
+                <p class="card-title">Id: @Model.Id</p>
+                <p class="card-text">Email: @Model.Email</p>
+                <p class="card-text">Phone number: @Model.PhoneNumber</p>
+                <p class="card-text">Ban: @Model.Ban</p>
+                <p class="card-text">
                     Roles:
-                    @inject Microsoft.AspNetCore.Identity.UserManager<PortalOgloszeniowy.Models.User> userManager
-                    @foreach (var role in await userManager.GetRolesAsync(await userManager.FindByNameAsync(Model.UserName)))
-                    {
-                        <span>@role,</span>
-                    }
-                </p>*@
+                    @*@inject Microsoft.AspNetCore.Identity.UserManager<PortalOgloszeniowy.Models.User> userManager
+                        @foreach (var role in await userManager.GetRolesAsync(await userManager.FindByNameAsync(Model.UserName)))
+                        {
+                            <span>@role,</span>
+                        }*@
+                </p>
                 <p class="card-text">
                     Posty:
-                      
-                            <a asp-controller="Post" asp-action="Details" asp-route-id="obj.Id">obj.Title</a>@(", ")
-                        
+                    @if (Model.Posts != null)
+                        @foreach (var obj in Model.Posts)
+                        {
+                            <a asp-controller="Post" asp-action="Details" asp-route-id="@obj.Id">@obj.Title</a>@(", ")
+                        }
                 </p>
-                @*<p class="card-text">
+                <p class="card-text">
                     Komentarze:
                     @if (Model.Comments != null)
                         @foreach (var obj in Model.Comments)
                         {
-                            @obj.Id @(", ")
+                            <a asp-controller="Comment" asp-action="Details" asp-route-id="@obj.Id">@obj.Text</a>@(", ")
                         }
-                </p>*@
+                </p>
             </div>
             <div class="card-footer">
-
-                    <span>
-                        <a class="btn btn-warning" asp-action="Edit" asp-route-Id="Model.Id">EDYTUJ</a>
-                    </span>
-                    <span>
-                        <a class="btn btn-danger" asp-action="Delete" asp-route-Id="Model.Id">USUN</a>
-                    </span>
-                
+                <span>
+                    <a class="btn btn-warning" asp-action="Edit" asp-route-Id="@Model.Id">EDYTUJ</a>
+                </span>
+                <span>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-Id="@Model.Id">USUN</a>
+                </span>
             </div>
         </div>
     </div>
+}

@@ -7,6 +7,7 @@ using TablicaOgloszen.Services;
 
 namespace TablicaOgloszen.Controllers
 {
+
     public class UserController : Controller
     {
         private readonly MyDataBaseService _myDataBaseService;
@@ -22,9 +23,12 @@ namespace TablicaOgloszen.Controllers
             return View(_myDataBaseService.GetUsers());
         }
 
-        public IActionResult Details()
+        public IActionResult Details(string Id)
         {
-            return View();
+            Models.UserDetails person = new Models.UserDetails(_myDataBaseService.QueryUsers($"SELECT * FROM Users WHERE Id='{Id}';").First());
+            person.Posts = _myDataBaseService.QueryPosts($"SELECT * FROM Posts WHERE Users_Id='{Id}'");
+            person.Comments = _myDataBaseService.QueryComments($"SELECT * FROM Comments WHERE Users_Id='{Id}'");
+            return View(person);
         }
 
         public IActionResult Edit()

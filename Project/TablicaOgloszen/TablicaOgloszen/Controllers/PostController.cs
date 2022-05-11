@@ -7,6 +7,7 @@ using TablicaOgloszen.Services;
 
 namespace TablicaOgloszen.Controllers
 {
+
     public class PostController : Controller
     {
         private readonly MyDataBaseService _myDataBaseService;
@@ -20,17 +21,23 @@ namespace TablicaOgloszen.Controllers
         public IActionResult Index()
         {
             var postList = _myDataBaseService.GetPosts();
+            var postIndexList = new List<Models.PostIndex>();
             foreach(var post in postList)
             {
-                post.Owner = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{post.Users_Id}';").First();
-                post.Comments = _myDataBaseService.QueryComments($"SELECT TOP 3 * FROM Comments WHERE Posts_Id={post.Id} AND Deleted = 0;");
+                var postIndex = new Models.PostIndex(post);
+                postIndex.Owner = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{post.Users_Id}';").First();
+                postIndex.Comments = _myDataBaseService.QueryComments($"SELECT TOP 3 * FROM Comments WHERE Posts_Id={post.Id} AND Deleted = 0;");
+                postIndexList.Add(postIndex);
             }
-            return View(postList);
+            return View(postIndexList);
         }
 
-        public IActionResult Details()
+        public IActionResult Details(int Id)
         {
-            return View();
+            Models.Post post = null;
+            var postlist = _myDataBaseService.QueryPosts($"SELECT * FROM Posts WHERE Id={Id}");
+            if (postlist.Count > 0) post = postlist.First();
+            return View(post);
         }
 
         public IActionResult Create()

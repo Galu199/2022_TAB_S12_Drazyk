@@ -107,7 +107,7 @@ namespace TablicaOgloszen.Services
             var items = new List<User>();
             using (SqlConnection con = new SqlConnection(myDbConnectionString))
             {
-                SqlCommand cmd = new SqlCommand("BEGIN TRANSACTION;" + "SELECT * FROM Users WHERE Ban = 0;" + "COMMIT;", con);
+                SqlCommand cmd = new SqlCommand("BEGIN TRANSACTION;" + "SELECT * FROM Users;" + "COMMIT;", con);
                 cmd.CommandType = CommandType.Text;
                 con.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
