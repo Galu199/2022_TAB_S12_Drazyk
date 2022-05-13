@@ -1,0 +1,15 @@
+﻿@model Tag
+
+<h1>Dodaj Tag</h1>
+<a class="btn btn-primary" asp-action="Tags" asp-route-id="@Model.Posts_Id">Powrót</a>
+<div asp-validation-summary="All"></div>
+<div class="container mt-5 mb-5 d-flex flex-column justify-content-center align-items-center">
+    <form class="card card-body" method="post" asp-action="AddTag">
+        <div class="mb-1">
+            <label asp-for="Text" class="form-label"></label>
+            <input asp-for="Text">
+            <input hidden asp-for="Posts_Id" value="@Model.Posts_Id">
+        </div>
+        <button type="submit" class="btn btn-primary">Dodaj tag</button>
+    </form>
+</div>

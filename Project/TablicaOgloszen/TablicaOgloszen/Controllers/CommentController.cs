@@ -17,9 +17,9 @@ namespace TablicaOgloszen.Controllers
             _myDataBaseService = myDataBaseService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int Id)
         {
-            return View(_myDataBaseService.GetComments());
+            return View(_myDataBaseService.QueryComments($"SELECT * FROM Comments WHERE Posts_Id={Id} ORDER BY DATE DESC;"));
         }
 
         public IActionResult Create()

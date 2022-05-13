@@ -1,43 +1,34 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model IEnumerable<Comment>
-@{
-
-}
-
-@if (Model != null)
-    @foreach (var item in Model)
-    {
-        <div>@item.Id | @item.Text | @item.Date | @item.Deleted | @item.ModedBy </div>
-    }
+﻿@model IEnumerable<Comment>
 
 <h1>Komentarze</h1>
 <div>
     <span>
-        <a asp-action="Details" asp-controller="Post" asp-route-id="ViewContext.RouteData.Values["idPost"]" class="btn btn-primary">Powrót</a>
+        <a asp-action="Details" asp-controller="Post" asp-route-id="@Model.First().Posts_Id" class="btn btn-primary">Powrót</a>
     </span>
-
-        <span>
-            <a asp-controller="Comment" asp-action="Create" asp-route-id="ViewContext.RouteData.Values["idPost"]" class="btn btn-primary">Dodaj komentarz</a>
-        </span>
-    
+    <span>
+        <a asp-controller="Comment" asp-action="Create" asp-route-id="@Model.First().Posts_Id" class="btn btn-primary">Dodaj komentarz</a>
+    </span>
 </div>
 
- <div class="card">
-            @*<h5 class="card-header">Id: @comment.Id</h5>*@
+@if (Model != null)
+    @foreach (var comment in Model)
+    {
+        @*<div>@item.Id | @item.Text | @item.Date | @item.Deleted | @item.ModedBy </div>*@
+        <div class="card">
+            <a class="text-decoration-none text-black" asp-controller="User" asp-action="Details" asp-route-id="@comment.Users_Id">
+                <h5 class="card-header">JAKAŚ NAZWA URZYTKOWNIKA</h5>
+            </a>
             <div class="card-body position-relative">
-                <h5 class="card-title">comment.Text</h5>
+                <h5 class="card-title">@comment.Text</h5>
                 <p class="card-text"></p>
-        
-           
 
-                            <a class="btn btn-warning" asp-action="Edit" asp-route-id="comment.Id" asp-route-IdPost="ViewContext.RouteData.Values["idPost"]">Edytuj</a>
-                        
-                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="comment.Id" asp-route-IdPost="ViewContext.RouteData.Values["idPost"]">Usuń</a>
-                    
-                    <a class="btn btn-danger position-absolute" style="right:1%;bottom:10%;" asp-action="Report" asp-route-id="comment.Id" asp-route-IdPost="ViewContext.RouteData.Values["idPost"]">Zgłoś</a>
-                
+                <a class="btn btn-warning" asp-action="Edit" asp-route-id="@comment.Id" asp-route-IdPost="@comment.Posts_Id">Edytuj</a>
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@comment.Id" asp-route-IdPost="@comment.Posts_Id">Usuń</a>
+                <a class="btn btn-danger position-absolute"
+                   style="right:1%;bottom:10%;"
+                   asp-action="Report" asp-route-id="@comment.Id" asp-route-IdPost="@comment.Posts_Id">Zgłoś</a>
             </div>
-            <div class="card-footer">Data utworzenia: comment.Date</div>
+            <div class="card-footer">Data utworzenia: @TablicaOgloszen.Services.DateConventer.DateConvert(comment.Date)</div>
         </div>
+        <br/>
+    }

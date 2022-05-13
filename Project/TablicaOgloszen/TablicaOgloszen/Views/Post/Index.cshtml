@@ -1,11 +1,5 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model IEnumerable<TablicaOgloszen.Models.PostIndex>
-@{
+﻿@model IEnumerable<TablicaOgloszen.Models.PostIndex>
 
-}
-@*<h1>Index - POSTS</h1>*@
 <div class="container mt-5 mb-5 text-center">
     <a asp-action="Create" type="button" class="btn btn-primary">Dodaj Ogłoszenie</a>
 </div>
@@ -17,13 +11,13 @@
         {
             <div class="container mt-5 mb-5">
                 <div class="row d-flex align-items-center justify-content-center">
-                    <div class="col-md-6">
+                    <div class="col-md-10">
                         <div class="card">
                             <div class="d-flex justify-content-between p-2 px-3">
                                 <div class="d-flex flex-row align-items-center">
                                     <img src="https://i.imgur.com/tdi3NGa.jpg" width="50" class="rounded-circle">
                                     <div class="d-flex flex-column m-2">
-                                        <span class="font-weight-bold">
+                                        <span class="font-weight-bold" style="font-size:120%;">
                                             <b><a class="text-decoration-none text-black" asp-controller="User" asp-action="Details" asp-route-id="@item.Owner.Id">@item.Owner.UserName</a></b>
                                         </span>
                                         <small class="text-primary">
@@ -34,7 +28,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex flex-row mt-1 ellipsis">
-                                    <small class="mr-2">Likes: @item.Rating</small> <i class="fa fa-ellipsis-h"></i>
+                                    <small class="mr-2" style="margin-right:5px;">Likes: @item.Rating</small> @*<i class="bi bi-three-dots-vertical" style="margin-right:5px;"></i>*@
                                     @if (item.Pinned)
                                     {<i class="bi bi-pin-fill"></i>}
                                 </div>
@@ -44,23 +38,20 @@
                                     @item.Text
                                 </p>
                                 <hr>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="d-flex flex-row"> <span>Data dodania: @item.Date</span> </div>
+                                <div class="d-flex justify-content-between align-items-center muted-color">
+                                    <div class="d-flex flex-row"> <span>Data dodania: @TablicaOgloszen.Services.DateConventer.DateConvert(item.Date)</span> </div>
                                     @*<div class="d-flex flex-row"> <span>Ilość komentarzy: item.Comments.ToList().Count()</span> </div>*@
-                                </div>
-                                <div class="d-flex flex-row muted-color">
-                                    Tags:@(" ")
                                 </div>
                                 <hr>
                                 <div class="comments">
-                                    Najnowsze Komentarz:
+                                    Najnowsze Komentarze:
                                     @foreach (var comment in item.Comments)
                                     {
                                         <div class="d-flex flex-row mb-2">
-                                            <div class="d-flex flex-column ml-2">
-                                                <span class="name"> | @comment.Users_Id | </span>
-                                                <span class="comment-text"> @comment.Date </span>
-                                                <div class="comment-text"> @comment.Text </div>
+                                            <div class="ml-2">
+                                                @*<a class="text-decoration-none text-black" asp-controller="User" asp-action="Details" asp-route-id="@comment.Users_Id"><span class="name">@comment.Users_Id</span></a>
+                                                <span class="comment-text"> - @comment.Date </span>*@
+                                                <span class="comment-text"> - @comment.Text </span>
                                             </div>
                                         </div>
                                     }

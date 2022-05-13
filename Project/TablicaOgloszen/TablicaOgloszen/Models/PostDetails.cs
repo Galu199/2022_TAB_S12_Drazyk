@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace TablicaOgloszen.Models
 {
-    public class PostIndex : Post
+    public class PostDetails : Post
     {
-        public PostIndex(Post _post)
+        public PostDetails(Post _post)
         {
             Id = _post.Id;
             Title = _post.Title;
@@ -19,6 +19,8 @@ namespace TablicaOgloszen.Models
             ModedBy = _post.ModedBy;
         }
         public List<Comment> Comments = new List<Comment>();
+        public List<Tag> Tags = new List<Tag>();
         public User Owner = new User();
+        public int CommentsCount = 0;
     }
 }

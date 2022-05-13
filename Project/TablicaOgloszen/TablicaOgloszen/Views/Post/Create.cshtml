@@ -1,14 +1,9 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model TablicaOgloszen.Models.Post
-@{
-}
+﻿@model TablicaOgloszen.Models.Post
 
 <h1>Dodaj Ogłoszenie</h1>
 
 <div asp-validation-summary="All"></div>
-<form class="form-control" method="post" asp-action="Create">
+<form class="form-control card card-body" method="post" asp-action="Create">
     <label class="form-label" asp-for="Title"></label>
     <input class="form-control" asp-for="Title" />
     <span class="form-text" asp-validation-for="Title"></span>

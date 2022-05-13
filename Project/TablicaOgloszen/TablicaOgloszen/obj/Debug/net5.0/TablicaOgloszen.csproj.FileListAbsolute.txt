@@ -410,3 +410,5 @@ C:\Users\Seweryn\Desktop\Work\2022_TAB_S12_Drazyk\Project\TablicaOgloszen\Tablic
 C:\Users\Seweryn\Desktop\Work\2022_TAB_S12_Drazyk\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Areas\Identity\Pages\Account\ResetPassword.cshtml.g.cs
 C:\Users\Seweryn\Desktop\Work\2022_TAB_S12_Drazyk\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Areas\Identity\Pages\Account\ResetPasswordConfirmation.cshtml.g.cs
 C:\Users\Seweryn\Desktop\Work\2022_TAB_S12_Drazyk\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Areas\Identity\Pages\Account\_StatusMessage.cshtml.g.cs
+C:\Users\Seweryn\Desktop\Work\2022_TAB_S12_Drazyk\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Views\Post\Tags.cshtml.g.cs
+C:\Users\Seweryn\Desktop\Work\2022_TAB_S12_Drazyk\Project\TablicaOgloszen\TablicaOgloszen\obj\Debug\net5.0\Razor\Views\Post\AddTag.cshtml.g.cs

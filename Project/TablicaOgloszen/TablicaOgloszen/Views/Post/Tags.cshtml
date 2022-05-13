@@ -1,0 +1,20 @@
+﻿@model TablicaOgloszen.Models.PostTags
+
+<h1>Zarządzaj Tagami</h1>
+@if (Model != null)
+{
+    <a class="btn btn-primary" asp-action="AddTag" asp-route-id="@Model.post.Id">Dodaj Tag</a>
+    <a class="btn btn-primary" asp-action="Details" asp-route-id="@Model.post.Id">Powrót</a>
+    <div class="container mt-5 mb-5 d-flex flex-column justify-content-center align-items-center">
+        @foreach (var item in Model.tags)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <span class="card-text">#@item.Text</span>
+                    <a type="button" class="btn btn-danger" asp-action="DeleteTag" asp-route-id="@item.Id" asp-route-Posts_Id="@item.Posts_Id">Usuń</a>
+                </div>
+            </div>
+            <br />
+        }
+    </div>
+}

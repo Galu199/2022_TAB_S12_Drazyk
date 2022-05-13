@@ -39,6 +39,8 @@ namespace TablicaOgloszen
 
             //services.AddTransient<MyDataBaseService>();
             services.AddSingleton<MyDataBaseService>();
+
+            services.AddTransient<DateConventer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
