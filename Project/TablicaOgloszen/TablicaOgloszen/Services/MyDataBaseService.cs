@@ -9,6 +9,8 @@ namespace TablicaOgloszen.Services
 {
     public class MyDataBaseService
     {
+        #region SETUP
+
         private readonly string ConnectionName = "DefaultConnection";
         private readonly IConfiguration _configuration;
         private readonly string myDbConnectionString;
@@ -31,25 +33,36 @@ namespace TablicaOgloszen.Services
             }
         }
 
+        #endregion
+
+        #region METHODTS
+
         public List<User> GetUsers()
         {
             var items = new List<User>();
             using (SqlConnection con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand("SELECT * FROM Users;", con))
             {
-                SqlCommand cmd = new SqlCommand("BEGIN TRANSACTION;" + "SELECT * FROM Users;" + "COMMIT;", con);
-                cmd.CommandType = CommandType.Text;
-                con.Open();
-                SqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
+                try
                 {
-                    var item = new User();
-                    item.Id = ConvertFromDBVal<string>(rdr["Id"]);
-                    item.Email = ConvertFromDBVal<string>(rdr["Email"]);
-                    item.UserName = ConvertFromDBVal<string>(rdr["UserName"]);
-                    item.PhoneNumber = ConvertFromDBVal<string>(rdr["PhoneNumber"]);
-                    item.Ban = ConvertFromDBVal<bool>(rdr["Ban"]);
-                    item.ModedBy = ConvertFromDBVal<string>(rdr["ModedBy"]);
-                    items.Add(item);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        var item = new User();
+                        item.Id = ConvertFromDBVal<string>(rdr["Id"]);
+                        item.Email = ConvertFromDBVal<string>(rdr["Email"]);
+                        item.UserName = ConvertFromDBVal<string>(rdr["UserName"]);
+                        item.PhoneNumber = ConvertFromDBVal<string>(rdr["PhoneNumber"]);
+                        item.Ban = ConvertFromDBVal<bool>(rdr["Ban"]);
+                        item.ModedBy = ConvertFromDBVal<string>(rdr["ModedBy"]);
+                        items.Add(item);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw (ex);
                 }
             }
             return items;
@@ -59,24 +72,31 @@ namespace TablicaOgloszen.Services
         {
             var items = new List<Post>();
             using (SqlConnection con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand("SELECT * FROM Posts WHERE Deleted = 0 ORDER BY DATE DESC;", con))
             {
-                SqlCommand cmd = new SqlCommand("BEGIN TRANSACTION;" + "SELECT * FROM Posts WHERE Deleted = 0 ORDER BY DATE DESC;" + "COMMIT;", con);
-                cmd.CommandType = CommandType.Text;
-                con.Open();
-                SqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
+                try
                 {
-                    var item = new Post();
-                    item.Id = ConvertFromDBVal<int>(rdr["Id"]);
-                    item.Title = ConvertFromDBVal<string>(rdr["Title"]);
-                    item.Text = ConvertFromDBVal<string>(rdr["Text"]);
-                    item.Rating = ConvertFromDBVal<int>(rdr["Rating"]);
-                    item.Date = ConvertFromDBVal<DateTime>(rdr["Date"]);
-                    item.Pinned = ConvertFromDBVal<bool>(rdr["Pinned"]);
-                    item.Deleted = ConvertFromDBVal<bool>(rdr["Deleted"]);
-                    item.Users_Id = ConvertFromDBVal<string>(rdr["Users_Id"]);
-                    item.ModedBy = ConvertFromDBVal<string>(rdr["ModedBy"]);
-                    items.Add(item);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        var item = new Post();
+                        item.Id = ConvertFromDBVal<int>(rdr["Id"]);
+                        item.Title = ConvertFromDBVal<string>(rdr["Title"]);
+                        item.Text = ConvertFromDBVal<string>(rdr["Text"]);
+                        item.Rating = ConvertFromDBVal<int>(rdr["Rating"]);
+                        item.Date = ConvertFromDBVal<DateTime>(rdr["Date"]);
+                        item.Pinned = ConvertFromDBVal<bool>(rdr["Pinned"]);
+                        item.Deleted = ConvertFromDBVal<bool>(rdr["Deleted"]);
+                        item.Users_Id = ConvertFromDBVal<string>(rdr["Users_Id"]);
+                        item.ModedBy = ConvertFromDBVal<string>(rdr["ModedBy"]);
+                        items.Add(item);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw (ex);
                 }
             }
             return items;
@@ -86,22 +106,29 @@ namespace TablicaOgloszen.Services
         {
             var items = new List<Comment>();
             using (SqlConnection con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand("SELECT * FROM Comments WHERE Deleted = 0;", con))
             {
-                SqlCommand cmd = new SqlCommand("BEGIN TRANSACTION;" + "SELECT * FROM Comments WHERE Deleted = 0;" + "COMMIT;", con);
-                cmd.CommandType = CommandType.Text;
-                con.Open();
-                SqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
+                try
                 {
-                    var item = new Comment();
-                    item.Id = ConvertFromDBVal<int>(rdr["Id"]);
-                    item.Text = ConvertFromDBVal<string>(rdr["Text"]);
-                    item.Date = ConvertFromDBVal<DateTime>(rdr["Date"]);
-                    item.Deleted = ConvertFromDBVal<bool>(rdr["Deleted"]);
-                    item.Users_Id = ConvertFromDBVal<string>(rdr["Users_Id"]);
-                    item.Posts_Id = ConvertFromDBVal<int>(rdr["Posts_Id"]);
-                    item.ModedBy = ConvertFromDBVal<string>(rdr["ModedBy"]);
-                    items.Add(item);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        var item = new Comment();
+                        item.Id = ConvertFromDBVal<int>(rdr["Id"]);
+                        item.Text = ConvertFromDBVal<string>(rdr["Text"]);
+                        item.Date = ConvertFromDBVal<DateTime>(rdr["Date"]);
+                        item.Deleted = ConvertFromDBVal<bool>(rdr["Deleted"]);
+                        item.Users_Id = ConvertFromDBVal<string>(rdr["Users_Id"]);
+                        item.Posts_Id = ConvertFromDBVal<int>(rdr["Posts_Id"]);
+                        item.ModedBy = ConvertFromDBVal<string>(rdr["ModedBy"]);
+                        items.Add(item);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw (ex);
                 }
             }
             return items;
@@ -111,43 +138,61 @@ namespace TablicaOgloszen.Services
         {
             var items = new List<Tag>();
             using (SqlConnection con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand("SELECT * FROM Tags;", con))
             {
-                SqlCommand cmd = new SqlCommand("BEGIN TRANSACTION;" + "SELECT * FROM Tags" + "COMMIT;", con);
-                cmd.CommandType = CommandType.Text;
-                con.Open();
-                SqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
+                try
                 {
-                    var item = new Tag();
-                    item.Id = ConvertFromDBVal<int>(rdr["Id"]);
-                    item.Text = ConvertFromDBVal<string>(rdr["Text"]);
-                    item.Posts_Id = ConvertFromDBVal<int>(rdr["Posts_Id"]);
-                    items.Add(item);
+                    cmd.CommandType = CommandType.Text;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        var item = new Tag();
+                        item.Id = ConvertFromDBVal<int>(rdr["Id"]);
+                        item.Text = ConvertFromDBVal<string>(rdr["Text"]);
+                        item.Posts_Id = ConvertFromDBVal<int>(rdr["Posts_Id"]);
+                        items.Add(item);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw (ex);
                 }
             }
             return items;
         }
 
+
         public List<User> QueryUsers(string query)
         {
             var items = new List<User>();
             using (SqlConnection con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand(query + ";", con))
             {
-                SqlCommand cmd = new SqlCommand("BEGIN TRANSACTION;" + query + ";" + "COMMIT;", con);
-                cmd.CommandType = CommandType.Text;
-                con.Open();
-                SqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
+                try
                 {
-                    var item = new User();
-                    item.Id = ConvertFromDBVal<string>(rdr["Id"]);
-                    item.Email = ConvertFromDBVal<string>(rdr["Email"]);
-                    item.UserName = ConvertFromDBVal<string>(rdr["UserName"]);
-                    item.PhoneNumber = ConvertFromDBVal<string>(rdr["PhoneNumber"]);
-                    item.Ban = ConvertFromDBVal<bool>(rdr["Ban"]);
-                    item.ModedBy = ConvertFromDBVal<string>(rdr["ModedBy"]);
-                    items.Add(item);
+                    cmd.CommandType = CommandType.Text;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        var item = new User();
+                        item.Id = ConvertFromDBVal<string>(rdr["Id"]);
+                        item.Email = ConvertFromDBVal<string>(rdr["Email"]);
+                        item.UserName = ConvertFromDBVal<string>(rdr["UserName"]);
+                        item.PhoneNumber = ConvertFromDBVal<string>(rdr["PhoneNumber"]);
+                        item.Ban = ConvertFromDBVal<bool>(rdr["Ban"]);
+                        item.ModedBy = ConvertFromDBVal<string>(rdr["ModedBy"]);
+                        items.Add(item);
+                    }
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw (ex);
+                }
+
             }
             return items;
         }
@@ -156,8 +201,8 @@ namespace TablicaOgloszen.Services
         {
             var items = new List<Post>();
             using (SqlConnection con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand(query + ";", con))
             {
-                SqlCommand cmd = new SqlCommand("BEGIN TRANSACTION;" + query + ";" + "COMMIT;", con);
                 try
                 {
                     cmd.CommandType = CommandType.Text;
@@ -181,6 +226,7 @@ namespace TablicaOgloszen.Services
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    throw (ex);
                 }
             }
             return items;
@@ -190,22 +236,30 @@ namespace TablicaOgloszen.Services
         {
             var items = new List<Comment>();
             using (SqlConnection con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand(query + ";", con))
             {
-                SqlCommand cmd = new SqlCommand("BEGIN TRANSACTION;" + query + ";" + "COMMIT;", con);
-                cmd.CommandType = CommandType.Text;
-                con.Open();
-                SqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
+                try
                 {
-                    var item = new Comment();
-                    item.Id = ConvertFromDBVal<int>(rdr["Id"]);
-                    item.Text = ConvertFromDBVal<string>(rdr["Text"]);
-                    item.Date = ConvertFromDBVal<DateTime>(rdr["Date"]);
-                    item.Deleted = ConvertFromDBVal<bool>(rdr["Deleted"]);
-                    item.Users_Id = ConvertFromDBVal<string>(rdr["Users_Id"]);
-                    item.Posts_Id = ConvertFromDBVal<int>(rdr["Posts_Id"]);
-                    item.ModedBy = ConvertFromDBVal<string>(rdr["ModedBy"]);
-                    items.Add(item);
+                    cmd.CommandType = CommandType.Text;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        var item = new Comment();
+                        item.Id = ConvertFromDBVal<int>(rdr["Id"]);
+                        item.Text = ConvertFromDBVal<string>(rdr["Text"]);
+                        item.Date = ConvertFromDBVal<DateTime>(rdr["Date"]);
+                        item.Deleted = ConvertFromDBVal<bool>(rdr["Deleted"]);
+                        item.Users_Id = ConvertFromDBVal<string>(rdr["Users_Id"]);
+                        item.Posts_Id = ConvertFromDBVal<int>(rdr["Posts_Id"]);
+                        item.ModedBy = ConvertFromDBVal<string>(rdr["ModedBy"]);
+                        items.Add(item);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw (ex);
                 }
             }
             return items;
@@ -215,10 +269,10 @@ namespace TablicaOgloszen.Services
         {
             var items = new List<Tag>();
             using (SqlConnection con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand(query + ";", con))
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("BEGIN TRANSACTION;" + query + ";" + "COMMIT;", con);
                     cmd.CommandType = CommandType.Text;
                     con.Open();
                     SqlDataReader rdr = cmd.ExecuteReader();
@@ -234,6 +288,7 @@ namespace TablicaOgloszen.Services
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    throw (ex);
                 }
             }
             return items;
@@ -243,11 +298,7 @@ namespace TablicaOgloszen.Services
         {
             int result = 0;
             using (var con = new SqlConnection(myDbConnectionString))
-            using (var cmd = new SqlCommand(
-                "BEGIN TRANSACTION;" +
-                query + ";" +
-                "COMMIT;"
-                , con))
+            using (var cmd = new SqlCommand(query + ";", con))
             {
                 try
                 {
@@ -257,19 +308,17 @@ namespace TablicaOgloszen.Services
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    throw (ex);
                 }
-                return result;
             }
+            return result;
         }
+
 
         public void AddUser(User item)
         {
             using (var con = new SqlConnection(myDbConnectionString))
-            using (var cmd = new SqlCommand(
-                "BEGIN TRANSACTION;" +
-                @"INSERT INTO Users VALUES ( @Id,@Email,@UserName,@PhoneNumber,@Ban,@ModedBy );" +
-                "COMMIT;"
-                , con))
+            using (var cmd = new SqlCommand(@"INSERT INTO Users VALUES ( @Id,@Email,@UserName,@PhoneNumber,@Ban,@ModedBy );", con))
             {
                 cmd.Parameters.Add("@Id", SqlDbType.VarChar, 450).Value = item.Id;
                 cmd.Parameters.Add("@Email", SqlDbType.Text).Value = item.Email;
@@ -291,6 +340,7 @@ namespace TablicaOgloszen.Services
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    throw (ex);
                 }
             }
             //{
@@ -304,11 +354,7 @@ namespace TablicaOgloszen.Services
         public void AddPost(Post item)
         {
             using (var con = new SqlConnection(myDbConnectionString))
-            using (var cmd = new SqlCommand(
-                "BEGIN TRANSACTION;" +
-                @"INSERT INTO Posts VALUES ( @Title, @Text, @Rating, @DATE, @Pinned, @Deleted, @Users_Id, @ModedBy );" +
-                "COMMIT;"
-                , con))
+            using (var cmd = new SqlCommand(@"INSERT INTO Posts VALUES ( @Title, @Text, @Rating, @DATE, @Pinned, @Deleted, @Users_Id, @ModedBy );", con))
             {
                 cmd.Parameters.Add("@Title", SqlDbType.Text).Value = item.Title;
                 cmd.Parameters.Add("@Text", SqlDbType.Text).Value = item.Text;
@@ -330,6 +376,7 @@ namespace TablicaOgloszen.Services
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    throw (ex);
                 }
             }
         }
@@ -337,11 +384,7 @@ namespace TablicaOgloszen.Services
         public void AddComments(Comment item)
         {
             using (var con = new SqlConnection(myDbConnectionString))
-            using (var cmd = new SqlCommand(
-                "BEGIN TRANSACTION;" +
-                @"INSERT INTO Comments VALUES ( @Text, @DATE, @Deleted, @Users_Id, @Posts_Id, @ModedBy );" +
-                "COMMIT;"
-                , con))
+            using (var cmd = new SqlCommand(@"INSERT INTO Comments VALUES ( @Text, @DATE, @Deleted, @Users_Id, @Posts_Id, @ModedBy );", con))
             {
                 cmd.Parameters.Add("@Text", SqlDbType.Text).Value = item.Text;
                 cmd.Parameters.Add("@DATE", SqlDbType.DateTime).Value = item.Date;
@@ -361,6 +404,7 @@ namespace TablicaOgloszen.Services
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    throw (ex);
                 }
             }
         }
@@ -368,11 +412,7 @@ namespace TablicaOgloszen.Services
         public void AddTag(Tag item)
         {
             using (var con = new SqlConnection(myDbConnectionString))
-            using (var cmd = new SqlCommand(
-                "BEGIN TRANSACTION;" +
-                @"INSERT INTO Tags VALUES ( @Text,@Posts_Id );" +
-                "COMMIT;"
-                , con))
+            using (var cmd = new SqlCommand(@"INSERT INTO Tags VALUES ( @Text,@Posts_Id );", con))
             {
                 cmd.Parameters.Add("@Text", SqlDbType.Text).Value = item.Text;
                 cmd.Parameters.Add("@Posts_Id", SqlDbType.Int).Value = item.Posts_Id;
@@ -389,18 +429,76 @@ namespace TablicaOgloszen.Services
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    throw (ex);
                 }
             }
         }
 
+
+        public void UpdatePost(Post item)
+        {
+            using (var con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand(@"UPDATE Posts SET Title=@Title, Text=@Text, Rating=@Rating, DATE=@DATE, Pinned=@Pinned, Deleted=@Deleted, Users_Id=@Users_Id, ModedBy=@ModedBy WHERE Id=@Id;", con))
+            {
+                cmd.Parameters.Add("@Id", SqlDbType.Int).Value = item.Id;
+                cmd.Parameters.Add("@Title", SqlDbType.Text).Value = item.Title;
+                cmd.Parameters.Add("@Text", SqlDbType.Text).Value = item.Text;
+                cmd.Parameters.Add("@Rating", SqlDbType.Int).Value = item.Rating;
+                cmd.Parameters.Add("@DATE", SqlDbType.DateTime).Value = item.Date;
+                cmd.Parameters.Add("@Pinned", SqlDbType.Bit).Value = item.Pinned;
+                cmd.Parameters.Add("@Deleted", SqlDbType.Bit).Value = item.Deleted;
+                cmd.Parameters.Add("@Users_Id", SqlDbType.VarChar, 450).Value = item.Users_Id;
+                cmd.Parameters.Add("@ModedBy", SqlDbType.VarChar, 450).Value = item.ModedBy;
+                foreach (IDataParameter param in cmd.Parameters)
+                {
+                    if (param.Value == null) param.Value = DBNull.Value;
+                }
+                try
+                {
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw(ex);
+                }
+            }
+        }
+
+        public void UpdateComment(Comment item)
+        {
+            using (var con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand(@"UPDATE Comments SET Text=@Text, Date=@Date, Deleted=@Deleted, Deleted=@Deleted, Users_Id=@Users_Id, Posts_Id=@Posts_Id Moded_By=@Moded_By WHERE Id=@Id;", con))
+            {
+                cmd.Parameters.Add("@Text", SqlDbType.Text).Value = item.Text;
+                cmd.Parameters.Add("@DATE", SqlDbType.DateTime).Value = item.Date;
+                cmd.Parameters.Add("@Deleted", SqlDbType.Bit).Value = item.Deleted;
+                cmd.Parameters.Add("@Users_Id", SqlDbType.VarChar, 450).Value = null;
+                cmd.Parameters.Add("@Posts_Id", SqlDbType.VarChar, 450).Value = null;
+                cmd.Parameters.Add("@ModedBy", SqlDbType.VarChar, 450).Value = null;
+                foreach (IDataParameter param in cmd.Parameters)
+                {
+                    if (param.Value == null) param.Value = DBNull.Value;
+                }
+                try
+                {
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw (ex);
+                }
+            }
+        }
+
+
         public void DeleteTag(int Id)
         {
             using (var con = new SqlConnection(myDbConnectionString))
-            using (var cmd = new SqlCommand(
-                "BEGIN TRANSACTION;" +
-                @"DELETE FROM Tags WHERE Id=@ID;" +
-                "COMMIT;"
-                , con))
+            using (var cmd = new SqlCommand(@"DELETE FROM Tags WHERE Id=@ID;", con))
             {
                 cmd.Parameters.Add("@ID", SqlDbType.Int).Value = Id;
                 try
@@ -411,9 +509,12 @@ namespace TablicaOgloszen.Services
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    throw (ex);
                 }
             }
         }
 
+
+        #endregion
     }
 }

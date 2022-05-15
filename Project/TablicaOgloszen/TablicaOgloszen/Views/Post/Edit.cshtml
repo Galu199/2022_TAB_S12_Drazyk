@@ -1,33 +1,29 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model TablicaOgloszen.Models.Post
-@{
-}
+﻿@model TablicaOgloszen.Models.Post
+
 <h1>Edytuj ogłoszenie</h1>
 
-    <div>
-        <span>
-            <a class="btn btn-primary" asp-action="Details" asp-controller="Post" asp-route-id="Model.Id">Powrót</a>
-        </span>
+<div>
+    <span>
+        <a class="btn btn-primary" asp-action="Details" asp-controller="Post" asp-route-id="@Model.Id">Powrót</a>
+    </span>
+</div>
+
+<form class="form-control" method="post" asp-action="Edit">
+    <div asp-validation-summary="All"></div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Title"></label>
+        <input class="form-control" asp-for="Title" />
+        <span class="form-text" asp-validation-for="Title"></span>
     </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Text"></label>
+        <textarea class="form-control" asp-for="Text"></textarea>
+        <span class="form-text" asp-validation-for="Text"></span>
+    </div>
+    <input class="btn btn-primary" type="submit" value="Edit" />
+</form>
 
-      <div asp-validation-summary="All"></div>
-    <form class="form-control" method="post" asp-action="Edit">
-        <div class="mb-3">
-            <label class="form-label" asp-for="Title"></label>
-            <input class="form-control" asp-for="Title" />
-            <span class="form-text" asp-validation-for="Title"></span>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" asp-for="Text"></label>
-            <textarea class="form-control" asp-for="Text"></textarea>
-            <span class="form-text" asp-validation-for="Text"></span>
-        </div>
-        <input class="btn btn-primary" type="submit" value="Edit" />
-    </form>
-
-    @section Scripts{
+@section Scripts{
     @{
         <partial name="_ValidationScriptsPartial" />
     }

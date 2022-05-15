@@ -1,19 +1,18 @@
-﻿@model IEnumerable<Comment>
+﻿@model CommentIndex
 
 <h1>Komentarze</h1>
 <div>
     <span>
-        <a asp-action="Details" asp-controller="Post" asp-route-id="@Model.First().Posts_Id" class="btn btn-primary">Powrót</a>
+        <a asp-action="Details" asp-controller="Post" asp-route-id="@Model.post.Id" class="btn btn-primary">Powrót</a>
     </span>
     <span>
-        <a asp-controller="Comment" asp-action="Create" asp-route-id="@Model.First().Posts_Id" class="btn btn-primary">Dodaj komentarz</a>
+        <a asp-controller="Comment" asp-action="Create" asp-route-id="@Model.post.Id" class="btn btn-primary">Dodaj komentarz</a>
     </span>
 </div>
 
 @if (Model != null)
-    @foreach (var comment in Model)
+    @foreach (var comment in Model.comments)
     {
-        @*<div>@item.Id | @item.Text | @item.Date | @item.Deleted | @item.ModedBy </div>*@
         <div class="card">
             <a class="text-decoration-none text-black" asp-controller="User" asp-action="Details" asp-route-id="@comment.Users_Id">
                 <h5 class="card-header">JAKAŚ NAZWA URZYTKOWNIKA</h5>
@@ -21,7 +20,6 @@
             <div class="card-body position-relative">
                 <h5 class="card-title">@comment.Text</h5>
                 <p class="card-text"></p>
-
                 <a class="btn btn-warning" asp-action="Edit" asp-route-id="@comment.Id" asp-route-IdPost="@comment.Posts_Id">Edytuj</a>
                 <a class="btn btn-danger" asp-action="Delete" asp-route-id="@comment.Id" asp-route-IdPost="@comment.Posts_Id">Usuń</a>
                 <a class="btn btn-danger position-absolute"
@@ -30,5 +28,5 @@
             </div>
             <div class="card-footer">Data utworzenia: @TablicaOgloszen.Services.DateConventer.DateConvert(comment.Date)</div>
         </div>
-        <br/>
+        <br />
     }

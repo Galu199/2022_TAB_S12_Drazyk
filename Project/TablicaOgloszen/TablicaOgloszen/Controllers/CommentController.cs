@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
+using TablicaOgloszen.Models;
 using TablicaOgloszen.Services;
 
 namespace TablicaOgloszen.Controllers
@@ -19,7 +21,22 @@ namespace TablicaOgloszen.Controllers
 
         public IActionResult Index(int Id)
         {
-            return View(_myDataBaseService.QueryComments($"SELECT * FROM Comments WHERE Posts_Id={Id} ORDER BY DATE DESC;"));
+            var commentIndex = new CommentIndex();
+            try
+            {
+                using (var scope = new TransactionScope())
+                {
+                    commentIndex.post = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Id}").First();
+                    commentIndex.comments = _myDataBaseService.QueryComments($"SELECT * FROM Comments WHERE Posts_Id={Id} ORDER BY DATE DESC");
+                    scope.Complete();
+                }
+                return View(commentIndex);
+            }
+            catch
+            {
+                ModelState.AddModelError(string.Empty, "error massage.");
+                return View(commentIndex);
+            }
         }
 
         public IActionResult Create()
@@ -28,6 +45,13 @@ namespace TablicaOgloszen.Controllers
         }
 
         public IActionResult Edit()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Comment comment)
         {
             return View();
         }
