@@ -34,13 +34,14 @@ namespace TablicaOgloszen
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
 
-            //services.AddTransient<MyDataBaseService>();
+            //SERVICES
             services.AddSingleton<MyDataBaseService>();
-
-            services.AddTransient<DateConventer>();
+            services.AddTransient<MyPermissionsManagerService>();
+            services.AddTransient<DateConventerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

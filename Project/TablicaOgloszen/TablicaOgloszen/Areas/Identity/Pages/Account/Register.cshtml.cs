@@ -25,19 +25,22 @@ namespace TablicaOgloszen.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly MyDataBaseService _myDataBaseService;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            MyDataBaseService myDataBaseService)
+            MyDataBaseService myDataBaseService,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
             _myDataBaseService = myDataBaseService;
+            _roleManager = roleManager;
         }
 
         [BindProperty]
@@ -83,7 +86,8 @@ namespace TablicaOgloszen.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                    //CONNECTING WITH APP INTEGRITY
+
+                    //----------CONNECTING WITH APP INTEGRITY---------------------------------------
                     Models.User newUser = new Models.User();
                     newUser.Id = user.Id;
                     newUser.UserName = user.UserName;
@@ -92,7 +96,15 @@ namespace TablicaOgloszen.Areas.Identity.Pages.Account
                     newUser.Ban = false;
                     newUser.ModedBy = null;
                     _myDataBaseService.AddUser(newUser);
-                    //END CONNECTING WITH APP INTEGRITY
+                    if (await _roleManager.FindByNameAsync("User") == null)
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole("User"));
+                        await _roleManager.CreateAsync(new IdentityRole("Moderator"));
+                        await _roleManager.CreateAsync(new IdentityRole("Administrator"));
+                    }
+                    await _userManager.AddToRoleAsync(user, new Models.Permissions().PermissionsRolesDictionary[Models.PermissionsRole.User]);
+                    //-------------END CONNECTING WITH APP INTEGRITY-------------------------------
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

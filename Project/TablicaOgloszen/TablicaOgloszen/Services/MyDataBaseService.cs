@@ -35,8 +35,8 @@ namespace TablicaOgloszen.Services
 
         #endregion
 
-        #region METHODTS
-
+        #region DELETED
+        /*
         public List<User> GetUsers()
         {
             var items = new List<User>();
@@ -50,7 +50,7 @@ namespace TablicaOgloszen.Services
                     while (rdr.Read())
                     {
                         var item = new User();
-                        item.Id = ConvertFromDBVal<string>(rdr["Id"]);
+    item.Id = ConvertFromDBVal<string>(rdr["Id"]);
                         item.Email = ConvertFromDBVal<string>(rdr["Email"]);
                         item.UserName = ConvertFromDBVal<string>(rdr["UserName"]);
                         item.PhoneNumber = ConvertFromDBVal<string>(rdr["PhoneNumber"]);
@@ -60,109 +60,112 @@ namespace TablicaOgloszen.Services
                     }
                 }
                 catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    throw (ex);
-                }
+{
+    Console.WriteLine(ex.Message);
+    throw (ex);
+}
             }
             return items;
         }
 
         public List<Post> GetPosts()
         {
-            var items = new List<Post>();
-            using (SqlConnection con = new SqlConnection(myDbConnectionString))
-            using (var cmd = new SqlCommand("SELECT * FROM Posts WHERE Deleted = 0 ORDER BY DATE DESC;", con))
+    var items = new List<Post>();
+    using (SqlConnection con = new SqlConnection(myDbConnectionString))
+    using (var cmd = new SqlCommand("SELECT * FROM Posts WHERE Deleted = 0 ORDER BY DATE DESC;", con))
+    {
+        try
+        {
+            con.Open();
+            SqlDataReader rdr = cmd.ExecuteReader();
+            while (rdr.Read())
             {
-                try
-                {
-                    con.Open();
-                    SqlDataReader rdr = cmd.ExecuteReader();
-                    while (rdr.Read())
-                    {
-                        var item = new Post();
-                        item.Id = ConvertFromDBVal<int>(rdr["Id"]);
-                        item.Title = ConvertFromDBVal<string>(rdr["Title"]);
-                        item.Text = ConvertFromDBVal<string>(rdr["Text"]);
-                        item.Rating = ConvertFromDBVal<int>(rdr["Rating"]);
-                        item.Date = ConvertFromDBVal<DateTime>(rdr["Date"]);
-                        item.Pinned = ConvertFromDBVal<bool>(rdr["Pinned"]);
-                        item.Deleted = ConvertFromDBVal<bool>(rdr["Deleted"]);
-                        item.Users_Id = ConvertFromDBVal<string>(rdr["Users_Id"]);
-                        item.ModedBy = ConvertFromDBVal<string>(rdr["ModedBy"]);
-                        items.Add(item);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    throw (ex);
-                }
+                var item = new Post();
+                item.Id = ConvertFromDBVal<int>(rdr["Id"]);
+                item.Title = ConvertFromDBVal<string>(rdr["Title"]);
+                item.Text = ConvertFromDBVal<string>(rdr["Text"]);
+                item.Rating = ConvertFromDBVal<int>(rdr["Rating"]);
+                item.Date = ConvertFromDBVal<DateTime>(rdr["Date"]);
+                item.Pinned = ConvertFromDBVal<bool>(rdr["Pinned"]);
+                item.Deleted = ConvertFromDBVal<bool>(rdr["Deleted"]);
+                item.Users_Id = ConvertFromDBVal<string>(rdr["Users_Id"]);
+                item.ModedBy = ConvertFromDBVal<string>(rdr["ModedBy"]);
+                items.Add(item);
             }
-            return items;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+    }
+    return items;
+}
 
         public List<Comment> GetComments()
+{
+    var items = new List<Comment>();
+    using (SqlConnection con = new SqlConnection(myDbConnectionString))
+    using (var cmd = new SqlCommand("SELECT * FROM Comments WHERE Deleted = 0;", con))
+    {
+        try
         {
-            var items = new List<Comment>();
-            using (SqlConnection con = new SqlConnection(myDbConnectionString))
-            using (var cmd = new SqlCommand("SELECT * FROM Comments WHERE Deleted = 0;", con))
+            con.Open();
+            SqlDataReader rdr = cmd.ExecuteReader();
+            while (rdr.Read())
             {
-                try
-                {
-                    con.Open();
-                    SqlDataReader rdr = cmd.ExecuteReader();
-                    while (rdr.Read())
-                    {
-                        var item = new Comment();
-                        item.Id = ConvertFromDBVal<int>(rdr["Id"]);
-                        item.Text = ConvertFromDBVal<string>(rdr["Text"]);
-                        item.Date = ConvertFromDBVal<DateTime>(rdr["Date"]);
-                        item.Deleted = ConvertFromDBVal<bool>(rdr["Deleted"]);
-                        item.Users_Id = ConvertFromDBVal<string>(rdr["Users_Id"]);
-                        item.Posts_Id = ConvertFromDBVal<int>(rdr["Posts_Id"]);
-                        item.ModedBy = ConvertFromDBVal<string>(rdr["ModedBy"]);
-                        items.Add(item);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    throw (ex);
-                }
+                var item = new Comment();
+                item.Id = ConvertFromDBVal<int>(rdr["Id"]);
+                item.Text = ConvertFromDBVal<string>(rdr["Text"]);
+                item.Date = ConvertFromDBVal<DateTime>(rdr["Date"]);
+                item.Deleted = ConvertFromDBVal<bool>(rdr["Deleted"]);
+                item.Users_Id = ConvertFromDBVal<string>(rdr["Users_Id"]);
+                item.Posts_Id = ConvertFromDBVal<int>(rdr["Posts_Id"]);
+                item.ModedBy = ConvertFromDBVal<string>(rdr["ModedBy"]);
+                items.Add(item);
             }
-            return items;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+    }
+    return items;
+}
 
         public List<Tag> GetTags()
+{
+    var items = new List<Tag>();
+    using (SqlConnection con = new SqlConnection(myDbConnectionString))
+    using (var cmd = new SqlCommand("SELECT * FROM Tags;", con))
+    {
+        try
         {
-            var items = new List<Tag>();
-            using (SqlConnection con = new SqlConnection(myDbConnectionString))
-            using (var cmd = new SqlCommand("SELECT * FROM Tags;", con))
+            cmd.CommandType = CommandType.Text;
+            con.Open();
+            SqlDataReader rdr = cmd.ExecuteReader();
+            while (rdr.Read())
             {
-                try
-                {
-                    cmd.CommandType = CommandType.Text;
-                    con.Open();
-                    SqlDataReader rdr = cmd.ExecuteReader();
-                    while (rdr.Read())
-                    {
-                        var item = new Tag();
-                        item.Id = ConvertFromDBVal<int>(rdr["Id"]);
-                        item.Text = ConvertFromDBVal<string>(rdr["Text"]);
-                        item.Posts_Id = ConvertFromDBVal<int>(rdr["Posts_Id"]);
-                        items.Add(item);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    throw (ex);
-                }
+                var item = new Tag();
+                item.Id = ConvertFromDBVal<int>(rdr["Id"]);
+                item.Text = ConvertFromDBVal<string>(rdr["Text"]);
+                item.Posts_Id = ConvertFromDBVal<int>(rdr["Posts_Id"]);
+                items.Add(item);
             }
-            return items;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+    }
+    return items;
+}
+        */
+        #endregion
 
+        #region METHODTS
 
         public List<User> QueryUsers(string query)
         {
@@ -461,7 +464,7 @@ namespace TablicaOgloszen.Services
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    throw(ex);
+                    throw (ex);
                 }
             }
         }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TablicaOgloszen.Services
 {
-    public class DateConventer
+    public class DateConventerService
     {
-        public DateConventer() { }
+        public DateConventerService() { }
 
         public static string DateConvert(DateTime datetime)
         {

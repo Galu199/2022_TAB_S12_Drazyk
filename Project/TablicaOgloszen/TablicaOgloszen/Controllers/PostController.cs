@@ -14,45 +14,42 @@ namespace TablicaOgloszen.Controllers
     public class PostController : Controller
     {
         private readonly MyDataBaseService _myDataBaseService;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly MyPermissionsManagerService _myPermissionsManagerService;
 
         public PostController(
             MyDataBaseService myDataBaseService,
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager
+            MyPermissionsManagerService myPermissionsManagerService
             )
         {
             _myDataBaseService = myDataBaseService;
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _myPermissionsManagerService = myPermissionsManagerService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
+            await _myPermissionsManagerService.getPermissions(User);
             var postList = new List<Post>();
             var postIndexList = new List<PostIndex>();
             try
             {
                 using (var scope = new TransactionScope())
                 {
-                    postList = _myDataBaseService.GetPosts();
+                    postList = _myDataBaseService.QueryPosts("SELECT * FROM Posts ORDER BY DATE DESC;");
                     foreach (var post in postList)
                     {
                         var postIndex = new PostIndex(post);
                         postIndex.Owner = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{post.Users_Id}';").First();
                         postIndex.Comments = _myDataBaseService.QueryComments($"SELECT TOP 3 * FROM Comments WHERE Posts_Id={post.Id} AND Deleted = 0 ORDER BY DATE DESC;");
                         postIndexList.Add(postIndex);
-
                     }
                     scope.Complete();
                 }
-                return View(postIndexList);
+                return View(new Tuple<List<PostIndex>, Permissions>(postIndexList, _myPermissionsManagerService.permissions));
             }
             catch
             {
                 ModelState.AddModelError(string.Empty, "Coudn't display posts.");
-                return View(postIndexList);
+                return View(new Tuple<List<PostIndex>, Permissions>(postIndexList, _myPermissionsManagerService.permissions));
             }
         }
 
@@ -92,6 +89,7 @@ namespace TablicaOgloszen.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(string Title, string Text)
         {
+            _myPermissionsManagerService.getPermissions(User);
             try
             {
                 using (var scope = new TransactionScope())
@@ -103,7 +101,7 @@ namespace TablicaOgloszen.Controllers
                     post.Date = DateTime.Now;
                     post.Pinned = false;
                     post.Deleted = false;
-                    post.Users_Id = _userManager.GetUserId(User);
+                    post.Users_Id = _myPermissionsManagerService.permissions.Id;
                     post.ModedBy = null;
                     _myDataBaseService.AddPost(post);
                     scope.Complete();
@@ -133,8 +131,9 @@ namespace TablicaOgloszen.Controllers
             {
                 using (var scope = new TransactionScope())
                 {
-                    //postEdit = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Id};").First();
+                    //postEdit = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={post.Id};").First();
                     //postEdit.Deleted = true;
+                    //_myDataBaseService.UpdatePost(postEdit);
                     scope.Complete();
                 }
                 return View();

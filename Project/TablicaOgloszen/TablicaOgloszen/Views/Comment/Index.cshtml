@@ -26,7 +26,7 @@
                    style="right:1%;bottom:10%;"
                    asp-action="Report" asp-route-id="@comment.Id" asp-route-IdPost="@comment.Posts_Id">Zgłoś</a>
             </div>
-            <div class="card-footer">Data utworzenia: @TablicaOgloszen.Services.DateConventer.DateConvert(comment.Date)</div>
+            <div class="card-footer">Data utworzenia: @TablicaOgloszen.Services.DateConventerService.DateConvert(comment.Date)</div>
         </div>
         <br />
     }

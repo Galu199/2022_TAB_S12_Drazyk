@@ -20,7 +20,7 @@ namespace TablicaOgloszen.Controllers
 
         public IActionResult Index()
         {
-            return View(_myDataBaseService.GetUsers());
+            return View(_myDataBaseService.QueryUsers("SELECT * FROM Users"));
         }
 
         public IActionResult Details(string Id)
