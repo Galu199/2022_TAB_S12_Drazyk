@@ -23,7 +23,7 @@ namespace TablicaOgloszen.Controllers
         public async Task<IActionResult> Index()
         {
             await _myPermissionsManagerService.getPermissions(User);
-            if (_myPermissionsManagerService.permissions.Level < PermissionsRole.Moderator) return View(null);
+            if (_myPermissionsManagerService.permissions.Level < PermissionsRole.Administrator) return View(null);
             return View(_myDataBaseService.QueryUsers("SELECT * FROM Users"));
         }
 

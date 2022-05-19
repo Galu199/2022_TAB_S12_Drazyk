@@ -1,32 +1,41 @@
 ﻿@model CommentIndex
 
 <h1>Komentarze</h1>
-<div>
-    <span>
-        <a asp-action="Details" asp-controller="Post" asp-route-id="@Model.post.Id" class="btn btn-primary">Powrót</a>
-    </span>
-    <span>
-        <a asp-controller="Comment" asp-action="Create" asp-route-id="@Model.post.Id" class="btn btn-primary">Dodaj komentarz</a>
-    </span>
-</div>
-
+<div asp-validation-summary="All"></div>
 @if (Model != null)
+{
+    <div>
+        <span>
+            <a asp-action="Details" asp-controller="Post" asp-route-id="@Model.post.Id" class="btn btn-primary">Powrót</a>
+        </span>
+        <span>
+            <a asp-controller="Comment" asp-action="Create" asp-route-id="@Model.post.Id" class="btn btn-primary">Dodaj komentarz</a>
+        </span>
+    </div>
     @foreach (var comment in Model.comments)
     {
         <div class="card">
             <a class="text-decoration-none text-black" asp-controller="User" asp-action="Details" asp-route-id="@comment.Users_Id">
-                <h5 class="card-header">JAKAŚ NAZWA URZYTKOWNIKA</h5>
+                <h5 class="card-header">JAKAŚ NAZWA UżYTKOWNIKA</h5>
             </a>
             <div class="card-body position-relative">
                 <h5 class="card-title">@comment.Text</h5>
                 <p class="card-text"></p>
-                <a class="btn btn-warning" asp-action="Edit" asp-route-id="@comment.Id" asp-route-IdPost="@comment.Posts_Id">Edytuj</a>
-                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@comment.Id" asp-route-IdPost="@comment.Posts_Id">Usuń</a>
-                <a class="btn btn-danger position-absolute"
-                   style="right:1%;bottom:10%;"
-                   asp-action="Report" asp-route-id="@comment.Id" asp-route-IdPost="@comment.Posts_Id">Zgłoś</a>
+                @inject TablicaOgloszen.Services.MyPermissionsManagerService per
+                @{
+                    await per.getPermissions(User);
+                    if (per.permissions.Id == Model.post.Users_Id)
+                    {
+                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@comment.Id" asp-route-IdPost="@comment.Posts_Id">Edytuj</a>
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@comment.Id" asp-route-IdPost="@comment.Posts_Id">Usuń</a>
+                    }
+                    <a class="btn btn-danger position-absolute"
+                       style="right:1%;bottom:10%;"
+                       asp-action="Report" asp-route-id="@comment.Id" asp-route-IdPost="@comment.Posts_Id">Zgłoś</a>
+                }
             </div>
             <div class="card-footer">Data utworzenia: @TablicaOgloszen.Services.DateConventerService.DateConvert(comment.Date)</div>
         </div>
         <br />
     }
+}

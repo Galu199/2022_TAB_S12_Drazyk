@@ -12,18 +12,25 @@ namespace TablicaOgloszen.Controllers
     public class CommentController : Controller
     {
         private readonly MyDataBaseService _myDataBaseService;
-        public CommentController(
-            MyDataBaseService myDataBaseService
-            )
+        private readonly MyPermissionsManagerService _myPermissionsManagerService;
+        public CommentController(MyDataBaseService myDataBaseService,
+            MyPermissionsManagerService myPermissionsManagerService)
         {
             _myDataBaseService = myDataBaseService;
+            _myPermissionsManagerService = myPermissionsManagerService;
         }
 
-        public IActionResult Index(int Id)
+        public async Task<IActionResult> Index(int Id)
         {
-            var commentIndex = new CommentIndex();
+            await _myPermissionsManagerService.getPermissions(User);
             try
             {
+                if (_myPermissionsManagerService.permissions.Level < PermissionsRole.User)
+                {
+                    ModelState.AddModelError(string.Empty, "Proszę się Zarejestrować.");
+                    return View(null);
+                }
+                var commentIndex = new CommentIndex();
                 using (var scope = new TransactionScope())
                 {
                     commentIndex.post = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Id}").First();
@@ -34,14 +41,46 @@ namespace TablicaOgloszen.Controllers
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "error massage.");
-                return View(commentIndex);
+                ModelState.AddModelError(string.Empty, "Nie można wyświetlić komentarzy");
+                return View(null);
             }
         }
 
-        public IActionResult Create()
+        //GET
+        public async Task<IActionResult> Create(int Id)
         {
-            return View();
+            var item = new Comment();
+            item.Posts_Id = Id;
+            return View(item);
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Comment item)
+        {
+            await _myPermissionsManagerService.getPermissions(User);
+            if (_myPermissionsManagerService.permissions.Level < PermissionsRole.User)
+            {
+                ModelState.AddModelError(string.Empty, "Proszę się zarejestrować!");
+                return View(item);
+            }
+            try
+            {
+                using (var scope = new TransactionScope())
+                {
+                    item.Users_Id=_myPermissionsManagerService.permissions.Id;
+                    item.Date = DateTime.Now;
+                    _myDataBaseService.AddComments(item);
+                    scope.Complete();
+                }
+                return RedirectToAction("Index", new { Id = item.Posts_Id });
+            }
+            catch
+            {
+                ModelState.AddModelError(string.Empty, "Coudn't create comment.");
+                return View(item);
+            }
         }
 
         public IActionResult Edit()

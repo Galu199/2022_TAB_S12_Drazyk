@@ -52,7 +52,7 @@
                                         <span>)</span>
                                     </a>
                                 </li>
-                                @if (per.permissions.Level >= PermissionsRole.Moderator)
+                                @if (per.permissions.Level >= PermissionsRole.Administrator)
                                 {
                                     <li class="nav-item">
                                         <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index"><i class="bi bi-people"></i> Użytkownicy</a>

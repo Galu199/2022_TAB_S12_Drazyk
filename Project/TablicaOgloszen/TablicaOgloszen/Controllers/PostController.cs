@@ -15,7 +15,6 @@ namespace TablicaOgloszen.Controllers
     {
         private readonly MyDataBaseService _myDataBaseService;
         private readonly MyPermissionsManagerService _myPermissionsManagerService;
-
         public PostController(MyDataBaseService myDataBaseService,
             MyPermissionsManagerService myPermissionsManagerService)
         {
@@ -84,8 +83,14 @@ namespace TablicaOgloszen.Controllers
                     postDetails = new PostDetails(postlist.First());
                     postDetails.Owner = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{postDetails.Users_Id}';").First();
                     postDetails.Comments = _myDataBaseService.QueryComments($"SELECT TOP 5 * FROM Comments WHERE Posts_Id={Id} AND Deleted = 0 ORDER BY DATE DESC;");
-                    postDetails.CommentsCount = _myDataBaseService.QueryAggregate($"SELECT COUNT(Id) FROM Comments WHERE Posts_Id={Id} AND Deleted = 0;");
-                    postDetails.Tags = _myDataBaseService.QueryTags($"SELECT * FROM Tags WHERE Posts_Id={Id}");
+                    postDetails.CommentsCount = (int)_myDataBaseService.QueryAggregate($"SELECT COUNT(Id) FROM Comments WHERE Posts_Id={Id} AND Deleted = 0;");
+                    postDetails.AvgRating = _myDataBaseService.QueryAggregate($"SELECT AVG(Cast(Value as Float)) FROM Ratings WHERE Posts_Id={Id};");
+                    postDetails.Tags = _myDataBaseService.QueryTags($"SELECT * FROM Tags WHERE Posts_Id={Id};");
+                    var ratings = _myDataBaseService.QueryRatings($"SELECT * FROM Ratings WHERE Posts_Id={Id} AND Users_Id='{_myPermissionsManagerService.permissions.Id}';");
+                    if (ratings.Count > 0)
+                    {
+                        postDetails.myRating = ratings.First();
+                    }
                     scope.Complete();
                 }
                 return View(postDetails);
@@ -101,7 +106,6 @@ namespace TablicaOgloszen.Controllers
         public async Task<IActionResult> Create()
         {
             await _myPermissionsManagerService.getPermissions(User);
-
             return View();
         }
 
@@ -142,7 +146,7 @@ namespace TablicaOgloszen.Controllers
         }
 
         //GET
-        public IActionResult Delete()
+        public IActionResult Delete(int id)
         {
             return View();
         }
@@ -307,21 +311,69 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
-        public IActionResult UpVote(int Id)
+        public async Task<IActionResult> AddRating(int Id,int Value)
         {
+            await _myPermissionsManagerService.getPermissions(User);
+            if (_myPermissionsManagerService.permissions.Level < PermissionsRole.User)
+            {
+                return RedirectToAction("Details", new { Id = Id });
+            }
             try
             {
                 using (var scope = new TransactionScope())
                 {
-                    //.Rating += 1;
+                    var rate = _myDataBaseService.QueryRatings($"SELECT * FROM Ratings WHERE Posts_Id={Id} AND Users_Id='{_myPermissionsManagerService.permissions.Id}';");
+                    if(rate.Count > 0)
+                    {
+                        rate.First().Value = Value;
+                        _myDataBaseService.UpdateRating(rate.First());
+                    }
+                    else
+                    {
+                        var newRate = new Rating();
+                        newRate.Posts_Id = Id;
+                        newRate.Users_Id = _myPermissionsManagerService.permissions.Id;
+                        newRate.Value = Value;
+                        _myDataBaseService.AddRating(newRate);
+                    }
                     scope.Complete();
                 }
                 return RedirectToAction("Details", new { Id = Id });
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "Coudn't upvote.");
                 return RedirectToAction("Details", new { Id = Id });
+            }
+        }
+
+        public async Task<IActionResult> PinTogggle(int Id)
+        {
+            try
+            {
+                await _myPermissionsManagerService.getPermissions(User);
+                if (_myPermissionsManagerService.permissions.Level < PermissionsRole.Moderator)
+                {
+                    return RedirectToAction("Index");
+                }
+                using (var scope = new TransactionScope())
+                {
+                    var item = _myDataBaseService.QueryPosts($"SELECT * FROM Posts WHERE Id={Id}").First();
+                    if (item.Pinned)
+                    {
+                        item.Pinned = false;
+                    }
+                    else
+                    {
+                        item.Pinned = true;
+                    }
+                    _myDataBaseService.UpdatePost(item);
+                    scope.Complete();
+                }
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return RedirectToAction("Index");
             }
         }
 

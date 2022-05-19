@@ -297,7 +297,7 @@ namespace TablicaOgloszen.Services
             return items;
         }
 
-        public List<Rating> QueryRating(string query)
+        public List<Rating> QueryRatings(string query)
         {
             var items = new List<Rating>();
             using (SqlConnection con = new SqlConnection(myDbConnectionString))
@@ -326,16 +326,17 @@ namespace TablicaOgloszen.Services
             return items;
         }
 
-        public int QueryAggregate(string query)
+        public float QueryAggregate(string query)
         {
-            int result = 0;
+            float result = 0;
             using (var con = new SqlConnection(myDbConnectionString))
             using (var cmd = new SqlCommand(query + ";", con))
             {
                 try
                 {
                     con.Open();
-                    result = (int)cmd.ExecuteScalar();
+                    var res = cmd.ExecuteScalar();
+                    if (!res.Equals(DBNull.Value))result = Convert.ToSingle(res);
                 }
                 catch (Exception ex)
                 {
@@ -414,9 +415,9 @@ namespace TablicaOgloszen.Services
                 cmd.Parameters.Add("@Text", SqlDbType.Text).Value = item.Text;
                 cmd.Parameters.Add("@DATE", SqlDbType.DateTime).Value = item.Date;
                 cmd.Parameters.Add("@Deleted", SqlDbType.Bit).Value = item.Deleted;
-                cmd.Parameters.Add("@Users_Id", SqlDbType.VarChar, 450).Value = null;
-                cmd.Parameters.Add("@Posts_Id", SqlDbType.VarChar, 450).Value = null;
-                cmd.Parameters.Add("@ModedBy", SqlDbType.VarChar, 450).Value = null;
+                cmd.Parameters.Add("@Users_Id", SqlDbType.VarChar, 450).Value = item.Users_Id;
+                cmd.Parameters.Add("@Posts_Id", SqlDbType.Int).Value = item.Posts_Id;
+                cmd.Parameters.Add("@ModedBy", SqlDbType.VarChar, 450).Value = item.ModedBy;
                 foreach (IDataParameter param in cmd.Parameters)
                 {
                     if (param.Value == null) param.Value = DBNull.Value;
@@ -464,9 +465,9 @@ namespace TablicaOgloszen.Services
             using (var con = new SqlConnection(myDbConnectionString))
             using (var cmd = new SqlCommand(@"INSERT INTO Ratings VALUES ( @Users_Id,@Posts_Id,@Value );", con))
             {
-                cmd.Parameters.Add("@Users_Id", SqlDbType.Int).Value = item.Users_Id;
+                cmd.Parameters.Add("@Users_Id", SqlDbType.VarChar, 450).Value = item.Users_Id;
                 cmd.Parameters.Add("@Posts_Id", SqlDbType.Int).Value = item.Posts_Id;
-                cmd.Parameters.Add("@Value", SqlDbType.Text).Value = item.Value;
+                cmd.Parameters.Add("@Value", SqlDbType.Int).Value = item.Value;
 
                 try
                 {
@@ -573,9 +574,9 @@ namespace TablicaOgloszen.Services
             using (var con = new SqlConnection(myDbConnectionString))
             using (var cmd = new SqlCommand(@"UPDATE Ratings SET Value=@Value WHERE Users_Id=@Users_Id AND Posts_Id=@Posts_Id;", con))
             {
-                cmd.Parameters.Add("@Users_Id", SqlDbType.Int).Value = item.Users_Id;
+                cmd.Parameters.Add("@Users_Id", SqlDbType.VarChar, 450).Value = item.Users_Id;
                 cmd.Parameters.Add("@Posts_Id", SqlDbType.Int).Value = item.Posts_Id;
-                cmd.Parameters.Add("@Value", SqlDbType.Text).Value = item.Value;
+                cmd.Parameters.Add("@Value", SqlDbType.Int).Value = item.Value;
 
                 try
                 {

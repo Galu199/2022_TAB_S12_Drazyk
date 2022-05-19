@@ -21,6 +21,8 @@ namespace TablicaOgloszen.Models
         public List<Comment> Comments = new List<Comment>();
         public List<Tag> Tags = new List<Tag>();
         public User Owner = new User();
+        public Rating myRating = new Rating();
+        public float AvgRating = 0;
         public int CommentsCount = 0;
     }
 }

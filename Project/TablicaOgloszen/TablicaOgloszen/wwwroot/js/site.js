@@ -14,12 +14,16 @@
 //}
 
 $(document).ready(function () {
-    $('.bi-star').hover(function () {
-        $(this).addClass('rating-color');
-        $(this).parent().prevAll().children('.bi-star').addClass('rating-color');
-        $(this).parent().nextAll().children('.bi-star').removeClass('rating-color');
+    $('.bi').hover(function () {
+        if ($(this).parents('.ratings').length) {
+            $(this).addClass('rating-color');
+            $(this).parent().parent().prevAll().children('a').children('.bi').addClass('rating-color');
+            $(this).parent().parent().nextAll().children('a').children('.bi').removeClass('rating-color');
+        }
     }, function () {
-        $(this).removeClass('rating-color');
-        $(this).parent().prevAll().children('.bi-star').removeClass('rating-color');
+        if ($(this).parents('.ratings').length) {
+            $(this).removeClass('rating-color');
+            $(this).parent().parent().prevAll().children('a').children('.bi').removeClass('rating-color');
+        }
     });
 });

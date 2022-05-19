@@ -24,8 +24,26 @@
                             </div>
                         </div>
                         <div class="d-flex flex-row mt-1 ellipsis">
-                            <small class="mr-2" style="margin-right:5px;">Polubienia: @Model.Rating </small>
-                            <a asp-action="UpVote" asp-route-id="@Model.Id"><i class="bi bi-heart-fill text-danger"></i></a>
+                            <div class="d-flex flex-column justify-content-start align-items-center">
+                                <ul class="ratings d-flex flex-row justify-content-start align-items-center" style="list-style:none;margin:0;padding:0;">
+                                    @{
+                                        int rate = Model.myRating.Value;
+                                        for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (rate > 0)
+                                            {
+                                                <li><a asp-action="AddRating" asp-route-Id="@Model.Id" asp-route-Value="@i"><i class="bi bi-star-fill"></i></a></li>
+                                                rate -= 1;
+                                            }
+                                            else
+                                            {
+                                                <li><a asp-action="AddRating" asp-route-Id="@Model.Id" asp-route-Value="@i"><i class="bi bi-star"></i></a></li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                                <div class="review-count">średnia: @Model.AvgRating</div>
+                            </div>
                         </div>
                     </div>
                     <div class="p-2">
