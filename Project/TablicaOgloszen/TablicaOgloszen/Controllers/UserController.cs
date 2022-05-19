@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TablicaOgloszen.Models;
 using TablicaOgloszen.Services;
 
 namespace TablicaOgloszen.Controllers
@@ -11,15 +12,18 @@ namespace TablicaOgloszen.Controllers
     public class UserController : Controller
     {
         private readonly MyDataBaseService _myDataBaseService;
-        public UserController(
-            MyDataBaseService myDataBaseService
-            )
+        private readonly MyPermissionsManagerService _myPermissionsManagerService;
+        public UserController(MyDataBaseService myDataBaseService,
+            MyPermissionsManagerService myPermissionsManagerService)
         {
             _myDataBaseService = myDataBaseService;
+            _myPermissionsManagerService = myPermissionsManagerService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            await _myPermissionsManagerService.getPermissions(User);
+            if (_myPermissionsManagerService.permissions.Level < PermissionsRole.Moderator) return View(null);
             return View(_myDataBaseService.QueryUsers("SELECT * FROM Users"));
         }
 

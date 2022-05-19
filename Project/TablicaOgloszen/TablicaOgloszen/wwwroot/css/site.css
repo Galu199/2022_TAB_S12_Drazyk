@@ -2,26 +2,66 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 .background-image {
+    z-index: -1;
     position: fixed;
     left: -1vw;
-    right: 0;
-    z-index: 1;
     display: block;
-    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1)), url(https://images.unsplash.com/photo-1579546929662-711aa81148cf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80);
+    width: 102vw;
+    height: 100vh;
+    background-image: linear-gradient(45deg, var(--Northern-Lights-Beach-1-hex), var(--Northern-Lights-Beach-5-hex)), url(https://images.unsplash.com/photo-1579546929662-711aa81148cf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80);
     background-position: top;
     background-repeat: no-repeat;
     background-size: cover;
+    filter: blur(5px);
+    /* Color Theme Swatches in Hex */
+    --Northern-Lights-Beach-1-hex: #012340;
+    --Northern-Lights-Beach-2-hex: #025959;
+    --Northern-Lights-Beach-3-hex: #027333;
+    --Northern-Lights-Beach-4-hex: #03A63C;
+    --Northern-Lights-Beach-5-hex: #04D939;
+}
+/*.background-image {
+    z-index: -1;
+    position: fixed;
+    left: -1vw;
+    right: 0;
+    display: block;
     width: 102vw;
     height: 100vh;
-    z-index: -1;
-    -webkit-filter: blur(5px);
-    -moz-filter: blur(5px);
-    -o-filter: blur(5px);
-    -ms-filter: blur(5px);
+    background-image: linear-gradient(90deg,
+    var(--Northern-Lights-Beach-1-hex) 10%,
+    var(--Northern-Lights-Beach-2-hex) 20%,
+    var(--Northern-Lights-Beach-3-hex) 30%,
+    var(--Northern-Lights-Beach-4-hex) 40%,
+    var(--Northern-Lights-Beach-5-hex) 50%,
+    var(--Northern-Lights-Beach-4-hex) 60%,
+    var(--Northern-Lights-Beach-3-hex) 70%,
+    var(--Northern-Lights-Beach-2-hex) 80%,
+    var(--Northern-Lights-Beach-1-hex) 90% );
+    background-size: 9000% 100%;
+    background-position: top;
+    background-repeat: no-repeat;
     filter: blur(5px);
+    animation: gradient 5s linear infinite;*/
+/* Color Theme Swatches in Hex */
+/*--Northern-Lights-Beach-1-hex: #012340;
+    --Northern-Lights-Beach-2-hex: #025959;
+    --Northern-Lights-Beach-3-hex: #027333;
+    --Northern-Lights-Beach-4-hex: #03A63C;
+    --Northern-Lights-Beach-5-hex: #04D939;
+}*/
+
+@keyframes gradient {
+    0% {
+        background-position: 0%;
+    }
+
+    100% {
+        background-position: 100%;
+    }
 }
 
-a.navbar-brand {
+a .navbar-brand {
     white-space: normal;
     text-align: center;
     word-break: break-all;
@@ -245,4 +285,24 @@ hr {
     border-color: #8bbafe;
     outline: 0;
     box-shadow: none
+}
+
+/* RATING */
+
+.ratings {
+    
+}
+
+.ratings i {
+    color: #cecece;
+    font-size: 15px;
+}
+
+.rating-color {
+    color: #fbc634 !important;
+}
+
+.review-count {
+    font-weight: 400;
+    font-size: 16px;
 }

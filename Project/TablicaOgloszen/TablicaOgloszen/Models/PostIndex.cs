@@ -5,19 +5,9 @@ using System.Threading.Tasks;
 
 namespace TablicaOgloszen.Models
 {
-    public class PostIndex : Post
+    public class PostIndex 
     {
-        public PostIndex(Post _post)
-        {
-            Id = _post.Id;
-            Title = _post.Title;
-            Text = _post.Text;
-            Rating = _post.Rating;
-            Date = _post.Date;
-            Pinned = _post.Pinned;
-            Users_Id = _post.Users_Id;
-            ModedBy = _post.ModedBy;
-        }
+        public Post post = new Post();
         public List<Comment> Comments = new List<Comment>();
         public User Owner = new User();
     }

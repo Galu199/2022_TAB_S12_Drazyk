@@ -297,6 +297,35 @@ namespace TablicaOgloszen.Services
             return items;
         }
 
+        public List<Rating> QueryRating(string query)
+        {
+            var items = new List<Rating>();
+            using (SqlConnection con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand(query + ";", con))
+            {
+                try
+                {
+                    cmd.CommandType = CommandType.Text;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        var item = new Rating();
+                        item.Users_Id = ConvertFromDBVal<string>(rdr["Users_Id"]);
+                        item.Posts_Id = ConvertFromDBVal<int>(rdr["Posts_Id"]);
+                        item.Value = ConvertFromDBVal<int>(rdr["value"]);
+                        items.Add(item);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw (ex);
+                }
+            }
+            return items;
+        }
+
         public int QueryAggregate(string query)
         {
             int result = 0;
@@ -316,7 +345,6 @@ namespace TablicaOgloszen.Services
             }
             return result;
         }
-
 
         public void AddUser(User item)
         {
@@ -346,12 +374,6 @@ namespace TablicaOgloszen.Services
                     throw (ex);
                 }
             }
-            //{
-            //SqlCommand cmd = new SqlCommand("BEGIN TRANSACTION;" + $"INSERT INTO Users ({item.Id},{item.Email},{item.UserName},{item.PhoneNumber},{item.Ban},{item.ModedBy});" + "COMMIT;");
-            //cmd.CommandType = CommandType.Text;
-            //con.Open();
-            //SqlDataReader rdr = cmd.ExecuteReader();
-            //}
         }
 
         public void AddPost(Post item)
@@ -437,6 +459,55 @@ namespace TablicaOgloszen.Services
             }
         }
 
+        public void AddRating(Rating item)
+        {
+            using (var con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand(@"INSERT INTO Ratings VALUES ( @Users_Id,@Posts_Id,@Value );", con))
+            {
+                cmd.Parameters.Add("@Users_Id", SqlDbType.Int).Value = item.Users_Id;
+                cmd.Parameters.Add("@Posts_Id", SqlDbType.Int).Value = item.Posts_Id;
+                cmd.Parameters.Add("@Value", SqlDbType.Text).Value = item.Value;
+
+                try
+                {
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw (ex);
+                }
+            }
+        }
+
+        public void UpdateUser(User item)
+        {
+            using (var con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand(@"UPDATE Users SET Email=@Email, UserName=@UserName, PhoneNumber=@PhoneNumber, Ban=@Ban, ModedBy=@ModedBy WHERE Id=@Id;", con))
+            {
+                cmd.Parameters.Add("@Id", SqlDbType.VarChar, 450).Value = item.Id;
+                cmd.Parameters.Add("@Email", SqlDbType.Text).Value = item.Email;
+                cmd.Parameters.Add("@UserName", SqlDbType.Text).Value = item.UserName;
+                cmd.Parameters.Add("@PhoneNumber", SqlDbType.Text).Value = item.PhoneNumber;
+                cmd.Parameters.Add("@Ban", SqlDbType.Bit).Value = item.Ban;
+                cmd.Parameters.Add("@ModedBy", SqlDbType.VarChar, 450).Value = item.ModedBy;
+                foreach (IDataParameter param in cmd.Parameters)
+                {
+                    if (param.Value == null) param.Value = DBNull.Value;
+                }
+                try
+                {
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw (ex);
+                }
+            }
+        }
 
         public void UpdatePost(Post item)
         {
@@ -497,6 +568,27 @@ namespace TablicaOgloszen.Services
             }
         }
 
+        public void UpdateRating(Rating item)
+        {
+            using (var con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand(@"UPDATE Ratings SET Value=@Value WHERE Users_Id=@Users_Id AND Posts_Id=@Posts_Id;", con))
+            {
+                cmd.Parameters.Add("@Users_Id", SqlDbType.Int).Value = item.Users_Id;
+                cmd.Parameters.Add("@Posts_Id", SqlDbType.Int).Value = item.Posts_Id;
+                cmd.Parameters.Add("@Value", SqlDbType.Text).Value = item.Value;
+
+                try
+                {
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw (ex);
+                }
+            }
+        }
 
         public void DeleteTag(int Id)
         {
@@ -516,7 +608,6 @@ namespace TablicaOgloszen.Services
                 }
             }
         }
-
 
         #endregion
     }

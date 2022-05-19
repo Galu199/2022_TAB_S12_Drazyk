@@ -13,18 +13,18 @@ namespace TablicaOgloszen.Services
     {
         private readonly UserManager<IdentityUser> _userManager;
 
-        public Permissions permissions;
-
-        public MyPermissionsManagerService(
-            UserManager<IdentityUser> userManager
-            )
+        public MyPermissionsManagerService(UserManager<IdentityUser> userManager)
         {
             _userManager = userManager;
         }
 
+        public Permissions permissions;
+
         public async Task getPermissions(ClaimsPrincipal user)
         {
             permissions = new Permissions();
+            if (user == null) return;
+            if (user.Identity.Name == null) return;
             permissions.Id = _userManager.GetUserId(user);
             var list = await _userManager.GetRolesAsync(await _userManager.FindByIdAsync(permissions.Id));
             //CODE FOR CHECKIG ROLES
@@ -37,6 +37,7 @@ namespace TablicaOgloszen.Services
                 }
             }
             //END
+            return;
         }
     }
 }

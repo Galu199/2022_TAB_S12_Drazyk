@@ -16,48 +16,67 @@ namespace TablicaOgloszen.Controllers
         private readonly MyDataBaseService _myDataBaseService;
         private readonly MyPermissionsManagerService _myPermissionsManagerService;
 
-        public PostController(
-            MyDataBaseService myDataBaseService,
-            MyPermissionsManagerService myPermissionsManagerService
-            )
+        public PostController(MyDataBaseService myDataBaseService,
+            MyPermissionsManagerService myPermissionsManagerService)
         {
             _myDataBaseService = myDataBaseService;
             _myPermissionsManagerService = myPermissionsManagerService;
         }
 
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> Index()
         {
             await _myPermissionsManagerService.getPermissions(User);
-            var postList = new List<Post>();
             var postIndexList = new List<PostIndex>();
             try
             {
                 using (var scope = new TransactionScope())
                 {
-                    postList = _myDataBaseService.QueryPosts("SELECT * FROM Posts ORDER BY DATE DESC;");
+                    var postList = new List<Post>();
+                    if (_myPermissionsManagerService.permissions.Level < PermissionsRole.User)
+                    {
+                        ModelState.AddModelError(string.Empty, "Zarejestruj się aby wyświetlić zawartość!");
+                        return View(null);
+                    }
+                    if (_myPermissionsManagerService.permissions.Level > PermissionsRole.User)
+                    {
+                        postList.AddRange(_myDataBaseService.QueryPosts("SELECT * FROM Posts WHERE Pinned = 1 ORDER BY DATE DESC;"));
+                        postList.AddRange(_myDataBaseService.QueryPosts("SELECT * FROM Posts WHERE Pinned = 0 ORDER BY DATE DESC;"));
+                    }
+                    else
+                    {
+                        postList.AddRange(_myDataBaseService.QueryPosts("SELECT * FROM Posts WHERE Deleted = 0 AND Pinned = 1 ORDER BY DATE DESC;"));
+                        postList.AddRange(_myDataBaseService.QueryPosts("SELECT * FROM Posts WHERE Deleted = 0 AND Pinned = 0 ORDER BY DATE DESC;"));
+                    }
                     foreach (var post in postList)
                     {
-                        var postIndex = new PostIndex(post);
+                        var postIndex = new PostIndex();
+                        postIndex.post = post;
                         postIndex.Owner = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{post.Users_Id}';").First();
                         postIndex.Comments = _myDataBaseService.QueryComments($"SELECT TOP 3 * FROM Comments WHERE Posts_Id={post.Id} AND Deleted = 0 ORDER BY DATE DESC;");
                         postIndexList.Add(postIndex);
                     }
                     scope.Complete();
                 }
-                return View(new Tuple<List<PostIndex>, Permissions>(postIndexList, _myPermissionsManagerService.permissions));
+                return View(postIndexList);
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "Coudn't display posts.");
-                return View(new Tuple<List<PostIndex>, Permissions>(postIndexList, _myPermissionsManagerService.permissions));
+                ModelState.AddModelError(string.Empty, "Wystąpił błąd.");
+                return View(null);
             }
         }
 
-        public IActionResult Details(int Id)
+        public async Task<IActionResult> Details(int Id)
         {
             PostDetails postDetails = null;
             try
             {
+                await _myPermissionsManagerService.getPermissions(User);
+                if (_myPermissionsManagerService.permissions.Level < PermissionsRole.User)
+                {
+                    ModelState.AddModelError(string.Empty, "You tried to display illegal material. Your IP address has been forwarded to various law enforcemenet agencies..");
+                    return View(null);
+                }
                 using (var scope = new TransactionScope())
                 {
                     var postlist = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Id}");
@@ -73,23 +92,30 @@ namespace TablicaOgloszen.Controllers
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "You tried to display illegal material. Your IP address has been forwarded to various law enforcemenet agencies..");
-                return View(postDetails);
+                ModelState.AddModelError(string.Empty, "Wystąpił błąd");
+                return View(null);
             }
         }
 
         //GET
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            await _myPermissionsManagerService.getPermissions(User);
+
             return View();
         }
 
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(string Title, string Text)
+        public async Task<IActionResult> Create(string Title, string Text)
         {
-            _myPermissionsManagerService.getPermissions(User);
+            await _myPermissionsManagerService.getPermissions(User);
+            if (_myPermissionsManagerService.permissions.Level < PermissionsRole.User)
+            {
+                ModelState.AddModelError(string.Empty, "Proszę się zarejestrować!");
+                return View(null);
+            }
             try
             {
                 using (var scope = new TransactionScope())
@@ -108,10 +134,10 @@ namespace TablicaOgloszen.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            catch 
+            catch
             {
                 ModelState.AddModelError(string.Empty, "Coudn't create post.");
-                return RedirectToAction("Index");
+                return View(null);
             }
         }
 
@@ -158,7 +184,7 @@ namespace TablicaOgloszen.Controllers
                 }
                 return View(postEdit);
             }
-            catch 
+            catch
             {
                 ModelState.AddModelError(string.Empty, "Post not found.");
                 return View(postEdit);
@@ -203,7 +229,7 @@ namespace TablicaOgloszen.Controllers
                 }
                 return RedirectToAction("Details");
             }
-            catch 
+            catch
             {
                 ModelState.AddModelError(string.Empty, "error massage.");
                 return RedirectToAction("Details");
@@ -224,7 +250,7 @@ namespace TablicaOgloszen.Controllers
                 return View(postTag);
 
             }
-            catch 
+            catch
             {
                 ModelState.AddModelError(string.Empty, "Coudn't display tags.");
                 return View(postTag);
@@ -256,7 +282,7 @@ namespace TablicaOgloszen.Controllers
                 }
                 return RedirectToAction("Tags", new { Id = Posts_Id });
             }
-            catch 
+            catch
             {
                 ModelState.AddModelError(string.Empty, "Coudn't add that tag.");
                 return RedirectToAction("Tags", new { Id = Posts_Id });
@@ -292,7 +318,7 @@ namespace TablicaOgloszen.Controllers
                 }
                 return RedirectToAction("Details", new { Id = Id });
             }
-            catch 
+            catch
             {
                 ModelState.AddModelError(string.Empty, "Coudn't upvote.");
                 return RedirectToAction("Details", new { Id = Id });

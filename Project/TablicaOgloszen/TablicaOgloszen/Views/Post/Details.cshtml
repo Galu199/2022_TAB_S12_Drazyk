@@ -1,5 +1,6 @@
 ﻿@model TablicaOgloszen.Models.PostDetails
 
+<div class="" asp-validation-summary="All"></div>
 @if (Model != null)
 {
     <div class="container mt-5 mb-5">
@@ -37,7 +38,8 @@
                             <div class="d-flex flex-row"> <span>Ilość komentarzy: @Model.CommentsCount</span> </div>
                         </div>
                         <hr>
-                        <div class="muted-color">Tags: 
+                        <div class="muted-color">
+                            Tags:
                             @foreach (var tag in Model.Tags)
                             {
                                 <small class="comment-text">#@tag.Text</small>@(" ")
@@ -57,7 +59,7 @@
                                     <div class="d-flex flex-row mb-2">
                                         <div class="ml-2">
                                             @*<a class="text-decoration-none text-black" asp-controller="User" asp-action="Details" asp-route-id="@comment.Users_Id"><span class="name">JAKAŚ NAZWA</span></a>
-                            <span class="comment-text"> - @comment.Date </span>*@
+                                                <span class="comment-text"> - @comment.Date </span>*@
                                             <span class="comment-text"> - @comment.Text </span>
                                         </div>
                                     </div>

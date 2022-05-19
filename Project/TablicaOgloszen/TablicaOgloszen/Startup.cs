@@ -39,9 +39,9 @@ namespace TablicaOgloszen
             services.AddControllersWithViews();
 
             //SERVICES
-            services.AddSingleton<MyDataBaseService>();
-            services.AddTransient<MyPermissionsManagerService>();
-            services.AddTransient<DateConventerService>();
+            services.AddScoped<MyDataBaseService>();
+            services.AddScoped<MyPermissionsManagerService>();
+            services.AddSingleton<DateConventerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
