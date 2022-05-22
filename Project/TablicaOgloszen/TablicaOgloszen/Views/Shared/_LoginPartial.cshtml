@@ -1,13 +1,15 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-
+@* asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"*@
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
+        var userId = await UserManager.FindByNameAsync(User.Identity.Name);
         <li class="nav-item">
-            <a class="nav-link" @* asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"*@> <i class="bi bi-person"></i> @User.Identity.Name!</a>
+            <a class="nav-link" asp-controller="User" asp-action="Details" asp-route-Id="@userId.Id"> <i class="bi bi-person"></i> @User.Identity.Name!</a>
         </li>
+
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                 <button type="submit" class="nav-link btn btn-link"> <i class="bi bi-door-closed"></i> Wyloguj się</button>

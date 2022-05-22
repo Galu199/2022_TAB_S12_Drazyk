@@ -33,7 +33,7 @@
                     @if (Model.Comments != null)
                         @foreach (var obj in Model.Comments)
                         {
-                            <a asp-controller="Comment" asp-action="Details" asp-route-id="@obj.Id">@obj.Text</a>@(", ")
+                            <a asp-controller="Comment" asp-action="Index" asp-route-id="@obj.Posts_Id">@obj.Text</a>@(", ")
                         }
                 </p>
             </div>

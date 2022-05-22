@@ -3,10 +3,12 @@
 <div class="" asp-validation-summary="All"></div>
 @if (Model != null)
 {
+    string text = "";
+    @if (Model.Post.Deleted == true) { text = "border:solid 3px red"; } else { text = ""; }
     <div class="container mt-5 mb-5">
         <div class="row d-flex align-items-center justify-content-center">
             <div class="col-md-10">
-                <div class="card">
+                <div class="card" style="@text">
                     <div class="d-flex justify-content-between p-2 px-3">
                         <div class="d-flex flex-row align-items-center">
                             <img src="https://i.imgur.com/tdi3NGa.jpg" width="50" class="rounded-circle">
@@ -17,8 +19,8 @@
                                     </b>
                                 </span>
                                 <small class="text-primary">
-                                    <a asp-action="Details" asp-route-id="@Model.Id">
-                                        @Model.Title
+                                    <a asp-action="Details" asp-route-id="@Model.Post.Id">
+                                        @Model.Post.Title
                                     </a>
                                 </small>
                             </div>
@@ -32,12 +34,12 @@
                                         {
                                             if (rate > 0)
                                             {
-                                                <li><a asp-action="AddRating" asp-route-Id="@Model.Id" asp-route-Value="@i"><i class="bi bi-star-fill"></i></a></li>
+                                                <li><a asp-action="AddRating" asp-route-Id="@Model.Post.Id" asp-route-Value="@i"><i class="bi bi-star-fill"></i></a></li>
                                                 rate -= 1;
                                             }
                                             else
                                             {
-                                                <li><a asp-action="AddRating" asp-route-Id="@Model.Id" asp-route-Value="@i"><i class="bi bi-star"></i></a></li>
+                                                <li><a asp-action="AddRating" asp-route-Id="@Model.Post.Id" asp-route-Value="@i"><i class="bi bi-star"></i></a></li>
                                             }
                                         }
                                     }
@@ -48,12 +50,16 @@
                     </div>
                     <div class="p-2">
                         <p class="text-justify">
-                            @Model.Text
+                            @Model.Post.Text
                         </p>
                         <hr>
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex flex-row"> <span>Data dodania: @TablicaOgloszen.Services.DateConventerService.DateConvert(Model.Date)</span> </div>
+                            <div class="d-flex flex-row"> <span>Data dodania: @TablicaOgloszen.Services.DateConventerService.DateConvert(Model.Post.Date)</span> </div>
                             <div class="d-flex flex-row"> <span>Ilość komentarzy: @Model.CommentsCount</span> </div>
+                            @if (Model.Post.Deleted == true)
+                            {
+                                <div class="d-flex flex-row"> <span>Usunięty przez: @Model.Post.ModedBy</span> </div>
+                            }
                         </div>
                         <hr>
                         <div class="muted-color">
@@ -66,10 +72,10 @@
                         <hr>
                         <div class="comments">
                             <span>
-                                <a asp-controller="Comment" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-primary">Dodaj komentarz</a>
+                                <a asp-controller="Comment" asp-action="Create" asp-route-id="@Model.Post.Id" class="btn btn-primary">Dodaj komentarz</a>
                             </span>
                             <span>
-                                <a asp-controller="Comment" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-secondary">Komentarze</a>
+                                <a asp-controller="Comment" asp-action="Index" asp-route-id="@Model.Post.Id" class="btn btn-secondary">Komentarze</a>
                             </span>
                             <div class="d-flex flex-column mb-2">
                                 @foreach (var comment in Model.Comments)
@@ -87,21 +93,31 @@
                         <hr>
                         <div class="container-fluid p-0">
                             <span>Opcje:</span>
-                            <span>
-                                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edytuj</a>
-                            </span>
-                            <span>
-                                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Usuń</a>
-                            </span>
-                            <span>
-                                <a asp-controller="Post" asp-action="Tags" asp-route-id="@Model.Id" class="btn btn-primary">zarządzaj Tagami</a>
-                            </span>
-                            <span>
-                                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Usuń jako moderator</a>
-                            </span>
-                            <span>
-                                <a asp-action="Report" asp-route-id="@Model.Id" class="btn btn-danger">Zgłoś</a>
-                            </span>
+                            @inject TablicaOgloszen.Services.MyPermissionsManagerService per
+                            @{
+                                await per.getPermissions(User);
+                                if (per.permissions.Id.Equals(Model.Owner.Id))
+                                {
+                                    <span>
+                                        <a asp-action="Edit" asp-route-id="@Model.Post.Id" class="btn btn-warning">Edytuj</a>
+                                    </span>
+                                    <span>
+                                        <a asp-action="Delete" asp-route-id="@Model.Post.Id" class="btn btn-danger">Usuń</a>
+                                    </span>
+                                    <span>
+                                        <a asp-controller="Post" asp-action="Tags" asp-route-id="@Model.Post.Id" class="btn btn-primary">zarządzaj Tagami</a>
+                                    </span>
+                                }
+                                if (per.permissions.Level >= PermissionsRole.Moderator)
+                                {
+                                    <span>
+                                        <a asp-action="Delete" asp-route-id="@Model.Post.Id" class="btn btn-danger">Usuń jako moderator</a>
+                                    </span>
+                                }
+                                <span>
+                                    <a asp-action="Report" asp-route-id="@Model.Post.Id" class="btn btn-danger">Zgłoś</a>
+                                </span>
+                            }
                         </div>
                     </div>
                 </div>

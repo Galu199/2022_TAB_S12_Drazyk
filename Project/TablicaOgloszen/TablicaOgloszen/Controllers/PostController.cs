@@ -67,7 +67,7 @@ namespace TablicaOgloszen.Controllers
 
         public async Task<IActionResult> Details(int Id)
         {
-            PostDetails postDetails = null;
+            PostDetails postDetails = new PostDetails();
             try
             {
                 await _myPermissionsManagerService.getPermissions(User);
@@ -80,8 +80,8 @@ namespace TablicaOgloszen.Controllers
                 {
                     var postlist = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Id}");
                     if (postlist.Count <= 0) return View(postDetails);
-                    postDetails = new PostDetails(postlist.First());
-                    postDetails.Owner = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{postDetails.Users_Id}';").First();
+                    postDetails.Post = postlist.First();
+                    postDetails.Owner = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{postDetails.Post.Users_Id}';").First();
                     postDetails.Comments = _myDataBaseService.QueryComments($"SELECT TOP 5 * FROM Comments WHERE Posts_Id={Id} AND Deleted = 0 ORDER BY DATE DESC;");
                     postDetails.CommentsCount = (int)_myDataBaseService.QueryAggregate($"SELECT COUNT(Id) FROM Comments WHERE Posts_Id={Id} AND Deleted = 0;");
                     postDetails.AvgRating = _myDataBaseService.QueryAggregate($"SELECT AVG(Cast(Value as Float)) FROM Ratings WHERE Posts_Id={Id};");
@@ -146,32 +146,55 @@ namespace TablicaOgloszen.Controllers
         }
 
         //GET
-        public IActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        //POST
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(Post post)
+        public IActionResult Delete(int Id)
         {
             var postEdit = new Post();
             try
             {
                 using (var scope = new TransactionScope())
                 {
-                    //postEdit = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={post.Id};").First();
-                    //postEdit.Deleted = true;
-                    //_myDataBaseService.UpdatePost(postEdit);
+                    postEdit = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Id};").First();
                     scope.Complete();
                 }
-                return View();
+                return View(postEdit);
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "Coudn't delete post.");
-                return View();
+                ModelState.AddModelError(string.Empty, "Post not found.");
+                return View(postEdit);
+            }
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Post post)
+        {
+            await _myPermissionsManagerService.getPermissions(User);
+            var postEdit = new Post();
+            if (!(_myPermissionsManagerService.permissions.Id.Equals(post.Users_Id) ||
+                _myPermissionsManagerService.permissions.Level >= PermissionsRole.Moderator))
+            {
+                ModelState.AddModelError(string.Empty, "You can't delete this post.");
+                return View(post);
+            }
+            try
+            {
+                using (var scope = new TransactionScope())
+                {
+                    postEdit = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={post.Id};").First();
+                    postEdit.Deleted = true;
+                    postEdit.ModedBy = _myPermissionsManagerService.permissions.Id;
+                    _myDataBaseService.UpdatePost(postEdit);
+                    scope.Complete();
+                }
+                ModelState.AddModelError(string.Empty, "Post deleted sucesfully.");
+                return View(postEdit);
+            }
+            catch
+            {
+                ModelState.AddModelError(string.Empty, "Coudn't edit post.");
+                return View(post);
             }
         }
 
@@ -225,7 +248,6 @@ namespace TablicaOgloszen.Controllers
                 ModelState.AddModelError(string.Empty, "Coudn't edit post.");
                 return View(post);
             }
-
         }
 
         public IActionResult Report()
@@ -321,6 +343,10 @@ namespace TablicaOgloszen.Controllers
         {
             await _myPermissionsManagerService.getPermissions(User);
             if (_myPermissionsManagerService.permissions.Level < PermissionsRole.User)
+            {
+                return RedirectToAction("Details", new { Id = Id });
+            }
+            if (Value < 1 || Value > 5)
             {
                 return RedirectToAction("Details", new { Id = Id });
             }
