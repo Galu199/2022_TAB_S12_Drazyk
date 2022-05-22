@@ -34,7 +34,12 @@ namespace TablicaOgloszen.Controllers
                 using (var scope = new TransactionScope())
                 {
                     commentIndex.post = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Id}").First();
-                    commentIndex.comments = _myDataBaseService.QueryComments($"SELECT * FROM Comments WHERE Posts_Id={Id} ORDER BY DATE DESC");
+                    var comments = _myDataBaseService.QueryComments($"SELECT * FROM Comments WHERE Posts_Id={Id} AND Deleted=0 ORDER BY DATE DESC");
+                    foreach(var item in comments)
+                    {
+                        var owner = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{item.Users_Id}';").First();
+                        commentIndex.comments.Add(new Tuple<Comment,User>(item,owner));
+                    }
                     scope.Complete();
                 }
                 return View(commentIndex);

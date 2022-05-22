@@ -198,9 +198,15 @@ namespace TablicaOgloszen.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Post post)
+        public async Task<IActionResult> Edit(Post post)
         {
+            await _myPermissionsManagerService.getPermissions(User);
             var postEdit = new Post();
+            if (!_myPermissionsManagerService.permissions.Id.Equals(post.Users_Id))
+            {
+                ModelState.AddModelError(string.Empty, "You can't edit this post.");
+                return View(post);
+            }
             try
             {
                 using (var scope = new TransactionScope())
@@ -217,7 +223,7 @@ namespace TablicaOgloszen.Controllers
             catch
             {
                 ModelState.AddModelError(string.Empty, "Coudn't edit post.");
-                return View(postEdit);
+                return View(post);
             }
 
         }
@@ -311,7 +317,7 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
-        public async Task<IActionResult> AddRating(int Id,int Value)
+        public async Task<IActionResult> AddRating(int Id, int Value)
         {
             await _myPermissionsManagerService.getPermissions(User);
             if (_myPermissionsManagerService.permissions.Level < PermissionsRole.User)
@@ -323,7 +329,7 @@ namespace TablicaOgloszen.Controllers
                 using (var scope = new TransactionScope())
                 {
                     var rate = _myDataBaseService.QueryRatings($"SELECT * FROM Ratings WHERE Posts_Id={Id} AND Users_Id='{_myPermissionsManagerService.permissions.Id}';");
-                    if(rate.Count > 0)
+                    if (rate.Count > 0)
                     {
                         rate.First().Value = Value;
                         _myDataBaseService.UpdateRating(rate.First());

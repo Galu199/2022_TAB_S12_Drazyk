@@ -15,26 +15,26 @@
     @foreach (var comment in Model.comments)
     {
         <div class="card">
-            <a class="text-decoration-none text-black" asp-controller="User" asp-action="Details" asp-route-id="@comment.Users_Id">
-                <h5 class="card-header">JAKAŚ NAZWA UżYTKOWNIKA</h5>
+            <a class="text-decoration-none text-black" asp-controller="User" asp-action="Details" asp-route-id="@comment.Item1.Users_Id">
+                <h5 class="card-header">@comment.Item2.UserName</h5>
             </a>
             <div class="card-body position-relative">
-                <h5 class="card-title">@comment.Text</h5>
+                <h5 class="card-title">@comment.Item1.Text</h5>
                 <p class="card-text"></p>
                 @inject TablicaOgloszen.Services.MyPermissionsManagerService per
                 @{
                     await per.getPermissions(User);
-                    if (per.permissions.Id == Model.post.Users_Id)
+                    if (per.permissions.Id == comment.Item2.Id)
                     {
-                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@comment.Id" asp-route-IdPost="@comment.Posts_Id">Edytuj</a>
-                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@comment.Id" asp-route-IdPost="@comment.Posts_Id">Usuń</a>
+                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@comment.Item1.Id" asp-route-IdPost="@comment.Item1.Posts_Id">Edytuj</a>
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@comment.Item1.Id" asp-route-IdPost="@comment.Item1.Posts_Id">Usuń</a>
                     }
                     <a class="btn btn-danger position-absolute"
                        style="right:1%;bottom:10%;"
-                       asp-action="Report" asp-route-id="@comment.Id" asp-route-IdPost="@comment.Posts_Id">Zgłoś</a>
+                       asp-action="Report" asp-route-id="@comment.Item1.Id" asp-route-IdPost="@comment.Item1.Posts_Id">Zgłoś</a>
                 }
             </div>
-            <div class="card-footer">Data utworzenia: @TablicaOgloszen.Services.DateConventerService.DateConvert(comment.Date)</div>
+            <div class="card-footer">Data utworzenia: @TablicaOgloszen.Services.DateConventerService.DateConvert(comment.Item1.Date)</div>
         </div>
         <br />
     }
