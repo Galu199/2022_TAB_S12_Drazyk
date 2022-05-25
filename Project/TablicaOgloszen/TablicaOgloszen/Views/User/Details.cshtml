@@ -1,4 +1,5 @@
 ﻿@model TablicaOgloszen.Models.UserDetails
+@inject TablicaOgloszen.Services.MyPermissionsManagerService per
 
 <h1>Profil Użytkownika</h1>
 <div asp-validation-summary="All"></div>
@@ -8,17 +9,16 @@
         <div class="card h-100">
             <h5 class="card-header">@Model.UserName</h5>
             <div class="card-body">
-                <p class="card-title">Id: @Model.Id</p>
+                @*<p class="card-title">Id: @Model.Id</p>*@
                 <p class="card-text">Email: @Model.Email</p>
                 <p class="card-text">Phone number: @Model.PhoneNumber</p>
                 <p class="card-text">Ban: @Model.Ban</p>
                 <p class="card-text">
-                    Roles:
-                    @*@inject Microsoft.AspNetCore.Identity.UserManager<PortalOgloszeniowy.Models.User> userManager
-                        @foreach (var role in await userManager.GetRolesAsync(await userManager.FindByNameAsync(Model.UserName)))
-                        {
-                            <span>@role,</span>
-                        }*@
+                    Level:
+                    @{
+                        var level = await per.findPermissions(Model.Id);
+                        @(level)
+                    }
                 </p>
                 <p class="card-text">
                     Posty:
@@ -26,7 +26,7 @@
                         @foreach (var obj in Model.Posts)
                         {
                             <a asp-controller="Post" asp-action="Details" asp-route-id="@obj.Id">@obj.Title</a>@(", ")
-                        }
+                            }
                 </p>
                 <p class="card-text">
                     Komentarze:
@@ -34,16 +34,20 @@
                         @foreach (var obj in Model.Comments)
                         {
                             <a asp-controller="Comment" asp-action="Index" asp-route-id="@obj.Posts_Id">@obj.Text</a>@(", ")
-                        }
+                            }
                 </p>
             </div>
             <div class="card-footer">
-                <span>
-                    <a class="btn btn-warning" asp-action="Edit" asp-route-Id="@Model.Id">EDYTUJ</a>
-                </span>
-                <span>
-                    <a class="btn btn-danger" asp-action="Delete" asp-route-Id="@Model.Id">USUN</a>
-                </span>
+                @{await per.getPermissions(User);}
+                @if (per.permissions.Id.Equals(Model.Id) || per.permissions.Level >= PermissionsRole.Administrator)
+                {
+                    <span>
+                        <a class="btn btn-warning" asp-action="Edit" asp-route-Id="@Model.Id">Edytuj</a>
+                    </span>
+                    <span>
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-Id="@Model.Id">Usuń</a>
+                    </span>
+                }
             </div>
         </div>
     </div>

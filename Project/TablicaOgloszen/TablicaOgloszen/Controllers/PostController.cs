@@ -22,6 +22,7 @@ namespace TablicaOgloszen.Controllers
             _myPermissionsManagerService = myPermissionsManagerService;
         }
 
+        //
         public async Task<IActionResult> Index()
         {
             await _myPermissionsManagerService.getPermissions(User);
@@ -65,6 +66,7 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
+        //
         public async Task<IActionResult> Details(int Id)
         {
             PostDetails postDetails = new PostDetails();
@@ -110,8 +112,7 @@ namespace TablicaOgloszen.Controllers
         }
 
         //POST
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost][ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(string Title, string Text)
         {
             await _myPermissionsManagerService.getPermissions(User);
@@ -166,8 +167,7 @@ namespace TablicaOgloszen.Controllers
         }
 
         //POST
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost][ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Post post)
         {
             await _myPermissionsManagerService.getPermissions(User);
@@ -219,13 +219,13 @@ namespace TablicaOgloszen.Controllers
         }
 
         //POST
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost][ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Post post)
         {
-            await _myPermissionsManagerService.getPermissions(User);
             var postEdit = new Post();
-            if (!_myPermissionsManagerService.permissions.Id.Equals(post.Users_Id))
+            await _myPermissionsManagerService.getPermissions(User);
+            if (!(_myPermissionsManagerService.permissions.Id.Equals(post.Users_Id) ||
+                _myPermissionsManagerService.permissions.Level >= PermissionsRole.Administrator))
             {
                 ModelState.AddModelError(string.Empty, "You can't edit this post.");
                 return View(post);
@@ -250,6 +250,7 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
+        //
         public IActionResult Report()
         {
             try
@@ -268,23 +269,30 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
-        public IActionResult Tags(int Id)
+        //
+        public async Task<IActionResult> Tags(int Id)
         {
+            await _myPermissionsManagerService.getPermissions(User);
             var postTag = new PostTags();
             try
             {
                 using (var scope = new TransactionScope())
                 {
                     postTag.post = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Id}").First();
+                    if (!(_myPermissionsManagerService.permissions.Id.Equals(postTag.post.Users_Id) ||
+                        _myPermissionsManagerService.permissions.Level>=PermissionsRole.Administrator))
+                    {
+                        ModelState.AddModelError(string.Empty, "Nie możesz zarządzać tagami tego postu.");
+                        return View(postTag);
+                    }
                     postTag.tags = _myDataBaseService.QueryTags($"SELECT * FROM Tags WHERE Posts_Id={Id}");
                     scope.Complete();
                 }
                 return View(postTag);
-
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "Coudn't display tags.");
+                ModelState.AddModelError(string.Empty, "Nie możesz zarządzać tagami tego postu.");
                 return View(postTag);
             }
         }
@@ -298,14 +306,21 @@ namespace TablicaOgloszen.Controllers
         }
 
         //POST
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult AddTag(string Text, int Posts_Id)
+        [HttpPost][ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddTag(string Text, int Posts_Id)
         {
+            await _myPermissionsManagerService.getPermissions(User);
             try
             {
                 using (var scope = new TransactionScope())
                 {
+                    var post = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Posts_Id}").First();
+                    if (!(_myPermissionsManagerService.permissions.Id.Equals(post.Users_Id) ||
+                        _myPermissionsManagerService.permissions.Level >= PermissionsRole.Administrator))
+                    {
+                        ModelState.AddModelError(string.Empty, "Nie możesz zarządzać tagami tego postu.");
+                        return View(null);
+                    }
                     var tag = new Tag();
                     tag.Text = Text;
                     tag.Posts_Id = Posts_Id;
@@ -316,17 +331,26 @@ namespace TablicaOgloszen.Controllers
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "Coudn't add that tag.");
+                //ModelState.AddModelError(string.Empty, "Coudn't add that tag.");
                 return RedirectToAction("Tags", new { Id = Posts_Id });
             }
         }
 
-        public IActionResult DeleteTag(int Id, int Posts_Id)
+        //
+        public async Task<IActionResult> DeleteTag(int Id, int Posts_Id)
         {
+            await _myPermissionsManagerService.getPermissions(User);
             try
             {
                 using (var scope = new TransactionScope())
                 {
+                    var post = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Posts_Id}").First();
+                    if (!(_myPermissionsManagerService.permissions.Id.Equals(post.Users_Id) ||
+                        _myPermissionsManagerService.permissions.Level >= PermissionsRole.Administrator))
+                    {
+                        ModelState.AddModelError(string.Empty, "Nie możesz zarządzać tagami tego postu.");
+                        return View(null);
+                    }
                     _myDataBaseService.DeleteTag(Id);
                     scope.Complete();
                 }
@@ -339,6 +363,7 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
+        //
         public async Task<IActionResult> AddRating(int Id, int Value)
         {
             await _myPermissionsManagerService.getPermissions(User);
@@ -378,6 +403,7 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
+        //
         public async Task<IActionResult> PinTogggle(int Id)
         {
             try
