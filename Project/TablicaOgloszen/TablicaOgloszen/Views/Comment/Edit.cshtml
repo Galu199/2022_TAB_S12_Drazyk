@@ -1,27 +1,31 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model TablicaOgloszen.Models.Comment
-@{
-}
+﻿@model TablicaOgloszen.Models.Comment
 
 <h1>Edytuj Komentarz</h1>
-<div>
-    <span>
-        <a class="btn btn-primary" asp-controller="Comment" asp-action="Index" asp-route-id="ViewContext.HttpContext.Request.Query["IdPost"]">Powrót</a>
-    </span>
-    @*@foreach (var i in ViewContext.HttpContext.Request.Query)
-    {
-        <span>@i</span><br/>
-    }*@
-</div>
-<div asp-validation-summary="All"></div>
-<form class="form-control" method="post" asp-action="Edit">
-    <label class="form-label" asp-for="Text"></label>
-    <input class="form-control" asp-for="Text" />
-    <span class="form-text" asp-validation-for="Text"></span>
-    <input class="btn btn-primary" type="submit" value="Edit" />
-</form>
+@if (Model != null)
+{
+    <div>
+        <span>
+            <a class="btn btn-primary" asp-controller="Comment" asp-action="Index" asp-route-id="@Model.Posts_Id">Powrót</a>
+        </span>
+        @*@foreach (var i in ViewContext.HttpContext.Request.Query)
+        {
+            <span>@i</span><br />
+        }*@
+    </div>
+    <form class="form-control" method="post" asp-action="Edit">
+        <div class="form-group mb-3">
+            <div asp-validation-summary="All"></div>
+        </div>
+        <div class="form-group mb-3">
+            <label class="form-label" asp-for="Text"></label>
+            <input class="form-control" asp-for="Text" />
+            <span class="form-text" asp-validation-for="Text"></span>
+        </div>
+        <div class="form-group mb-3">
+            <input class="btn btn-primary" type="submit" value="Edit" />
+        </div>
+    </form>
+}
 
 @section Scripts{
     @{

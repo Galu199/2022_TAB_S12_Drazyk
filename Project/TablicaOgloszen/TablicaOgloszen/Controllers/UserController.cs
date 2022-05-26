@@ -21,7 +21,7 @@ namespace TablicaOgloszen.Controllers
             _myPermissionsManagerService = myPermissionsManagerService;
         }
 
-        //
+        //GET
         public async Task<IActionResult> Index()
         {
             await _myPermissionsManagerService.getPermissions(User);
@@ -47,7 +47,7 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
-        //
+        //GET
         public IActionResult Details(string Id)
         {
             UserDetails person = new UserDetails(new User());
@@ -137,7 +137,7 @@ namespace TablicaOgloszen.Controllers
             return View();
         }
 
-        //
+        //GET
         public async Task<IActionResult> ModGrant(string Id)
         {
             await _myPermissionsManagerService.getPermissions(User);
@@ -153,7 +153,7 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
-        //
+        //GET
         public async Task<IActionResult> ModRevoke(string Id)
         {
             await _myPermissionsManagerService.getPermissions(User);
@@ -169,7 +169,7 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
-        //
+        //GET
         public async Task<IActionResult> Ban(string Id)
         {
             await _myPermissionsManagerService.getPermissions(User);
@@ -203,7 +203,7 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
-        //
+        //GET
         public async Task<IActionResult> Unban(string Id)
         {
             await _myPermissionsManagerService.getPermissions(User);

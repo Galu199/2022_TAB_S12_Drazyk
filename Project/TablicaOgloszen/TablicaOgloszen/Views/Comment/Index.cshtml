@@ -1,4 +1,5 @@
 ﻿@model CommentIndex
+@inject TablicaOgloszen.Services.MyPermissionsManagerService per
 
 <h1>Komentarze</h1>
 <div asp-validation-summary="All"></div>
@@ -14,25 +15,28 @@
     </div>
     @foreach (var comment in Model.comments)
     {
-        <div class="card">
+        string text = "";
+        @if (comment.Item1.Deleted == true) { text = "border:solid 3px red"; } else { text = ""; }
+        <div class="card" style="@text">
             <a class="text-decoration-none text-black" asp-controller="User" asp-action="Details" asp-route-id="@comment.Item1.Users_Id">
                 <h5 class="card-header">@comment.Item2.UserName</h5>
             </a>
             <div class="card-body position-relative">
-                <h5 class="card-title">@comment.Item1.Text</h5>
-                <p class="card-text"></p>
-                @inject TablicaOgloszen.Services.MyPermissionsManagerService per
-                @{
-                    await per.getPermissions(User);
-                    if (per.permissions.Id == comment.Item2.Id)
-                    {
-                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@comment.Item1.Id" asp-route-IdPost="@comment.Item1.Posts_Id">Edytuj</a>
-                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@comment.Item1.Id" asp-route-IdPost="@comment.Item1.Posts_Id">Usuń</a>
+                <h5 class="card-text">@comment.Item1.Text</h5>
+                <hr />
+                <p class="card-text">
+                    @{
+                        await per.getPermissions(User);
+                        if (per.permissions.Id == comment.Item2.Id || per.permissions.Level >= PermissionsRole.Moderator)
+                        {
+                            <a class="btn btn-warning" asp-action="Edit" asp-route-id="@comment.Item1.Id">Edytuj</a>
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@comment.Item1.Id">Usuń</a>
+                        }
+                        <a class="btn btn-danger position-absolute"
+                           style="right:1%;bottom:10%;"
+                           asp-action="Report" asp-route-id="@comment.Item1.Id" asp-route-IdPost="@comment.Item1.Posts_Id">Zgłoś</a>
                     }
-                    <a class="btn btn-danger position-absolute"
-                       style="right:1%;bottom:10%;"
-                       asp-action="Report" asp-route-id="@comment.Item1.Id" asp-route-IdPost="@comment.Item1.Posts_Id">Zgłoś</a>
-                }
+                </p>
             </div>
             <div class="card-footer">Data utworzenia: @TablicaOgloszen.Services.DateConventerService.DateConvert(comment.Item1.Date)</div>
         </div>

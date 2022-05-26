@@ -22,7 +22,7 @@ namespace TablicaOgloszen.Controllers
             _myPermissionsManagerService = myPermissionsManagerService;
         }
 
-        //
+        //GET
         public async Task<IActionResult> Index()
         {
             await _myPermissionsManagerService.getPermissions(User);
@@ -37,7 +37,7 @@ namespace TablicaOgloszen.Controllers
                         ModelState.AddModelError(string.Empty, "Zarejestruj się aby wyświetlić zawartość!");
                         return View(null);
                     }
-                    if (_myPermissionsManagerService.permissions.Level > PermissionsRole.User)
+                    else if (_myPermissionsManagerService.permissions.Level > PermissionsRole.User)
                     {
                         postList.AddRange(_myDataBaseService.QueryPosts("SELECT * FROM Posts WHERE Pinned = 1 ORDER BY DATE DESC;"));
                         postList.AddRange(_myDataBaseService.QueryPosts("SELECT * FROM Posts WHERE Pinned = 0 ORDER BY DATE DESC;"));
@@ -66,7 +66,7 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
-        //
+        //GET
         public async Task<IActionResult> Details(int Id)
         {
             PostDetails postDetails = new PostDetails();
@@ -112,7 +112,8 @@ namespace TablicaOgloszen.Controllers
         }
 
         //POST
-        [HttpPost][ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(string Title, string Text)
         {
             await _myPermissionsManagerService.getPermissions(User);
@@ -167,7 +168,8 @@ namespace TablicaOgloszen.Controllers
         }
 
         //POST
-        [HttpPost][ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Post post)
         {
             await _myPermissionsManagerService.getPermissions(User);
@@ -219,7 +221,8 @@ namespace TablicaOgloszen.Controllers
         }
 
         //POST
-        [HttpPost][ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Post post)
         {
             var postEdit = new Post();
@@ -250,26 +253,7 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
-        //
-        public IActionResult Report()
-        {
-            try
-            {
-                using (var scope = new TransactionScope())
-                {
-
-                    scope.Complete();
-                }
-                return RedirectToAction("Details");
-            }
-            catch
-            {
-                ModelState.AddModelError(string.Empty, "error massage.");
-                return RedirectToAction("Details");
-            }
-        }
-
-        //
+        //GET
         public async Task<IActionResult> Tags(int Id)
         {
             await _myPermissionsManagerService.getPermissions(User);
@@ -280,7 +264,7 @@ namespace TablicaOgloszen.Controllers
                 {
                     postTag.post = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Id}").First();
                     if (!(_myPermissionsManagerService.permissions.Id.Equals(postTag.post.Users_Id) ||
-                        _myPermissionsManagerService.permissions.Level>=PermissionsRole.Administrator))
+                        _myPermissionsManagerService.permissions.Level >= PermissionsRole.Administrator))
                     {
                         ModelState.AddModelError(string.Empty, "Nie możesz zarządzać tagami tego postu.");
                         return View(postTag);
@@ -306,7 +290,8 @@ namespace TablicaOgloszen.Controllers
         }
 
         //POST
-        [HttpPost][ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddTag(string Text, int Posts_Id)
         {
             await _myPermissionsManagerService.getPermissions(User);
@@ -336,7 +321,7 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
-        //
+        //GET
         public async Task<IActionResult> DeleteTag(int Id, int Posts_Id)
         {
             await _myPermissionsManagerService.getPermissions(User);
@@ -363,7 +348,7 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
-        //
+        //GET
         public async Task<IActionResult> AddRating(int Id, int Value)
         {
             await _myPermissionsManagerService.getPermissions(User);
@@ -403,7 +388,7 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
-        //
+        //GET
         public async Task<IActionResult> PinTogggle(int Id)
         {
             try
@@ -435,5 +420,23 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
+        //GET
+        public IActionResult Report()
+        {
+            try
+            {
+                using (var scope = new TransactionScope())
+                {
+
+                    scope.Complete();
+                }
+                return RedirectToAction("Details");
+            }
+            catch
+            {
+                ModelState.AddModelError(string.Empty, "error massage.");
+                return RedirectToAction("Details");
+            }
+        }
     }
 }

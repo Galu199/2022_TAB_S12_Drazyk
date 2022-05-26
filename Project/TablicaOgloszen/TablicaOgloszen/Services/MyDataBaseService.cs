@@ -544,14 +544,15 @@ namespace TablicaOgloszen.Services
         public void UpdateComment(Comment item)
         {
             using (var con = new SqlConnection(myDbConnectionString))
-            using (var cmd = new SqlCommand(@"UPDATE Comments SET Text=@Text, Date=@Date, Deleted=@Deleted, Deleted=@Deleted, Users_Id=@Users_Id, Posts_Id=@Posts_Id Moded_By=@Moded_By WHERE Id=@Id;", con))
+            using (var cmd = new SqlCommand(@"UPDATE Comments SET Text=@Text, Date=@Date, Deleted=@Deleted, Users_Id=@Users_Id, Posts_Id=@Posts_Id, ModedBy=@ModedBy WHERE Id=@Id;", con))
             {
+                cmd.Parameters.Add("@Id", SqlDbType.Int).Value = item.Id;
                 cmd.Parameters.Add("@Text", SqlDbType.Text).Value = item.Text;
                 cmd.Parameters.Add("@DATE", SqlDbType.DateTime).Value = item.Date;
                 cmd.Parameters.Add("@Deleted", SqlDbType.Bit).Value = item.Deleted;
-                cmd.Parameters.Add("@Users_Id", SqlDbType.VarChar, 450).Value = null;
-                cmd.Parameters.Add("@Posts_Id", SqlDbType.VarChar, 450).Value = null;
-                cmd.Parameters.Add("@ModedBy", SqlDbType.VarChar, 450).Value = null;
+                cmd.Parameters.Add("@Users_Id", SqlDbType.VarChar, 450).Value = item.Users_Id;
+                cmd.Parameters.Add("@Posts_Id", SqlDbType.VarChar, 450).Value = item.Posts_Id;
+                cmd.Parameters.Add("@ModedBy", SqlDbType.VarChar, 450).Value = item.ModedBy;
                 foreach (IDataParameter param in cmd.Parameters)
                 {
                     if (param.Value == null) param.Value = DBNull.Value;
