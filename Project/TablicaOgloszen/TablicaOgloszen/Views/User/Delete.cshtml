@@ -1,33 +1,51 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model TablicaOgloszen.Models.User
-@{
-}
+﻿@model TablicaOgloszen.Models.User
 
-<h1>Delete - USER</h1>
+<h1>Usuń konto</h1>
 
+@if (Model != null)
+{
     <div>
         <span>
-            <a asp-action="Index" class="btn btn-primary" asp-controller="User" asp-route-id="Model.Id">Powrót</a>
+            @if (Model.Id==null)
+            {
+                <a asp-action="Index" class="btn btn-primary" asp-controller="User">Powrót</a>
+            }
+            else
+            {
+                <a asp-action="Details" class="btn btn-primary" asp-controller="User" asp-route-id="@Model.Id">Powrót</a>
+            }
         </span>
     </div>
 
-     <div asp-validation-summary="All"></div>
     <form class="form-control" method="post" asp-action="Delete">
-        <label asp-for="UserName" class="form-label"></label>
-        <input asp-for="UserName" class="form-control" disabled />
-        <span asp-validation-for="UserName" class="form-text"></span>
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" disabled />
-        <span asp-validation-for="Email"  class="form-text"></span>
-        <label asp-for="PhoneNumber" class="form-label"></label>
-        <input asp-for="PhoneNumber" class="form-control" disabled />
-        <span asp-validation-for="PhoneNumber" class="form-text"></span>
-        <input type="submit" class="btn btn-primary"  value="Delete" />
+        <div class="form-group mb-3">
+            <div asp-validation-summary="All"></div>
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="UserName" class="form-label"></label>
+            <input asp-for="UserName" class="form-control" readonly />
+            <span asp-validation-for="UserName" class="form-text"></span>
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" readonly />
+            <span asp-validation-for="Email" class="form-text"></span>
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="PhoneNumber" class="form-label"></label>
+            <input asp-for="PhoneNumber" class="form-control" readonly />
+            <span asp-validation-for="PhoneNumber" class="form-text"></span>
+        </div>
+        <div class="form-group mb-3">
+            <span style="color:red;">UWAGA </span><span>Wszystkie ogłoszenia oraz komentarze zostaną usunięte!</span>
+        </div>
+        <div class="form-group mb-3">
+            <input type="submit" class="btn btn-primary" value="Usuń" />
+        </div>
     </form>
+}
 
-    @section Scripts{
+@section Scripts{
     @{
         <partial name="_ValidationScriptsPartial" />
     }

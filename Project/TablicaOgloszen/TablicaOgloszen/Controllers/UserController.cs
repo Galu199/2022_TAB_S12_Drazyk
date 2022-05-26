@@ -87,7 +87,7 @@ namespace TablicaOgloszen.Controllers
                 }
                 return View(user);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
                 return View(null);
@@ -95,7 +95,8 @@ namespace TablicaOgloszen.Controllers
         }
 
         //POST
-        [HttpPost][ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(User user)
         {
             await _myPermissionsManagerService.getPermissions(User);
@@ -112,7 +113,7 @@ namespace TablicaOgloszen.Controllers
                     var users = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{user.Id}';");
                     if (users.Count <= 0)
                     {
-                        throw (new Exception("No user with this ID: "+user.Id));
+                        throw (new Exception("No user with this ID: " + user.Id));
                     }
                     userEdit = users.First();
                     userEdit.UserName = user.UserName;
@@ -132,9 +133,79 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
-        public IActionResult Delete(string Id)
+        //GET
+        public async Task<IActionResult> Delete(string Id)
         {
-            return View();
+            await _myPermissionsManagerService.getPermissions(User);
+            var user = new User();
+            try
+            {
+                using (var scope = new TransactionScope())
+                {
+                    var users = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{Id}';");
+                    if (users.Count <= 0)
+                    {
+                        throw (new Exception("No user with this Id: " + Id));
+                    }
+                    user = users.First();
+                    user.PhoneNumber = "000 000 000";
+                    scope.Complete();
+                }
+                return View(user);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                ModelState.AddModelError(string.Empty, "Wystąpił błąd.");
+                return View(user);
+            }
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(User user)
+        {
+            await _myPermissionsManagerService.getPermissions(User);
+            try
+            {
+                using (var scope = new TransactionScope())
+                {
+                    var users = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{user.Id}';");
+                    if (users.Count <= 0)
+                    {
+                        throw (new Exception("No user with this Id: " + user.Id));
+                    }
+                    user = users.First();
+                    user.Ban = true;
+                    user.ModedBy = _myPermissionsManagerService.permissions.Id;
+                    _myDataBaseService.UpdateUser(user);
+                    var usersPosts = _myDataBaseService.QueryPosts($"SELECT * FROM Posts WHERE Users_Id='{user.Id}';");
+                    foreach (var post in usersPosts)
+                    {
+                        post.Pinned = false;
+                        post.Deleted = true;
+                        post.ModedBy = _myPermissionsManagerService.permissions.Id;
+                        _myDataBaseService.UpdatePost(post);
+                    }
+                    var usersComments = _myDataBaseService.QueryComments($"SELECT * FROM Comments WHERE Users_Id='{user.Id}';");
+                    foreach (var comment in usersComments)
+                    {
+                        comment.Deleted = true;
+                        comment.ModedBy = _myPermissionsManagerService.permissions.Id;
+                        _myDataBaseService.UpdateComment(comment);
+                    }
+                    scope.Complete();
+                }
+                ModelState.AddModelError(string.Empty, "Usuwanie powiodło się.");
+                return View(user);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                ModelState.AddModelError(string.Empty, "Wystąpił błąd.");
+                return View(user);
+            }
         }
 
         //GET

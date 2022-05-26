@@ -9,13 +9,19 @@ namespace TablicaOgloszen.Models
     {
         [Key]
         public string Id { get; set; }
-        [Required][EmailAddress][DisplayName("E-mail")]
+        [Required]
+        [EmailAddress]
+        [DisplayName("E-mail")]
         public string Email { get; set; }
-        [Required][DisplayName("Imię i nazwisko")]
+        [Required]
+        [DisplayName("Imię i nazwisko")]
         public string UserName { get; set; }
-        [Required][Phone][DisplayName("Numer telefonu")]
+        [Required]
+        [Phone]
+        [DisplayName("Numer telefonu")]
         public string PhoneNumber { get; set; }
-        [Required][DisplayName("Zbanowany")]
+        [Required]
+        [DisplayName("Zbanowany")]
         public bool Ban { get; set; }
         [DisplayName("Zablokowany przez")]
         public string ModedBy { get; set; }
