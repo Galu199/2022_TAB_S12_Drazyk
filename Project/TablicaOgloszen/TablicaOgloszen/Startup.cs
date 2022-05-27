@@ -39,8 +39,9 @@ namespace TablicaOgloszen
             services.AddControllersWithViews();
 
             //SERVICES
-            services.AddScoped<MyDataBaseService>();
+            services.AddScoped<MyDataBaseManagerService>();
             services.AddScoped<MyPermissionsManagerService>();
+            services.AddScoped<MyNotificationManagerService>();
             services.AddSingleton<DateConventerService>();
         }
 

@@ -29,9 +29,11 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarsExample05">
+                    @inject TablicaOgloszen.Services.MyDataBaseManagerService db
                     @inject TablicaOgloszen.Services.MyPermissionsManagerService per
                     @{
                         await per.getPermissions(User);
+                        var not = db.QueryAggregate($"SELECT count(*) FROM notifications WHERE Users_Id='{per.permissions.Id}';");
                         if (per.permissions.Level > PermissionsRole.Ban)
                         {
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -48,7 +50,7 @@
                                     <a class="nav-link" asp-area="" asp-controller="Notification" asp-action="Index">
                                         <i class="bi bi-bell"></i> Powiadomienia
                                         <span>(</span>
-                                        0
+                                        @not
                                         <span>)</span>
                                     </a>
                                 </li>

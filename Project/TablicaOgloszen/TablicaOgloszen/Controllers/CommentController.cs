@@ -11,22 +11,25 @@ namespace TablicaOgloszen.Controllers
 {
     public class CommentController : Controller
     {
-        private readonly MyDataBaseService _myDataBaseService;
-        private readonly MyPermissionsManagerService _myPermissionsManagerService;
-        public CommentController(MyDataBaseService myDataBaseService,
-            MyPermissionsManagerService myPermissionsManagerService)
+        private readonly MyDataBaseManagerService _myDataBaseService;
+        private readonly MyPermissionsManagerService _myPermissionsService;
+        private readonly MyNotificationManagerService _myNotificationService;
+        public CommentController(MyDataBaseManagerService myDataBaseService,
+            MyPermissionsManagerService myPermissionsManagerService,
+            MyNotificationManagerService myNotificationManagerService)
         {
             _myDataBaseService = myDataBaseService;
-            _myPermissionsManagerService = myPermissionsManagerService;
+            _myPermissionsService = myPermissionsManagerService;
+            _myNotificationService = myNotificationManagerService;
         }
 
         //GET
         public async Task<IActionResult> Index(int Id)
         {
-            await _myPermissionsManagerService.getPermissions(User);
+            await _myPermissionsService.getPermissions(User);
             try
             {
-                if (_myPermissionsManagerService.permissions.Level < PermissionsRole.User)
+                if (_myPermissionsService.permissions.Level < PermissionsRole.User)
                 {
                     ModelState.AddModelError(string.Empty, "Proszę się Zarejestrować.");
                     return View(null);
@@ -36,7 +39,7 @@ namespace TablicaOgloszen.Controllers
                 {
                     commentIndex.post = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Id}").First();
                     List<Comment> comments;
-                    if (_myPermissionsManagerService.permissions.Level > PermissionsRole.User)
+                    if (_myPermissionsService.permissions.Level > PermissionsRole.User)
                     {
                         comments = _myDataBaseService.QueryComments($"SELECT * FROM Comments WHERE Posts_Id={Id} ORDER BY DATE DESC");
                     }
@@ -61,7 +64,7 @@ namespace TablicaOgloszen.Controllers
         }
 
         //GET
-        public async Task<IActionResult> Create(int Id)
+        public IActionResult Create(int Id)
         {
             var item = new Comment();
             item.Posts_Id = Id;
@@ -73,8 +76,8 @@ namespace TablicaOgloszen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Comment item)
         {
-            await _myPermissionsManagerService.getPermissions(User);
-            if (_myPermissionsManagerService.permissions.Level < PermissionsRole.User)
+            await _myPermissionsService.getPermissions(User);
+            if (_myPermissionsService.permissions.Level < PermissionsRole.User)
             {
                 ModelState.AddModelError(string.Empty, "Proszę się zarejestrować!");
                 return View(item);
@@ -83,7 +86,7 @@ namespace TablicaOgloszen.Controllers
             {
                 using (var scope = new TransactionScope())
                 {
-                    item.Users_Id = _myPermissionsManagerService.permissions.Id;
+                    item.Users_Id = _myPermissionsService.permissions.Id;
                     item.Date = DateTime.Now;
                     _myDataBaseService.AddComments(item);
                     scope.Complete();
@@ -100,7 +103,7 @@ namespace TablicaOgloszen.Controllers
         //GET
         public async Task<IActionResult> Edit(int Id)
         {
-            await _myPermissionsManagerService.getPermissions(User);
+            await _myPermissionsService.getPermissions(User);
             var com = new Comment();
             com.Id = Id;
             try
@@ -113,8 +116,8 @@ namespace TablicaOgloszen.Controllers
                         throw new Exception("No Comment with this Id");
                     }
                     var comment = comments.First();
-                    if (!(_myPermissionsManagerService.permissions.Id.Equals(comment.Users_Id) ||
-                        _myPermissionsManagerService.permissions.Level >= PermissionsRole.Moderator))
+                    if (!(_myPermissionsService.permissions.Id.Equals(comment.Users_Id) ||
+                        _myPermissionsService.permissions.Level >= PermissionsRole.Moderator))
                     {
                         ModelState.AddModelError(string.Empty, "Brak uprawnień do edycji tego komentarza");
                         return View(com);
@@ -137,7 +140,7 @@ namespace TablicaOgloszen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Comment comment)
         {
-            await _myPermissionsManagerService.getPermissions(User);
+            await _myPermissionsService.getPermissions(User);
             try
             {
                 var commentEdit = new Comment();
@@ -150,8 +153,8 @@ namespace TablicaOgloszen.Controllers
                     }
                     commentEdit = comments.First();
                     commentEdit.Text = comment.Text;
-                    if (!(_myPermissionsManagerService.permissions.Id.Equals(commentEdit.Users_Id) ||
-                        _myPermissionsManagerService.permissions.Level >= PermissionsRole.Moderator))
+                    if (!(_myPermissionsService.permissions.Id.Equals(commentEdit.Users_Id) ||
+                        _myPermissionsService.permissions.Level >= PermissionsRole.Moderator))
                     {
                         ModelState.AddModelError(string.Empty, "Brak uprawnień do edycji tego komentarza");
                         return View(comment);
@@ -173,7 +176,7 @@ namespace TablicaOgloszen.Controllers
         //GET
         public async Task<IActionResult> Delete(int Id)
         {
-            await _myPermissionsManagerService.getPermissions(User);
+            await _myPermissionsService.getPermissions(User);
             var item = new Comment();
             item.Id = Id;
             try
@@ -186,8 +189,8 @@ namespace TablicaOgloszen.Controllers
                         throw new Exception("No Comment with this Id");
                     }
                     var comment = comments.First();
-                    if (!(_myPermissionsManagerService.permissions.Id.Equals(comment.Users_Id) ||
-                        _myPermissionsManagerService.permissions.Level >= PermissionsRole.Moderator))
+                    if (!(_myPermissionsService.permissions.Id.Equals(comment.Users_Id) ||
+                        _myPermissionsService.permissions.Level >= PermissionsRole.Moderator))
                     {
                         ModelState.AddModelError(string.Empty, "Brak uprawnień do usunięcia tego komentarza");
                         return View(item);
@@ -210,7 +213,7 @@ namespace TablicaOgloszen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Comment comment)
         {
-            await _myPermissionsManagerService.getPermissions(User);
+            await _myPermissionsService.getPermissions(User);
             try
             {
                 var commentEdit = new Comment();
@@ -223,9 +226,9 @@ namespace TablicaOgloszen.Controllers
                     }
                     commentEdit = comments.First();
                     commentEdit.Deleted = true;
-                    commentEdit.ModedBy = _myPermissionsManagerService.permissions.Id;
-                    if (!(_myPermissionsManagerService.permissions.Id.Equals(commentEdit.Users_Id) ||
-                        _myPermissionsManagerService.permissions.Level >= PermissionsRole.Moderator))
+                    commentEdit.ModedBy = _myPermissionsService.permissions.Id;
+                    if (!(_myPermissionsService.permissions.Id.Equals(commentEdit.Users_Id) ||
+                        _myPermissionsService.permissions.Level >= PermissionsRole.Moderator))
                     {
                         ModelState.AddModelError(string.Empty, "Brak uprawnień do edycji tego komentarza");
                         return View(comment);
@@ -244,9 +247,34 @@ namespace TablicaOgloszen.Controllers
             }
         }
 
-        public IActionResult Report()
+        //GET
+        public async Task<IActionResult> Report(int Id, int IdPost)
         {
-            return RedirectToAction("Index");
+            await _myPermissionsService.getPermissions(User);
+            try
+            {
+                if (_myPermissionsService.permissions.Level < PermissionsRole.User)
+                {
+                    ModelState.AddModelError(string.Empty, "Proszę się zarejestrować!");
+                    throw (new Exception("No permissions for this tab"));
+                }
+                User sender;
+                Comment comment;
+                using (var scope = new TransactionScope())
+                {
+                    sender = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{_myPermissionsService.permissions.Id}';").First();
+                    comment = _myDataBaseService.QueryComments($"SELECT TOP 1 * FROM Comments WHERE Id={Id};").First();
+                    scope.Complete();
+                }
+                _myNotificationService.reportToMods(sender, comment);
+                return RedirectToAction("Index", new { Id = IdPost });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                ModelState.AddModelError(string.Empty, "error massage.");
+                return RedirectToAction("Index", new { Id = IdPost });
+            }
         }
 
     }

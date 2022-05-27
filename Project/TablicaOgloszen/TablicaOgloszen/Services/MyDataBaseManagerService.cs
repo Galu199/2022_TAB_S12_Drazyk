@@ -7,7 +7,7 @@ using Microsoft.Data.SqlClient;
 
 namespace TablicaOgloszen.Services
 {
-    public class MyDataBaseService
+    public class MyDataBaseManagerService
     {
         #region SETUP
 
@@ -15,7 +15,7 @@ namespace TablicaOgloszen.Services
         private readonly IConfiguration _configuration;
         private readonly string myDbConnectionString;
 
-        public MyDataBaseService(IConfiguration configuration)
+        public MyDataBaseManagerService(IConfiguration configuration)
         {
             _configuration = configuration;
             myDbConnectionString = _configuration.GetConnectionString(ConnectionName);
@@ -326,6 +326,36 @@ namespace TablicaOgloszen.Services
             return items;
         }
 
+        public List<Notification> QueryNotifications(string query)
+        {
+            var items = new List<Notification>();
+            using (SqlConnection con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand(query + ";", con))
+            {
+                try
+                {
+                    cmd.CommandType = CommandType.Text;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        var item = new Notification();
+                        item.Id = ConvertFromDBVal<int>(rdr["Id"]);
+                        item.Text = ConvertFromDBVal<string>(rdr["Text"]);
+                        item.Date = ConvertFromDBVal<DateTime>(rdr["Date"]);
+                        item.Users_Id = ConvertFromDBVal<string>(rdr["Users_Id"]);
+                        items.Add(item);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw (ex);
+                }
+            }
+            return items;
+        }
+
         public float QueryAggregate(string query)
         {
             float result = 0;
@@ -482,6 +512,27 @@ namespace TablicaOgloszen.Services
             }
         }
 
+        public void AddNotification(Notification item)
+        {
+            using (var con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand(@"INSERT INTO Notifications VALUES ( @Text,@Date,@Users_Id );", con))
+            {
+                cmd.Parameters.Add("@Text", SqlDbType.Text).Value = item.Text;
+                cmd.Parameters.Add("@Date", SqlDbType.DateTime).Value = item.Date;
+                cmd.Parameters.Add("@Users_Id", SqlDbType.VarChar, 450).Value = item.Users_Id;
+                try
+                {
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw (ex);
+                }
+            }
+        }
+
         public void UpdateUser(User item)
         {
             using (var con = new SqlConnection(myDbConnectionString))
@@ -596,6 +647,25 @@ namespace TablicaOgloszen.Services
         {
             using (var con = new SqlConnection(myDbConnectionString))
             using (var cmd = new SqlCommand(@"DELETE FROM Tags WHERE Id=@ID;", con))
+            {
+                cmd.Parameters.Add("@ID", SqlDbType.Int).Value = Id;
+                try
+                {
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw (ex);
+                }
+            }
+        }
+
+        public void DeleteNotification(int Id)
+        {
+            using (var con = new SqlConnection(myDbConnectionString))
+            using (var cmd = new SqlCommand(@"DELETE FROM Notifications WHERE Id=@ID;", con))
             {
                 cmd.Parameters.Add("@ID", SqlDbType.Int).Value = Id;
                 try

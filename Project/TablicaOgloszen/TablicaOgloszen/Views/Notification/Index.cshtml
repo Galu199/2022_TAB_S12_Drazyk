@@ -1,16 +1,18 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model List<TablicaOgloszen.Models.Notification>
 
+@if (Model != null)
+{
+    foreach (var notification in Model)
+    {
+        <div class="card text-center m-4">
+            <div class="card-body">
+                <p class="card-text">@Html.Raw(notification.Text)</p>
+                <hr />
+                <a asp-action="Delete" asp-route-id="@notification.Id" class="btn btn-danger"> Usuń </a>
+            </div>
+            <div class="card-footer text-muted">
+                @TablicaOgloszen.Services.DateConventerService.DateConvert(notification.Date)
+            </div>
+        </div>
+    }
 }
-
-<div class="card text-center m-4">
-    <div class="card-body">
-        <p class="card-text">Html.Raw(not.Text)</p>
-        <a asp-action="Delete" asp-route-id="not.Id" class="btn btn-danger"> Usuń </a>
-    </div>
-    <div class="card-footer text-muted">
-        not.Date
-    </div>
-</div>

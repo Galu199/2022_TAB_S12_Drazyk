@@ -24,7 +24,7 @@ namespace TablicaOgloszen.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly MyDataBaseService _myDataBaseService;
+        private readonly MyDataBaseManagerService _myDataBaseService;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
@@ -32,7 +32,7 @@ namespace TablicaOgloszen.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            MyDataBaseService myDataBaseService,
+            MyDataBaseManagerService myDataBaseService,
             RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;

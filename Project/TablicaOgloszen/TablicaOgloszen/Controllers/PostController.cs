@@ -13,31 +13,34 @@ namespace TablicaOgloszen.Controllers
 
     public class PostController : Controller
     {
-        private readonly MyDataBaseService _myDataBaseService;
-        private readonly MyPermissionsManagerService _myPermissionsManagerService;
-        public PostController(MyDataBaseService myDataBaseService,
-            MyPermissionsManagerService myPermissionsManagerService)
+        private readonly MyDataBaseManagerService _myDataBaseService;
+        private readonly MyPermissionsManagerService _myPermissionsService;
+        private readonly MyNotificationManagerService _myNotificationService;
+        public PostController(MyDataBaseManagerService myDataBaseService,
+            MyPermissionsManagerService myPermissionsManagerService,
+            MyNotificationManagerService myNotificationManagerService)
         {
             _myDataBaseService = myDataBaseService;
-            _myPermissionsManagerService = myPermissionsManagerService;
+            _myPermissionsService = myPermissionsManagerService;
+            _myNotificationService = myNotificationManagerService;
         }
 
         //GET
         public async Task<IActionResult> Index()
         {
-            await _myPermissionsManagerService.getPermissions(User);
+            await _myPermissionsService.getPermissions(User);
             var postIndexList = new List<PostIndex>();
             try
             {
                 using (var scope = new TransactionScope())
                 {
                     var postList = new List<Post>();
-                    if (_myPermissionsManagerService.permissions.Level < PermissionsRole.User)
+                    if (_myPermissionsService.permissions.Level < PermissionsRole.User)
                     {
                         ModelState.AddModelError(string.Empty, "Zarejestruj się aby wyświetlić zawartość!");
                         return View(null);
                     }
-                    else if (_myPermissionsManagerService.permissions.Level > PermissionsRole.User)
+                    else if (_myPermissionsService.permissions.Level > PermissionsRole.User)
                     {
                         postList.AddRange(_myDataBaseService.QueryPosts("SELECT * FROM Posts WHERE Pinned = 1 ORDER BY DATE DESC;"));
                         postList.AddRange(_myDataBaseService.QueryPosts("SELECT * FROM Posts WHERE Pinned = 0 ORDER BY DATE DESC;"));
@@ -72,8 +75,8 @@ namespace TablicaOgloszen.Controllers
             PostDetails postDetails = new PostDetails();
             try
             {
-                await _myPermissionsManagerService.getPermissions(User);
-                if (_myPermissionsManagerService.permissions.Level < PermissionsRole.User)
+                await _myPermissionsService.getPermissions(User);
+                if (_myPermissionsService.permissions.Level < PermissionsRole.User)
                 {
                     ModelState.AddModelError(string.Empty, "You tried to display illegal material. Your IP address has been forwarded to various law enforcemenet agencies..");
                     return View(null);
@@ -88,7 +91,7 @@ namespace TablicaOgloszen.Controllers
                     postDetails.CommentsCount = (int)_myDataBaseService.QueryAggregate($"SELECT COUNT(Id) FROM Comments WHERE Posts_Id={Id} AND Deleted = 0;");
                     postDetails.AvgRating = _myDataBaseService.QueryAggregate($"SELECT AVG(Cast(Value as Float)) FROM Ratings WHERE Posts_Id={Id};");
                     postDetails.Tags = _myDataBaseService.QueryTags($"SELECT * FROM Tags WHERE Posts_Id={Id};");
-                    var ratings = _myDataBaseService.QueryRatings($"SELECT * FROM Ratings WHERE Posts_Id={Id} AND Users_Id='{_myPermissionsManagerService.permissions.Id}';");
+                    var ratings = _myDataBaseService.QueryRatings($"SELECT * FROM Ratings WHERE Posts_Id={Id} AND Users_Id='{_myPermissionsService.permissions.Id}';");
                     if (ratings.Count > 0)
                     {
                         postDetails.myRating = ratings.First();
@@ -107,7 +110,7 @@ namespace TablicaOgloszen.Controllers
         //GET
         public async Task<IActionResult> Create()
         {
-            await _myPermissionsManagerService.getPermissions(User);
+            await _myPermissionsService.getPermissions(User);
             return View();
         }
 
@@ -116,8 +119,8 @@ namespace TablicaOgloszen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(string Title, string Text)
         {
-            await _myPermissionsManagerService.getPermissions(User);
-            if (_myPermissionsManagerService.permissions.Level < PermissionsRole.User)
+            await _myPermissionsService.getPermissions(User);
+            if (_myPermissionsService.permissions.Level < PermissionsRole.User)
             {
                 ModelState.AddModelError(string.Empty, "Proszę się zarejestrować!");
                 return View(null);
@@ -133,7 +136,7 @@ namespace TablicaOgloszen.Controllers
                     post.Date = DateTime.Now;
                     post.Pinned = false;
                     post.Deleted = false;
-                    post.Users_Id = _myPermissionsManagerService.permissions.Id;
+                    post.Users_Id = _myPermissionsService.permissions.Id;
                     post.ModedBy = null;
                     _myDataBaseService.AddPost(post);
                     scope.Complete();
@@ -172,10 +175,10 @@ namespace TablicaOgloszen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Post post)
         {
-            await _myPermissionsManagerService.getPermissions(User);
+            await _myPermissionsService.getPermissions(User);
             var postEdit = new Post();
-            if (!(_myPermissionsManagerService.permissions.Id.Equals(post.Users_Id) ||
-                _myPermissionsManagerService.permissions.Level >= PermissionsRole.Moderator))
+            if (!(_myPermissionsService.permissions.Id.Equals(post.Users_Id) ||
+                _myPermissionsService.permissions.Level >= PermissionsRole.Moderator))
             {
                 ModelState.AddModelError(string.Empty, "You can't delete this post.");
                 return View(post);
@@ -186,7 +189,7 @@ namespace TablicaOgloszen.Controllers
                 {
                     postEdit = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={post.Id};").First();
                     postEdit.Deleted = true;
-                    postEdit.ModedBy = _myPermissionsManagerService.permissions.Id;
+                    postEdit.ModedBy = _myPermissionsService.permissions.Id;
                     _myDataBaseService.UpdatePost(postEdit);
                     scope.Complete();
                 }
@@ -226,9 +229,9 @@ namespace TablicaOgloszen.Controllers
         public async Task<IActionResult> Edit(Post post)
         {
             var postEdit = new Post();
-            await _myPermissionsManagerService.getPermissions(User);
-            if (!(_myPermissionsManagerService.permissions.Id.Equals(post.Users_Id) ||
-                _myPermissionsManagerService.permissions.Level >= PermissionsRole.Administrator))
+            await _myPermissionsService.getPermissions(User);
+            if (!(_myPermissionsService.permissions.Id.Equals(post.Users_Id) ||
+                _myPermissionsService.permissions.Level >= PermissionsRole.Administrator))
             {
                 ModelState.AddModelError(string.Empty, "You can't edit this post.");
                 return View(post);
@@ -256,15 +259,15 @@ namespace TablicaOgloszen.Controllers
         //GET
         public async Task<IActionResult> Tags(int Id)
         {
-            await _myPermissionsManagerService.getPermissions(User);
+            await _myPermissionsService.getPermissions(User);
             var postTag = new PostTags();
             try
             {
                 using (var scope = new TransactionScope())
                 {
                     postTag.post = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Id}").First();
-                    if (!(_myPermissionsManagerService.permissions.Id.Equals(postTag.post.Users_Id) ||
-                        _myPermissionsManagerService.permissions.Level >= PermissionsRole.Administrator))
+                    if (!(_myPermissionsService.permissions.Id.Equals(postTag.post.Users_Id) ||
+                        _myPermissionsService.permissions.Level >= PermissionsRole.Administrator))
                     {
                         ModelState.AddModelError(string.Empty, "Nie możesz zarządzać tagami tego postu.");
                         return View(postTag);
@@ -294,14 +297,14 @@ namespace TablicaOgloszen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddTag(string Text, int Posts_Id)
         {
-            await _myPermissionsManagerService.getPermissions(User);
+            await _myPermissionsService.getPermissions(User);
             try
             {
                 using (var scope = new TransactionScope())
                 {
                     var post = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Posts_Id}").First();
-                    if (!(_myPermissionsManagerService.permissions.Id.Equals(post.Users_Id) ||
-                        _myPermissionsManagerService.permissions.Level >= PermissionsRole.Administrator))
+                    if (!(_myPermissionsService.permissions.Id.Equals(post.Users_Id) ||
+                        _myPermissionsService.permissions.Level >= PermissionsRole.Administrator))
                     {
                         ModelState.AddModelError(string.Empty, "Nie możesz zarządzać tagami tego postu.");
                         return View(null);
@@ -324,14 +327,14 @@ namespace TablicaOgloszen.Controllers
         //GET
         public async Task<IActionResult> DeleteTag(int Id, int Posts_Id)
         {
-            await _myPermissionsManagerService.getPermissions(User);
+            await _myPermissionsService.getPermissions(User);
             try
             {
                 using (var scope = new TransactionScope())
                 {
                     var post = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Posts_Id}").First();
-                    if (!(_myPermissionsManagerService.permissions.Id.Equals(post.Users_Id) ||
-                        _myPermissionsManagerService.permissions.Level >= PermissionsRole.Administrator))
+                    if (!(_myPermissionsService.permissions.Id.Equals(post.Users_Id) ||
+                        _myPermissionsService.permissions.Level >= PermissionsRole.Administrator))
                     {
                         ModelState.AddModelError(string.Empty, "Nie możesz zarządzać tagami tego postu.");
                         return View(null);
@@ -351,8 +354,8 @@ namespace TablicaOgloszen.Controllers
         //GET
         public async Task<IActionResult> AddRating(int Id, int Value)
         {
-            await _myPermissionsManagerService.getPermissions(User);
-            if (_myPermissionsManagerService.permissions.Level < PermissionsRole.User)
+            await _myPermissionsService.getPermissions(User);
+            if (_myPermissionsService.permissions.Level < PermissionsRole.User)
             {
                 return RedirectToAction("Details", new { Id = Id });
             }
@@ -364,7 +367,7 @@ namespace TablicaOgloszen.Controllers
             {
                 using (var scope = new TransactionScope())
                 {
-                    var rate = _myDataBaseService.QueryRatings($"SELECT * FROM Ratings WHERE Posts_Id={Id} AND Users_Id='{_myPermissionsManagerService.permissions.Id}';");
+                    var rate = _myDataBaseService.QueryRatings($"SELECT * FROM Ratings WHERE Posts_Id={Id} AND Users_Id='{_myPermissionsService.permissions.Id}';");
                     if (rate.Count > 0)
                     {
                         rate.First().Value = Value;
@@ -374,7 +377,7 @@ namespace TablicaOgloszen.Controllers
                     {
                         var newRate = new Rating();
                         newRate.Posts_Id = Id;
-                        newRate.Users_Id = _myPermissionsManagerService.permissions.Id;
+                        newRate.Users_Id = _myPermissionsService.permissions.Id;
                         newRate.Value = Value;
                         _myDataBaseService.AddRating(newRate);
                     }
@@ -393,8 +396,8 @@ namespace TablicaOgloszen.Controllers
         {
             try
             {
-                await _myPermissionsManagerService.getPermissions(User);
-                if (_myPermissionsManagerService.permissions.Level < PermissionsRole.Moderator)
+                await _myPermissionsService.getPermissions(User);
+                if (_myPermissionsService.permissions.Level < PermissionsRole.Moderator)
                 {
                     return RedirectToAction("Index");
                 }
@@ -421,21 +424,32 @@ namespace TablicaOgloszen.Controllers
         }
 
         //GET
-        public IActionResult Report()
+        public async Task<IActionResult> Report(int Id)
         {
+            await _myPermissionsService.getPermissions(User);
             try
             {
+                if (_myPermissionsService.permissions.Level < PermissionsRole.User)
+                {
+                    ModelState.AddModelError(string.Empty, "Proszę się zarejestrować!");
+                    throw (new Exception("No permissions for this tab"));
+                }
+                User sender;
+                Post post;
                 using (var scope = new TransactionScope())
                 {
-
+                    sender = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{_myPermissionsService.permissions.Id}';").First();
+                    post = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Id};").First();
                     scope.Complete();
                 }
-                return RedirectToAction("Details");
+                _myNotificationService.reportToMods(sender, post);
+                return RedirectToAction("Details", new { Id = Id });
             }
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 ModelState.AddModelError(string.Empty, "error massage.");
-                return RedirectToAction("Details");
+                return RedirectToAction("Details", new { Id = Id });
             }
         }
     }

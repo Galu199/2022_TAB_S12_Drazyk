@@ -12,9 +12,9 @@ namespace TablicaOgloszen.Controllers
 
     public class UserController : Controller
     {
-        private readonly MyDataBaseService _myDataBaseService;
+        private readonly MyDataBaseManagerService _myDataBaseService;
         private readonly MyPermissionsManagerService _myPermissionsManagerService;
-        public UserController(MyDataBaseService myDataBaseService,
+        public UserController(MyDataBaseManagerService myDataBaseService,
             MyPermissionsManagerService myPermissionsManagerService)
         {
             _myDataBaseService = myDataBaseService;
