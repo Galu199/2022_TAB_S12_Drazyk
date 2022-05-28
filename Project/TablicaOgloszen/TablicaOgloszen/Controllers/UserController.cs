@@ -14,11 +14,14 @@ namespace TablicaOgloszen.Controllers
     {
         private readonly MyDataBaseManagerService _myDataBaseService;
         private readonly MyPermissionsManagerService _myPermissionsManagerService;
+        private readonly MyNotificationManagerService _myNotificationService;
         public UserController(MyDataBaseManagerService myDataBaseService,
-            MyPermissionsManagerService myPermissionsManagerService)
+            MyPermissionsManagerService myPermissionsManagerService,
+            MyNotificationManagerService myNotificationManagerService)
         {
             _myDataBaseService = myDataBaseService;
             _myPermissionsManagerService = myPermissionsManagerService;
+            _myNotificationService = myNotificationManagerService;
         }
 
         //GET
@@ -216,6 +219,7 @@ namespace TablicaOgloszen.Controllers
             try
             {
                 await _myPermissionsManagerService.addRole(Id, PermissionsRole.Moderator);
+                _myNotificationService.Modded(Id, true);
                 return RedirectToAction("Index");
             }
             catch
@@ -227,11 +231,13 @@ namespace TablicaOgloszen.Controllers
         //GET
         public async Task<IActionResult> ModRevoke(string Id)
         {
+
             await _myPermissionsManagerService.getPermissions(User);
             if (_myPermissionsManagerService.permissions.Level < PermissionsRole.Administrator) return RedirectToAction("Index");
             try
             {
                 await _myPermissionsManagerService.removeRole(Id, PermissionsRole.Moderator);
+                _myNotificationService.Modded(Id, false);
                 return RedirectToAction("Index");
             }
             catch

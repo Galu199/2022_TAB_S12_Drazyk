@@ -10,6 +10,14 @@ namespace TablicaOgloszen.Services
     {
         public DateConventerService() { }
 
+        public static double NumberConvert(double z)
+        {
+            z = z * 10;
+            z = Math.Round(z);
+            z = z * 0.1;
+            return z;
+        }
+
         public static string DateConvert(DateTime datetime)
         {
             const int SECOND = 1;
@@ -18,7 +26,7 @@ namespace TablicaOgloszen.Services
             const int DAY = 24 * HOUR;
             const int MONTH = 30 * DAY;
 
-            var ts = new TimeSpan(DateTime.UtcNow.Ticks - datetime.Ticks);
+            var ts = new TimeSpan(DateTime.Now.Ticks - datetime.Ticks);
             double delta = Math.Abs(ts.TotalSeconds);
 
             if (delta < 1 * MINUTE)

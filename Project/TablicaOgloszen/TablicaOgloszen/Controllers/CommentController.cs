@@ -84,13 +84,25 @@ namespace TablicaOgloszen.Controllers
             }
             try
             {
+                User sender;
+                User receiver;
+                Post post;
                 using (var scope = new TransactionScope())
                 {
                     item.Users_Id = _myPermissionsService.permissions.Id;
                     item.Date = DateTime.Now;
                     _myDataBaseService.AddComments(item);
+                    sender = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{_myPermissionsService.permissions.Id}';").First();
+                    post = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={item.Posts_Id};").First();
+                    receiver = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{post.Users_Id}';").First();
+
                     scope.Complete();
                 }
+
+
+
+                _myNotificationService.CommentAdded(sender, post, receiver,item);
+
                 return RedirectToAction("Index", new { Id = item.Posts_Id });
             }
             catch
@@ -217,6 +229,7 @@ namespace TablicaOgloszen.Controllers
             try
             {
                 var commentEdit = new Comment();
+                User receiver;
                 using (var scope = new TransactionScope())
                 {
                     var comments = _myDataBaseService.QueryComments($"SELECT TOP 1 * FROM Comments WHERE Id={comment.Id};");
@@ -233,6 +246,14 @@ namespace TablicaOgloszen.Controllers
                         ModelState.AddModelError(string.Empty, "Brak uprawnień do edycji tego komentarza");
                         return View(comment);
                     }
+
+                    if (_myPermissionsService.permissions.Level >= PermissionsRole.Moderator && commentEdit.Users_Id != _myPermissionsService.permissions.Id)
+                    {
+                        receiver = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{commentEdit.Users_Id}';").First();
+
+                        _myNotificationService.PostRemoved(receiver, commentEdit);
+                    }
+
                     _myDataBaseService.UpdateComment(commentEdit);
                     scope.Complete();
                 }

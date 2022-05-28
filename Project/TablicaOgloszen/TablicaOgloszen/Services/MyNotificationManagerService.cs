@@ -19,6 +19,70 @@ namespace TablicaOgloszen.Services
             _myPermissionsManagerService = myPermissionsManagerService;
         }
 
+        public void Modded(string Id, bool bul)
+        {
+            var notification = new Notification();
+            notification.Date = DateTime.Now;
+            if (bul)
+            {
+                notification.Text = "You has just been granted mod";
+            }
+            else { notification.Text = "You has been demoded"; }
+           // notification.Text = "You has been demoded";
+            using (var scope = new TransactionScope())
+            {
+                notification.Users_Id = Id;
+                _myDataBaseManagerService.AddNotification(notification);
+
+                scope.Complete();
+            }
+        }
+
+        public void PostRemoved<T>(User receiver, T _item)
+        {
+            var notification = new Notification();
+            notification.Date = DateTime.Now;
+            if (_item is Post)
+            {
+                var post = (Post)Convert.ChangeType(_item, typeof(Post));
+                notification.Text = $"Your post: {post.Text} has been removed by moderator. Uncool!";
+
+            }
+            else if (_item is Comment)
+            {
+                var comment = (Comment)Convert.ChangeType(_item, typeof(Comment));
+                notification.Text = $"Your comment: {comment.Text} has been removed by moderator. Uncool!";
+
+            }
+
+
+            using (var scope = new TransactionScope())
+            {
+                notification.Users_Id = receiver.Id;
+                _myDataBaseManagerService.AddNotification(notification);
+
+                scope.Complete();
+            }
+        }
+
+        public void CommentAdded(User sender, Post post, User receiver, Comment comment)
+        {
+            var notification = new Notification();
+            notification.Date = DateTime.Now;
+            notification.Text = $"User: <a href='/User/Details/{sender.Id}'>{sender.UserName}</a> added comment: <a href='/Comment/Index/{post.Id}'>{comment.Text}</a> under your Post: <a href='/Post/Details/{post.Id}'>{post.Title}</a> So cool.";
+
+
+            using (var scope = new TransactionScope())
+            {
+                notification.Users_Id = receiver.Id;
+                _myDataBaseManagerService.AddNotification(notification);
+            
+            scope.Complete();
+            }
+
+
+        }
+
         public void reportToMods<T>(User sender, T _item)
         {
             var notification = new Notification();

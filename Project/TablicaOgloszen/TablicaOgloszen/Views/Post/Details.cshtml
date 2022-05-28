@@ -44,7 +44,7 @@
                                         }
                                     }
                                 </ul>
-                                <div class="review-count">średnia: @Model.AvgRating</div>
+                                <div class="review-count">średnia: @TablicaOgloszen.Services.DateConventerService.NumberConvert(Model.AvgRating)</div>
                             </div>
                         </div>
                     </div>
@@ -120,6 +120,9 @@
                                 {
                                     <span>
                                         <a asp-controller="Post" asp-action="Tags" asp-route-id="@Model.Post.Id" class="btn btn-primary">zarządzaj Tagami</a>
+                                    </span>
+                                    <span>
+                                        <a asp-action="Edit" asp-route-id="@Model.Post.Id" class="btn btn-warning">Edytuj jako admin</a>
                                     </span>
                                 }
                                 <span>
