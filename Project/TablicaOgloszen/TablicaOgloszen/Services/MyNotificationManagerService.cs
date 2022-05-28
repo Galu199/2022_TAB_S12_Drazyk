@@ -27,13 +27,14 @@ namespace TablicaOgloszen.Services
             {
                 notification.Text = "You has just been granted mod";
             }
-            else { notification.Text = "You has been demoded"; }
-           // notification.Text = "You has been demoded";
+            else
+            {
+                notification.Text = "You has been demoded";
+            }
             using (var scope = new TransactionScope())
             {
                 notification.Users_Id = Id;
                 _myDataBaseManagerService.AddNotification(notification);
-
                 scope.Complete();
             }
         }
@@ -54,13 +55,10 @@ namespace TablicaOgloszen.Services
                 notification.Text = $"Your comment: {comment.Text} has been removed by moderator. Uncool!";
 
             }
-
-
             using (var scope = new TransactionScope())
             {
                 notification.Users_Id = receiver.Id;
                 _myDataBaseManagerService.AddNotification(notification);
-
                 scope.Complete();
             }
         }
@@ -71,16 +69,12 @@ namespace TablicaOgloszen.Services
             notification.Date = DateTime.Now;
             notification.Text = $"User: <a href='/User/Details/{sender.Id}'>{sender.UserName}</a> added comment: <a href='/Comment/Index/{post.Id}'>{comment.Text}</a> under your Post: <a href='/Post/Details/{post.Id}'>{post.Title}</a> So cool.";
 
-
             using (var scope = new TransactionScope())
             {
                 notification.Users_Id = receiver.Id;
                 _myDataBaseManagerService.AddNotification(notification);
-            
-            scope.Complete();
+                scope.Complete();
             }
-
-
         }
 
         public void reportToMods<T>(User sender, T _item)
@@ -92,7 +86,7 @@ namespace TablicaOgloszen.Services
                 var post = (Post)Convert.ChangeType(_item, typeof(Post));
                 notification.Text = $"User: <a href='/User/Details/{sender.Id}'>{sender.UserName}</a> reported Post: <a href='/Post/Details/{post.Id}'>{post.Title}</a> Please check it out.";
             }
-            if (_item is Comment)
+            else if (_item is Comment)
             {
                 var comment = (Comment)Convert.ChangeType(_item, typeof(Comment));
                 notification.Text = $"User: <a href='/User/Details/{sender.Id}'>{sender.UserName}</a> reported Comment: <a href='/Comment/Delete/{comment.Id}'>{comment.Text}</a> Please check it out.";
@@ -107,7 +101,7 @@ JOIN AspNetUserRoles as usrol ON (us.Id = usrol.UserId)
 JOIN AspNetRoles as rol ON (usrol.RoleId = rol.Id)
 WHERE
 rol.Name = '{new Permissions().PermissionsRolesDictionary[PermissionsRole.Moderator]}';");
-                foreach(var mod in moderators)
+                foreach (var mod in moderators)
                 {
                     notification.Users_Id = mod.Id;
                     _myDataBaseManagerService.AddNotification(notification);

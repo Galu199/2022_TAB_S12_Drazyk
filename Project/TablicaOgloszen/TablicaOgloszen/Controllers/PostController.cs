@@ -26,16 +26,16 @@ namespace TablicaOgloszen.Controllers
         }
 
 
-            //GET
-            public async Task<IActionResult> Index(String tag="")
+        //GET
+        public async Task<IActionResult> Index(string tag = "")
         {
             await _myPermissionsService.getPermissions(User);
             var postIndexList = new List<PostIndex>();
             try
             {
                 string append = "";
-                if (tag != "") append = " AND Id IN(SELECT Posts_Id FROM Tags WHERE Text LIKE '" + tag + "')";
-                    using (var scope = new TransactionScope())
+                if (tag != "") append = $" AND Id IN (SELECT Posts_Id FROM Tags WHERE Text LIKE '{tag}')";
+                using (var scope = new TransactionScope())
                 {
                     var postList = new List<Post>();
                     if (_myPermissionsService.permissions.Level < PermissionsRole.User)
@@ -45,13 +45,13 @@ namespace TablicaOgloszen.Controllers
                     }
                     else if (_myPermissionsService.permissions.Level > PermissionsRole.User)
                     {
-                        postList.AddRange(_myDataBaseService.QueryPosts("SELECT * FROM Posts WHERE Pinned = 1"+append+" ORDER BY DATE DESC;"));
-                        postList.AddRange(_myDataBaseService.QueryPosts("SELECT * FROM Posts WHERE Pinned = 0"+append+" ORDER BY DATE DESC;"));
+                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT * FROM Posts WHERE Pinned = 1 {append} ORDER BY DATE DESC;"));
+                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT * FROM Posts WHERE Pinned = 0 {append} ORDER BY DATE DESC;"));
                     }
                     else
                     {
-                        postList.AddRange(_myDataBaseService.QueryPosts("SELECT * FROM Posts WHERE Deleted = 0 AND Pinned = 1"+append+" ORDER BY DATE DESC;"));
-                        postList.AddRange(_myDataBaseService.QueryPosts("SELECT * FROM Posts WHERE Deleted = 0 AND Pinned = 0"+append+" ORDER BY DATE DESC;"));
+                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT * FROM Posts WHERE Deleted = 0 AND Pinned = 1 {append} ORDER BY DATE DESC;"));
+                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT * FROM Posts WHERE Deleted = 0 AND Pinned = 0 {append} ORDER BY DATE DESC;"));
                     }
                     foreach (var post in postList)
                     {
@@ -71,10 +71,6 @@ namespace TablicaOgloszen.Controllers
                 return View(null);
             }
         }
-
-
-
-
 
         //GET
         public async Task<IActionResult> Details(int Id)
@@ -199,19 +195,16 @@ namespace TablicaOgloszen.Controllers
                     postEdit.Deleted = true;
                     postEdit.ModedBy = _myPermissionsService.permissions.Id;
 
-
-
                     _myDataBaseService.UpdatePost(postEdit);
 
-                       if (_myPermissionsService.permissions.Level >= PermissionsRole.Moderator && postEdit.Users_Id != _myPermissionsService.permissions.Id)
-                      {
+                    if (_myPermissionsService.permissions.Level >= PermissionsRole.Moderator &&
+                        postEdit.Users_Id != _myPermissionsService.permissions.Id)
+                    {
                         receiver = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{postEdit.Users_Id}';").First();
-
                         _myNotificationService.PostRemoved(receiver, postEdit);
-                     }
+                    }
                     scope.Complete();
                 }
-            //    _myNotificationService.PostRemoved(receiver, post);
                 ModelState.AddModelError(string.Empty, "Post deleted sucesfully.");
                 return View(postEdit);
             }
@@ -409,27 +402,9 @@ namespace TablicaOgloszen.Controllers
                 return RedirectToAction("Details", new { Id = Id });
             }
         }
-
-        public async Task<IActionResult> SortByTag(String tag)
-        {
-            try
-            {
-                await _myPermissionsService.getPermissions(User);
-                if (_myPermissionsService.permissions.Level < PermissionsRole.User)
-                {
-                    return RedirectToAction("Index");
-                }
-
-
-                return RedirectToAction("Index", new { tag = tag });
-            }
-            catch
-            {
-                return RedirectToAction("Index");
-            }
-        }
-            //GET
-            public async Task<IActionResult> PinTogggle(int Id)
+        
+        //GET
+        public async Task<IActionResult> PinTogggle(int Id)
         {
             try
             {
@@ -482,7 +457,7 @@ namespace TablicaOgloszen.Controllers
                 _myNotificationService.reportToMods(sender, post);
                 return RedirectToAction("Details", new { Id = Id });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 ModelState.AddModelError(string.Empty, "error massage.");

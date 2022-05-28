@@ -92,6 +92,7 @@ namespace TablicaOgloszen.Controllers
                     item.Users_Id = _myPermissionsService.permissions.Id;
                     item.Date = DateTime.Now;
                     _myDataBaseService.AddComments(item);
+
                     sender = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{_myPermissionsService.permissions.Id}';").First();
                     post = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={item.Posts_Id};").First();
                     receiver = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{post.Users_Id}';").First();
@@ -99,9 +100,7 @@ namespace TablicaOgloszen.Controllers
                     scope.Complete();
                 }
 
-
-
-                _myNotificationService.CommentAdded(sender, post, receiver,item);
+                _myNotificationService.CommentAdded(sender, post, receiver, item);
 
                 return RedirectToAction("Index", new { Id = item.Posts_Id });
             }
@@ -237,9 +236,11 @@ namespace TablicaOgloszen.Controllers
                     {
                         throw new Exception("No Comment with this Id");
                     }
+
                     commentEdit = comments.First();
                     commentEdit.Deleted = true;
                     commentEdit.ModedBy = _myPermissionsService.permissions.Id;
+
                     if (!(_myPermissionsService.permissions.Id.Equals(commentEdit.Users_Id) ||
                         _myPermissionsService.permissions.Level >= PermissionsRole.Moderator))
                     {
@@ -247,7 +248,8 @@ namespace TablicaOgloszen.Controllers
                         return View(comment);
                     }
 
-                    if (_myPermissionsService.permissions.Level >= PermissionsRole.Moderator && commentEdit.Users_Id != _myPermissionsService.permissions.Id)
+                    if (_myPermissionsService.permissions.Level >= PermissionsRole.Moderator &&
+                        commentEdit.Users_Id != _myPermissionsService.permissions.Id)
                     {
                         receiver = _myDataBaseService.QueryUsers($"SELECT TOP 1 * FROM Users WHERE Id='{commentEdit.Users_Id}';").First();
 

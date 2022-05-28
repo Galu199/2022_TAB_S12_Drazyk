@@ -10,14 +10,6 @@ namespace TablicaOgloszen.Services
     {
         public DateConventerService() { }
 
-        public static double NumberConvert(double z)
-        {
-            z = z * 10;
-            z = Math.Round(z);
-            z = z * 0.1;
-            return z;
-        }
-
         public static string DateConvert(DateTime datetime)
         {
             const int SECOND = 1;
