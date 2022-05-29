@@ -24,7 +24,7 @@ namespace TablicaOgloszen.Controllers
         }
 
         //GET
-        public async Task<IActionResult> Index(int Id)
+        public async Task<IActionResult> Index(int Id, string sort = "")
         {
             await _myPermissionsService.getPermissions(User);
             try
@@ -39,13 +39,15 @@ namespace TablicaOgloszen.Controllers
                 {
                     commentIndex.post = _myDataBaseService.QueryPosts($"SELECT TOP 1 * FROM Posts WHERE Id={Id}").First();
                     List<Comment> comments;
+                    string sortorder = "DESC";
+                    if (sort == "dateasc") sortorder = "ASC";
                     if (_myPermissionsService.permissions.Level > PermissionsRole.User)
                     {
-                        comments = _myDataBaseService.QueryComments($"SELECT * FROM Comments WHERE Posts_Id={Id} ORDER BY DATE DESC");
+                        comments = _myDataBaseService.QueryComments($"SELECT * FROM Comments WHERE Posts_Id={Id} ORDER BY DATE {sortorder}");
                     }
                     else
                     {
-                        comments = _myDataBaseService.QueryComments($"SELECT * FROM Comments WHERE Posts_Id={Id} AND Deleted=0 ORDER BY DATE DESC");
+                        comments = _myDataBaseService.QueryComments($"SELECT * FROM Comments WHERE Posts_Id={Id} AND Deleted=0 ORDER BY DATE {sortorder}");
                     }
                     foreach (var item in comments)
                     {
