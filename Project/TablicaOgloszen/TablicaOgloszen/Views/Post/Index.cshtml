@@ -9,8 +9,10 @@
 
     <form class="form-control" method="get" asp-action="Index">
         <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">#Tag</label>
+            <label for="exampleInputEmail1" class="form-label">Filtruj według tagu:</label>
             <input type="text" class="form-control" id="exampleInputEmail1" name="tag">
+            <label for="exampleInputEmail1" class="form-label">Filtruj według autora:</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" name="author">
         </div>
 
 
@@ -21,6 +23,8 @@
             <option value="dateasc">Data od najstarszego do najnowszego</option>
             <option value="ratingasc">Ocena od najwyższej do najniższej</option>
             <option value="ratingdesc">Ocena od najniższej do najwyższej</option>
+            <option value="commentdesc">Liczba komentarzy: Dużo-mało</option>
+            <option value="commentasc">Liczba komentarzy: Mało-dużo</option>
         </select>
         </div>
     <button type="submit" class="btn btn-primary">Sortuj</button>
@@ -39,12 +43,12 @@
                                 <img src="https://i.imgur.com/tdi3NGa.png" width="50" class="rounded-circle">
                                 <div class="d-flex flex-column m-2">
                                     <span class="font-weight-bold" style="font-size:120%;">
-                                        <b><a class="text-decoration-none text-black" asp-controller="User" asp-action="Details" asp-route-id="@item.Owner.Id">@item.Owner.UserName</a></b>
+                                        <b><a class="text-decoration-none text-black" asp-action="Details" asp-route-id="@item.post.Id">
+                                            @item.post.Title
+                                        </a></b>
                                     </span>
                                     <small class="text-primary">
-                                        <a asp-action="Details" asp-route-id="@item.post.Id">
-                                            @item.post.Title
-                                        </a>
+                                        By: <a asp-controller="User" asp-action="Details" asp-route-id="@item.Owner.Id">@item.Owner.UserName</a>
                                     </small>
                                 </div>
                             </div>

@@ -46,7 +46,7 @@ namespace TablicaOgloszen.Services
             if (_item is Post)
             {
                 var post = (Post)Convert.ChangeType(_item, typeof(Post));
-                notification.Text = $"Your post: {post.Text} has been removed by moderator. Uncool!";
+                notification.Text = $"Your post: {post.Title} has been removed by moderator. Uncool!";
 
             }
             else if (_item is Comment)

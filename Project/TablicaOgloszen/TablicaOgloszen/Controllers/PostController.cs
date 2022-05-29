@@ -27,24 +27,30 @@ namespace TablicaOgloszen.Controllers
 
 
         //GET
-        public async Task<IActionResult> Index(string tag = "", string sort = "")
+        public async Task<IActionResult> Index(string tag = "", string author = "", string sort = "")
         {
             await _myPermissionsService.getPermissions(User);
             var postIndexList = new List<PostIndex>();
             try
             {
                 string append = "";
-                string append2 = "";
-                if (tag!=null && tag != "")
+                string sortappend = "";
+                string authorappend = "";
+                if (tag != null && tag != "")
                 {
-                    Console.WriteLine("Rozne");
                     append = $" AND Id IN (SELECT Posts_Id FROM Tags WHERE Text LIKE '{tag}')";
-                } 
-                if (sort == "datedesc") append2 = " ORDER BY DATE DESC";
-                else if (sort == "dateasc") append2 = " ORDER BY DATE ASC";
-                else if(sort == "ratingasc") append2 = " ORDER BY (SELECT AVG(Z.value) FROM Ratings Z WHERE Z.Posts_Id = PO.Id) ASC;";
-                else if (sort == "ratingdesc") append2 = " ORDER BY (SELECT AVG(Z.value) FROM Ratings Z WHERE Z.Posts_Id = PO.Id) DESC;";
-                else if (sort == "") append2 = " ORDER BY DATE DESC";
+                }
+                if (author != null && author != "")
+                {
+                    authorappend = $" AND Users_ID IN (SELECT F.Id FROM Users F WHERE UserName LIKE '{author}')";
+                }
+                if (sort == "datedesc") sortappend = " ORDER BY DATE DESC";
+                else if (sort == "dateasc") sortappend = " ORDER BY DATE ASC";
+                else if (sort == "ratingasc") sortappend = " ORDER BY (SELECT AVG(Z.value) FROM Ratings Z WHERE Z.Posts_Id = PO.Id) ASC;";
+                else if (sort == "ratingdesc") sortappend = " ORDER BY (SELECT AVG(Z.value) FROM Ratings Z WHERE Z.Posts_Id = PO.Id) DESC;";
+                else if (sort == "commentdesc") sortappend = " ORDER BY (SELECT COUNT(C.Id) FROM Comments C WHERE C.Posts_Id = PO.Id) DESC";
+                else if (sort == "commentasc") sortappend = " ORDER BY (SELECT COUNT(C.Id) FROM Comments C WHERE C.Posts_Id = PO.Id) ASC";
+                else if (sort == "") sortappend = " ORDER BY DATE DESC";
                 using (var scope = new TransactionScope())
                 {
                     var postList = new List<Post>();
@@ -56,10 +62,10 @@ namespace TablicaOgloszen.Controllers
                     string perm = "";
                     if (_myPermissionsService.permissions.Level <= PermissionsRole.User)
                     {
-                        perm = "AND DELETED = 0";
+                        perm = " AND DELETED = 0";
                     }
-                    postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 1 {append} {perm} {append2};"));
-                    postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 0 {append} {perm} {append2};"));                
+                    postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 1 {append} {authorappend} {perm} {sortappend};"));
+                    postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 0 {append} {authorappend} {perm} {sortappend};"));
                     foreach (var post in postList)
                     {
                         var postIndex = new PostIndex();
@@ -409,7 +415,7 @@ namespace TablicaOgloszen.Controllers
                 return RedirectToAction("Details", new { Id = Id });
             }
         }
-        
+
         //GET
         public async Task<IActionResult> PinTogggle(int Id)
         {
