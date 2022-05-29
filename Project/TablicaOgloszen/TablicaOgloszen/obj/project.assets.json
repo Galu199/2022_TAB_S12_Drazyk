@@ -7493,23 +7493,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Seweryn\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\borys\\.nuget\\packages\\": {},
+    "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Seweryn\\Desktop\\Work\\2022_TAB_S12_Drazyk\\Project\\TablicaOgloszen\\TablicaOgloszen\\TablicaOgloszen.csproj",
+      "projectUniqueName": "D:\\Users\\borys\\Source\\Repos\\2022_TAB_S12_Drazyk\\Project\\TablicaOgloszen\\TablicaOgloszen\\TablicaOgloszen.csproj",
       "projectName": "TablicaOgloszen",
-      "projectPath": "C:\\Users\\Seweryn\\Desktop\\Work\\2022_TAB_S12_Drazyk\\Project\\TablicaOgloszen\\TablicaOgloszen\\TablicaOgloszen.csproj",
-      "packagesPath": "C:\\Users\\Seweryn\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Seweryn\\Desktop\\Work\\2022_TAB_S12_Drazyk\\Project\\TablicaOgloszen\\TablicaOgloszen\\obj\\",
+      "projectPath": "D:\\Users\\borys\\Source\\Repos\\2022_TAB_S12_Drazyk\\Project\\TablicaOgloszen\\TablicaOgloszen\\TablicaOgloszen.csproj",
+      "packagesPath": "C:\\Users\\borys\\.nuget\\packages\\",
+      "outputPath": "D:\\Users\\borys\\Source\\Repos\\2022_TAB_S12_Drazyk\\Project\\TablicaOgloszen\\TablicaOgloszen\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Seweryn\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\borys\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -7581,7 +7581,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

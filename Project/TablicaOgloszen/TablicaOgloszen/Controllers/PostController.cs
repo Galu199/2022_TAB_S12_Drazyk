@@ -27,14 +27,20 @@ namespace TablicaOgloszen.Controllers
 
 
         //GET
-        public async Task<IActionResult> Index(string tag = "")
+        public async Task<IActionResult> Index(string tag = "", string sort = "")
         {
             await _myPermissionsService.getPermissions(User);
             var postIndexList = new List<PostIndex>();
             try
             {
                 string append = "";
-                if (tag != "") append = $" AND Id IN (SELECT Posts_Id FROM Tags WHERE Text LIKE '{tag}')";
+                if (tag != "")
+                {
+                    append = $" AND Id IN (SELECT Posts_Id FROM Tags WHERE Text LIKE '{tag}')";
+                }
+                if (sort == "datedesc") append += " ORDER BY DATE DESC";
+                else if (sort == "dateasc") append += " ORDER BY DATE ASC";
+                else if (sort == "") append += " ORDER BY DATE DESC";
                 using (var scope = new TransactionScope())
                 {
                     var postList = new List<Post>();
@@ -43,15 +49,25 @@ namespace TablicaOgloszen.Controllers
                         ModelState.AddModelError(string.Empty, "Zarejestruj się aby wyświetlić zawartość!");
                         return View(null);
                     }
-                    else if (_myPermissionsService.permissions.Level > PermissionsRole.User)
+                    string perm = "";
+                    if (_myPermissionsService.permissions.Level <= PermissionsRole.User)
                     {
-                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT * FROM Posts WHERE Pinned = 1 {append} ORDER BY DATE DESC;"));
-                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT * FROM Posts WHERE Pinned = 0 {append} ORDER BY DATE DESC;"));
+                        perm = "AND DELETED = 0";
+                    }
+                    if (sort == "ratingasc")
+                    {
+                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 1 {perm} ORDER BY (SELECT AVG(Z.value) FROM Ratings Z WHERE Z.Posts_Id = PO.Id) DESC;"));
+                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 0 {perm} ORDER BY (SELECT AVG(Z.value) FROM Ratings Z WHERE Z.Posts_Id = PO.Id) DESC;"));
+                    }
+                    else if (sort == "ratingdesc")
+                    {
+                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 1 {perm} ORDER BY (SELECT AVG(Z.value) FROM Ratings Z WHERE Z.Posts_Id = PO.Id) ASC;"));
+                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 0 {perm} ORDER BY (SELECT AVG(Z.value) FROM Ratings Z WHERE Z.Posts_Id = PO.Id) ASC;"));
                     }
                     else
                     {
-                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT * FROM Posts WHERE Deleted = 0 AND Pinned = 1 {append} ORDER BY DATE DESC;"));
-                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT * FROM Posts WHERE Deleted = 0 AND Pinned = 0 {append} ORDER BY DATE DESC;"));
+                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT * FROM Posts WHERE Pinned = 1 {perm} {append};"));
+                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT * FROM Posts WHERE Pinned = 0 {perm} {append};"));
                     }
                     foreach (var post in postList)
                     {
