@@ -34,13 +34,17 @@ namespace TablicaOgloszen.Controllers
             try
             {
                 string append = "";
-                if (tag != "")
+                string append2 = "";
+                if (tag!=null && tag != "")
                 {
+                    Console.WriteLine("Rozne");
                     append = $" AND Id IN (SELECT Posts_Id FROM Tags WHERE Text LIKE '{tag}')";
-                }
-                if (sort == "datedesc") append += " ORDER BY DATE DESC";
-                else if (sort == "dateasc") append += " ORDER BY DATE ASC";
-                else if (sort == "") append += " ORDER BY DATE DESC";
+                } 
+                if (sort == "datedesc") append2 = " ORDER BY DATE DESC";
+                else if (sort == "dateasc") append2 = " ORDER BY DATE ASC";
+                else if(sort == "ratingasc") append2 = " ORDER BY (SELECT AVG(Z.value) FROM Ratings Z WHERE Z.Posts_Id = PO.Id) ASC;";
+                else if (sort == "ratingdesc") append2 = " ORDER BY (SELECT AVG(Z.value) FROM Ratings Z WHERE Z.Posts_Id = PO.Id) DESC;";
+                else if (sort == "") append2 = " ORDER BY DATE DESC";
                 using (var scope = new TransactionScope())
                 {
                     var postList = new List<Post>();
@@ -54,21 +58,8 @@ namespace TablicaOgloszen.Controllers
                     {
                         perm = "AND DELETED = 0";
                     }
-                    if (sort == "ratingasc")
-                    {
-                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 1 {perm} ORDER BY (SELECT AVG(Z.value) FROM Ratings Z WHERE Z.Posts_Id = PO.Id) DESC;"));
-                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 0 {perm} ORDER BY (SELECT AVG(Z.value) FROM Ratings Z WHERE Z.Posts_Id = PO.Id) DESC;"));
-                    }
-                    else if (sort == "ratingdesc")
-                    {
-                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 1 {perm} ORDER BY (SELECT AVG(Z.value) FROM Ratings Z WHERE Z.Posts_Id = PO.Id) ASC;"));
-                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 0 {perm} ORDER BY (SELECT AVG(Z.value) FROM Ratings Z WHERE Z.Posts_Id = PO.Id) ASC;"));
-                    }
-                    else
-                    {
-                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT * FROM Posts WHERE Pinned = 1 {perm} {append};"));
-                        postList.AddRange(_myDataBaseService.QueryPosts($"SELECT * FROM Posts WHERE Pinned = 0 {perm} {append};"));
-                    }
+                    postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 1 {append} {perm} {append2};"));
+                    postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 0 {append} {perm} {append2};"));                
                     foreach (var post in postList)
                     {
                         var postIndex = new PostIndex();
