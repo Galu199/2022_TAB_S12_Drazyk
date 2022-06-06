@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Transactions;
 using TablicaOgloszen.Models;
 using TablicaOgloszen.Services;
+using System.Text.RegularExpressions;
 
 namespace TablicaOgloszen.Controllers
 {
@@ -27,7 +28,7 @@ namespace TablicaOgloszen.Controllers
 
 
         //GET
-        public async Task<IActionResult> Index(string tag = "", string author = "", string sort = "")
+        public async Task<IActionResult> Index(string tag = "", string author = "", string sort = "", string txt = "")
         {
             await _myPermissionsService.getPermissions(User);
             var postIndexList = new List<PostIndex>();
@@ -36,6 +37,7 @@ namespace TablicaOgloszen.Controllers
                 string append = "";
                 string sortappend = "";
                 string authorappend = "";
+                string txtappend = "";
                 if (tag != null && tag != "")
                 {
                     append = $" AND Id IN (SELECT Posts_Id FROM Tags WHERE Text LIKE '{tag}')";
@@ -51,21 +53,25 @@ namespace TablicaOgloszen.Controllers
                 else if (sort == "commentdesc") sortappend = " ORDER BY (SELECT COUNT(C.Id) FROM Comments C WHERE C.Posts_Id = PO.Id) DESC";
                 else if (sort == "commentasc") sortappend = " ORDER BY (SELECT COUNT(C.Id) FROM Comments C WHERE C.Posts_Id = PO.Id) ASC";
                 else if (sort == "") sortappend = " ORDER BY DATE DESC";
+                if (txt != null && txt != "")
+                {
+                    txtappend = $" AND (PO.Text LIKE '%{txt}%' OR PO.Title LIKE '%{txt}%')";
+                }
                 using (var scope = new TransactionScope())
                 {
                     var postList = new List<Post>();
-                    if (_myPermissionsService.permissions.Level < PermissionsRole.User)
+                //    if (_myPermissionsService.permissions.Level < PermissionsRole.User)
                     {
-                        ModelState.AddModelError(string.Empty, "Zarejestruj się aby wyświetlić zawartość!");
-                        return View(null);
+                 //       ModelState.AddModelError(string.Empty, "Zarejestruj się aby wyświetlić zawartość!");
+                //        return View(null);
                     }
                     string perm = "";
                     if (_myPermissionsService.permissions.Level <= PermissionsRole.User)
                     {
                         perm = " AND DELETED = 0";
                     }
-                    postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 1 {append} {authorappend} {perm} {sortappend};"));
-                    postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 0 {append} {authorappend} {perm} {sortappend};"));
+                    postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 1 {append} {txtappend} {authorappend} {perm} {sortappend};"));
+                    postList.AddRange(_myDataBaseService.QueryPosts($"SELECT PO.* FROM Posts PO WHERE Pinned = 0 {append} {txtappend} {authorappend} {perm} {sortappend};"));
                     foreach (var post in postList)
                     {
                         var postIndex = new PostIndex();
@@ -92,10 +98,10 @@ namespace TablicaOgloszen.Controllers
             try
             {
                 await _myPermissionsService.getPermissions(User);
-                if (_myPermissionsService.permissions.Level < PermissionsRole.User)
+           //     if (_myPermissionsService.permissions.Level < PermissionsRole.User)
                 {
-                    ModelState.AddModelError(string.Empty, "You tried to display illegal material. Your IP address has been forwarded to various law enforcemenet agencies..");
-                    return View(null);
+               //     ModelState.AddModelError(string.Empty, "You tried to display illegal material. Your IP address has been forwarded to various law enforcemenet agencies..");
+             //       return View(null);
                 }
                 using (var scope = new TransactionScope())
                 {

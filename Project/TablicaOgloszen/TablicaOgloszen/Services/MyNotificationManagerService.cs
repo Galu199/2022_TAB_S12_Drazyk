@@ -101,10 +101,19 @@ JOIN AspNetUserRoles as usrol ON (us.Id = usrol.UserId)
 JOIN AspNetRoles as rol ON (usrol.RoleId = rol.Id)
 WHERE
 rol.Name = '{new Permissions().PermissionsRolesDictionary[PermissionsRole.Moderator]}';");
-                foreach (var mod in moderators)
+
+                int mods = moderators.Count();
+                int notifs = _myDataBaseManagerService.QueryNotifications("SELECT * FROM Notifications WHERE Text LIKE '%reported%'").Count();
+
+                var mod = moderators[notifs % mods];
+
+                notification.Users_Id = mod.Id;
+                _myDataBaseManagerService.AddNotification(notification);
+
+             //   foreach (var mod in moderators)
                 {
-                    notification.Users_Id = mod.Id;
-                    _myDataBaseManagerService.AddNotification(notification);
+              //      notification.Users_Id = mod.Id;
+             //       _myDataBaseManagerService.AddNotification(notification);
                 }
                 scope.Complete();
             }
