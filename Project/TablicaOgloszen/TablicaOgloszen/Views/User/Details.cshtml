@@ -39,7 +39,7 @@
             </div>
             <div class="card-footer">
                 @{await per.getPermissions(User);}
-                @if (per.permissions.Id.Equals(Model.Id) || per.permissions.Level >= PermissionsRole.Administrator)
+                @if (per.permissions.Id != null && per.permissions.Id.Equals(Model.Id) || per.permissions.Level >= PermissionsRole.Administrator)
                 {
                     <span>
                         <a class="btn btn-warning" asp-action="Edit" asp-route-Id="@Model.Id">Edytuj</a>
