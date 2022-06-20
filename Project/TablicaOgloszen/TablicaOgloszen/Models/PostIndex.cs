@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TablicaOgloszen.Models
 {
-    public class PostIndex 
+    public class PostIndex
     {
         public Post post = new Post();
         public List<Comment> Comments = new List<Comment>();

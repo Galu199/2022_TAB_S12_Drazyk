@@ -98,7 +98,7 @@
                             @inject TablicaOgloszen.Services.MyPermissionsManagerService per
                             @{
                                 await per.getPermissions(User);
-                                if (per.permissions.Id.Equals(Model.Owner.Id))
+                                if (per.permissions.Id != null && per.permissions.Id.Equals(Model.Owner.Id))
                                 {
                                     <span>
                                         <a asp-action="Edit" asp-route-id="@Model.Post.Id" class="btn btn-warning">Edytuj</a>
