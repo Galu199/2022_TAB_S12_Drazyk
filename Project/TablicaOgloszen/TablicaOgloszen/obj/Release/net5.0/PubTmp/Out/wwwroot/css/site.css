@@ -1,0 +1,308 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+.background-image {
+    z-index: -1;
+    position: fixed;
+    left: -1vw;
+    display: block;
+    width: 102vw;
+    height: 100vh;
+    background-image: linear-gradient(45deg, var(--Northern-Lights-Beach-1-hex), var(--Northern-Lights-Beach-5-hex)), url(https://images.unsplash.com/photo-1579546929662-711aa81148cf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80);
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: blur(5px);
+    /* Color Theme Swatches in Hex */
+    --Northern-Lights-Beach-1-hex: #012340;
+    --Northern-Lights-Beach-2-hex: #025959;
+    --Northern-Lights-Beach-3-hex: #027333;
+    --Northern-Lights-Beach-4-hex: #03A63C;
+    --Northern-Lights-Beach-5-hex: #04D939;
+}
+/*.background-image {
+    z-index: -1;
+    position: fixed;
+    left: -1vw;
+    right: 0;
+    display: block;
+    width: 102vw;
+    height: 100vh;
+    background-image: linear-gradient(90deg,
+    var(--Northern-Lights-Beach-1-hex) 10%,
+    var(--Northern-Lights-Beach-2-hex) 20%,
+    var(--Northern-Lights-Beach-3-hex) 30%,
+    var(--Northern-Lights-Beach-4-hex) 40%,
+    var(--Northern-Lights-Beach-5-hex) 50%,
+    var(--Northern-Lights-Beach-4-hex) 60%,
+    var(--Northern-Lights-Beach-3-hex) 70%,
+    var(--Northern-Lights-Beach-2-hex) 80%,
+    var(--Northern-Lights-Beach-1-hex) 90% );
+    background-size: 9000% 100%;
+    background-position: top;
+    background-repeat: no-repeat;
+    filter: blur(5px);
+    animation: gradient 5s linear infinite;*/
+/* Color Theme Swatches in Hex */
+/*--Northern-Lights-Beach-1-hex: #012340;
+    --Northern-Lights-Beach-2-hex: #025959;
+    --Northern-Lights-Beach-3-hex: #027333;
+    --Northern-Lights-Beach-4-hex: #03A63C;
+    --Northern-Lights-Beach-5-hex: #04D939;
+}*/
+
+@keyframes gradient {
+    0% {
+        background-position: 0%;
+    }
+
+    100% {
+        background-position: 100%;
+    }
+}
+
+a .navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 141px !important;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+}
+
+
+/* -------------------------------------------------- style do rejestracji  --------------------------------------------------*/
+
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}
+
+body {
+    height: 100%;
+}
+
+/*body {
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f5f5f5;
+}*/
+
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+}
+
+    .form-signin input {
+        margin-bottom: 0 !important;
+    }
+
+    .form-signin .checkbox {
+        font-weight: 400;
+    }
+
+    .form-signin .form-floating:focus-within {
+        z-index: 2;
+    }
+
+    .form-signin input[type="email"] {
+        margin-bottom: -1px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    .form-signin input[type="password"] {
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+/* -------------------------------------------------- style do ogłoszerń --------------------------------------------------*/
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap");
+
+body {
+    background-color: #eee;
+    font-family: "Poppins", sans-serif;
+    font-weight: 300
+}
+
+.card {
+    border: none
+}
+
+.ellipsis {
+    color: #a09c9c
+}
+
+hr {
+    color: #a09c9c;
+    margin-top: 4px;
+    margin-bottom: 8px
+}
+
+.muted-color {
+    color: #a09c9c;
+    font-size: 13px
+}
+
+.ellipsis i {
+    margin-top: 3px;
+    cursor: pointer
+}
+
+.icons i {
+    font-size: 25px
+}
+
+.icons .fa-heart {
+    color: red
+}
+
+.icons .fa-smile-o {
+    color: yellow;
+    font-size: 29px
+}
+
+.rounded-image {
+    border-radius: 50% !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px
+}
+
+.name {
+    font-size: 110%;
+    font-weight: 600
+}
+
+.comment-text {
+    font-size: 12px;
+    width: 100%;
+}
+
+.status small {
+    margin-right: 10px;
+    color: blue
+}
+
+.form-control {
+    border-radius: 26px
+}
+
+.comment-input {
+    position: relative
+}
+
+.fonts {
+    position: absolute;
+    right: 13px;
+    top: 8px;
+    color: #a09c9c
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #8bbafe;
+    outline: 0;
+    box-shadow: none
+}
+
+/* RATING */
+
+.ratings {
+    
+}
+
+.ratings i {
+    color: #cecece;
+    font-size: 15px;
+}
+
+.rating-color {
+    color: #fbc634 !important;
+}
+
+.review-count {
+    font-weight: 400;
+    font-size: 16px;
+}
